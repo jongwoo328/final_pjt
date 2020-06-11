@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+
+{% block title %}{{ user.username }}{% endblock %}
+
+{% block context %}
+<h3>{{ user.username }}님의 프로필</h3>
+<hr>
+
+<h4> 좋아하는 영화 </h4>
+<hr>
+
+<h4> 작성하신 게시글 </h4>
+<hr>
+

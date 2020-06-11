@@ -8,7 +8,7 @@ def login(request):
     pass
 
 def signup(request):
-    pass
+    return render(request, 'accounts/form.html')
 
 def logout(request):
     pass
