@@ -25,6 +25,8 @@ def create_article(request):
         if form.is_valid():
             article = form.save(commit=False)
             article.author = request.user
+            article.board = get_object_or_404(Board, pk=request.POST.get('board')[0])
+            article.save()
             return redirect('community:detail', article.pk)
     else:
         form = ArticleForm()
