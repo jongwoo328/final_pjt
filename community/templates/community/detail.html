@@ -4,5 +4,12 @@
 {% block title %}Community{% endblock %}
 
 {% block context %}
-    
+    <p>{{ article.title }}</p>
+    <p>{{ article.content }}</p>
+
+    <form action="{% url 'commuinity:create_comment' article.pk %}" method="POST">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+    </form>
+
 {% endblock %}
