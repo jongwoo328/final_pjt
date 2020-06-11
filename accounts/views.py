@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model, login as auth_login, logout as auth_logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
+from django.views.decorators.http import require_POST
 
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 
@@ -45,6 +46,7 @@ def signup(request):
     return render(request, 'accounts/form.html', context)
 
 @login_required
+@require_POST
 def logout(request):
     auth_logout(request)
     return redirect('community:community')
@@ -64,6 +66,7 @@ def update(request):
     return render(request, 'accounts/form.html', context)
 
 @login_required
+@require_POST
 def delete(request):
     user = request.user
     user.delete()
