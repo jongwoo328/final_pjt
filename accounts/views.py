@@ -52,7 +52,7 @@ def logout(request):
 @login_required
 def update(request):
     if request.method == 'POST':
-        form = CustomUserChangeForm(request.POST)
+        form = CustomUserChangeForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
             return redirect('accounts:profile')
@@ -73,13 +73,13 @@ def delete(request):
 def change_password(request):
     if request.method == 'POST':
         user = request.user
-        form = PasswordChangeForm(user, request,POST)
+        form = PasswordChangeForm(user, request.POST)
         if form.is_valid():
             form.save()
             update_session_auth_hash(request, user)
             return redirect('accounts:profile')
     else:
-        form = PasswordChangeForm()
+        form = PasswordChangeForm(request.user)
     context = {
         'form': form,
     }
