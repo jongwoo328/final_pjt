@@ -9,7 +9,7 @@
     <hr>
     <a href="{% url 'community:create_article' %}" class="btn btn-primary">게시글 작성</a>
     {% for article in page_obj %}
-        <a href="{% url 'community:detail' artiicle.pk %}">{{article.title}}</a>
+        <a href="{% url 'community:detail' article.pk %}">{{article.title}}</a>
         <hr>
     {% endfor %}
 
