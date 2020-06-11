@@ -46,7 +46,6 @@ def signup(request):
     return render(request, 'accounts/form.html', context)
 
 @login_required
-@require_POST
 def logout(request):
     auth_logout(request)
     return redirect('community:community')
