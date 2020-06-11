@@ -18,13 +18,13 @@ def profile(request):
 
 def login(request):
     if request.method == 'POST':
-        form = AuthenticationForm(request.POST)
+        form = AuthenticationForm(request, request.POST)
         if form.is_valid():
             user = form.get_user()
             auth_login(request, user)
             return redirect('community:community')
     else:
-        form = AuthenticationForm()
+        form = AuthenticationForm(request)
     context = {
         'form': form,
     }
