@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 
 from .models import Article, Comment, Board
 from .forms import ArticleForm, CommentForm
@@ -12,7 +13,7 @@ def community(request):
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    conetext = {
+    context = {
         'page_obj': page_obj,
     }
     return render(request, 'community/index.html', context)
@@ -42,6 +43,7 @@ def detail(request, article_pk):
     }
     return render(request, 'community/detail.html', context)
 
+@login_required
 def update_article(request, article_pk):
     article = get_object_or_404(Article, pk=article_pk)
     if request.method == 'POST':
@@ -50,20 +52,54 @@ def update_article(request, article_pk):
             article = form.save()
             return redirect('community:detail', article_pk)
     else:
+        if request.user != article.author:
+            return redirect('community:detail', article_pk)
         form = ArticleForm(instance=article)
     context = {
         'form': form,
     }
     return render(request, 'community/form.html', context)
 
+@login_required
+@require_POST
 def delete_article(request, article_pk):
-    pass
+    article = get_object_or_404(Article, pk=article_pk)
+    if request.user == article.author:
+        article.delete()
+        return redirect('community:community')
+    return redirect('community:detail', article_pk)
 
+@login_required
 def create_comment(request, article_pk):
-    pass
+    form = CommentForm(request.POST)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.author = request.user
+        comment.article = get_object_or_404(Article, pk=article_pk)
+        comment.save()
+    return redirect('community:detail', article_pk)
 
+@login_required
 def update_comment(request, article_pk, comment_pk):
-    pass
+    comment = get_object_or_404(Comment, pk=comment_pk)
+    if request.method == 'POST':
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            form.save()
+            return redirect('community:detail', article_pk)
+    else:
+        if request.user != comment.author:
+            return redirect('community:detail', article_pk)
+        form = CommentForm(instance=comment)
+    context = {
+        'form': form,
+    }
+    return render(request, 'community/form.html', context)
 
+@login_required
+@require_POST
 def delete_comment(request, article_pk, comment_pk):
-    pass
+    comment = get_object_or_404(Comment, pk=comment_pk)
+    if request.user == comment.author:
+        comment.delete()
+    return redirect('community:detail', article_pk)
