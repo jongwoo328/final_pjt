@@ -18,7 +18,7 @@
 {% block context %}
 
 <!-- Modal -->
-<div class="modal fade" id="UserDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<class class="modal fade" id="UserDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 <div class="modal-dialog" role="document">
     <div class="modal-content">
     <div class="modal-header">
@@ -37,10 +37,10 @@
     </div>
     </div>
 </div>
-</div>
+</class>
 
 
-
+<div class="border border-secondary rounded p-4">
 {% if request.resolver_match.url_name == 'signup' %}
     <h2>회원가입</h2>
 {% elif request.resolver_match.url_name == 'login' %}
@@ -68,4 +68,5 @@
         <button class="btn btn-info">수정</button>
     {% endif %}
 </form>
+</>
 {% endblock %}

@@ -2,19 +2,20 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
+import datetime # 날짜 가져오기
 
 from .models import Article, Comment, Board
 from .forms import ArticleForm, CommentForm
 
-
 def community(request):
-    articles = Article.objects.all()
+    articles = Article.objects.order_by('-pk')
     paginator = Paginator(articles, 10)
-
+    nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     context = {
         'page_obj': page_obj,
+        'nowDate': nowDate,
     }
     return render(request, 'community/index.html', context)
 

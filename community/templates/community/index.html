@@ -5,13 +5,51 @@
 {% block title %}Community{% endblock %}
 
 {% block context %}
-    <h2>전체 게시물</h2>
-    <hr>
-    <a href="{% url 'community:create_article' %}" class="btn btn-primary">게시글 작성</a>
-    {% for article in page_obj %}
-        <a href="{% url 'community:detail' article.pk %}">{{article.title}}</a>
-        <hr>
-    {% endfor %}
+    <div class="d-flex justify-content-between"> 
+        <h3>
+            <a href="{%url 'community:community' %}" class="text-dark"><i class="fas fa-angle-double-left"></i></a>
+            <!-- <a href="{%url 'community:community' %}" class="text-dark">커뮤니티</a> -->
+            <i class="fas"> 전체 게시판 </i>
+        </h3>
+        <div class="align-self-center">
+            <h4>
+                <!-- <i class="fas fa-search"> | </i> -->
+            <a href="{% url 'community:create_article' %}" class="text-dark"><i class="fas fa-edit"></i></a></h4>
+        </div>
+        
+    </div>
+    
+    <div class="table-responsive-lg ">
+    <table class="table table-sm mt-3">
+        <thead>
+            <tr>
+                <th scope="col-6">제목</th>
+                <th scope="col">작성자</th>
+                <th scope="col">댓글 수</th>
+                <th scope="col">작성일</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for article in page_obj %}
+            <tr>
+                <td>
+                    <a href="{% url 'community:detail' article.pk %}">{{article.title}}</a>
+                </td>
+                <td>{{ article.author }}</td>
+                <td>{{ article.comment_set|length }}</td>
+                <td>
+                    {% if article.created_at|date:"Y-m-d" == nowDate %}
+                        {{ article.created_at | date:"H:i" }}
+                    {% else %}
+                        {{ article.created_at | date:"Y-m-d" }}
+                    {% endif %}
+                    </td>
+                
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
     {% bootstrap_paginate page_obj range=10 show_prev_next="false" show_first_last="true" %}
 {% endblock %}
