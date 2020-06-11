@@ -39,10 +39,14 @@ def create_article(request):
 @login_required
 def detail(request, article_pk):
     article = get_object_or_404(Article, pk=article_pk)
+    comments = article.comment_set.order_by('-pk')
+    nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
     form = CommentForm()
     context = {
         'form': form,
         'article': article,
+        'comments' : comments,
+        'nowDate': nowDate,
     }
     return render(request, 'community/detail.html', context)
 

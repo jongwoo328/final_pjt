@@ -4,12 +4,64 @@
 {% block title %}Community{% endblock %}
 
 {% block context %}
-    <p>{{ article.title }}</p>
-    <p>{{ article.content }}</p>
+    <div class="d-flex justify-content-between"> 
+        <h5>
+            <a href="{%url 'community:community' %}" class="text-dark"><i class="fas fa-angle-double-left"></i></a>
+            <!-- <a href="{%url 'community:community' %}" class="text-dark">커뮤니티</a> -->
+            <i class="fas"> 전체 게시판 </i>
+        </h5>
+    </div>
+    <hr class="mt-2 mb-3">
 
+    <!-- 게시글 -->
+    <div>
+        <h4 class="font-weight-bold mb-3">{{ article.title }}</h4>
+        <div class="d-flex justify-content-between">
+            <p class="text-muted"><small>{{ article.created_at }}</small></p>
+            <p class="text-muted"><small>댓글 수 {{ comments|length }}</small></p>
+        </div>
+        <hr class="mt-0 mb-3">
+        <p>{{ article.content }}</p>
+    </div>
+    
+
+    <!-- 댓글 -->
+    <hr>
+    <p><strong>{{ comments|length }}</strong>개의 댓글</p>
+    <!-- 댓글 작성 -->
     <form action="{% url 'community:create_comment' article.pk %}" method="POST">
         {% csrf_token %}
         {% bootstrap_form form %}
+        <button>댓글 작성</button>
     </form>
+    <!-- 댓글 목록 -->
+    {% for comment in comments %}
+        <!-- 날짜 & 댓글 수정, 삭제 -->
+        <div class="d-flex justify-content-between">
+        <p>{{ comment.author }} 
+            <small class="text-muted"> 
+                {% if comment.updated_at|date:"Y-m-d" == nowDate %}
+                    | {{ comment.updated_at | date:"H:i" }}
+                {% else %}
+                    | {{ comment.updated_at | date:"Y-m-d" }}
+                {% endif %}
+            </small>
+        </p>
+        {% if comment.author == request.user %}
+        <div>
+            <!-- <small><a href="{% url 'community:update_comment' article.pk comment.pk %}" class="text-dark">수정</a></small> -->
+            <small><a href="#" class="text-dark">수정</a></small>
+            <small>
+                <form action="{% url 'community:delete_comment' article.pk comment.pk %}" method="POST" class="d-inline">
+                    {% csrf_token %}
+                <button style="border:0; background-color: transparent" class="text-decoration-none">삭제</button>
+                </form>
+            </small>
+        </div>
+        {% endif %}
+        </div>
+        {{ comment.content }}
+        <hr>
+    {% endfor %}
 
 {% endblock %}
