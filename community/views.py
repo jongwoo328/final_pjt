@@ -12,7 +12,9 @@ def community(request):
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    conetext = {
+    
+    print(page_obj)
+    context = {
         'page_obj': page_obj,
     }
     return render(request, 'community/index.html', context)
