@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import get_user_model, login as auth_login, logout as auth_logout
+from django.contrib.auth import get_user_model, login as auth_login, logout as auth_logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 
@@ -68,3 +68,19 @@ def delete(request):
     user = request.user
     user.delete()
     return redirect('community:community')
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        user = request.user
+        form = PasswordChangeForm(user, request,POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, user)
+            return redirect('accounts:profile')
+    else:
+        form = PasswordChangeForm()
+    context = {
+        'form': form,
+    }
+    return render(request, 'accounts/form.html', context)
