@@ -57,7 +57,7 @@ def update(request):
             form.save()
             return redirect('accounts:profile')
     else:
-        form = CustomUserChangeForm()
+        form = CustomUserChangeForm(instance=request.user)
     conetxt = {
         'form': form,
     }
