@@ -6,9 +6,11 @@
 
 {% block context %}
     <div class="w3-bar w3-dark-gray mb-3">
-        <a href="#" class="w3-bar-item w3-button w3-mobile text-decoration-none">전체게시판</a>
-        <a href="#" class="w3-bar-item w3-button w3-mobile text-decoration-none">자유게시판</a>
-        <a href="#" class="w3-bar-item w3-button w3-mobile text-decoration-none">추천해요~</a>
+        <a href="{% url 'community:community' %}" class="w3-bar-item w3-button w3-mobile text-decoration-none">전체게시판</a>
+        {% for board in boards %}
+            <a href="{% url 'community:board' board.url_name %}" class="w3-bar-item w3-button w3-mobile text-decoration-none">{{ board.name }}</a>
+            
+        {% endfor%}
     </div>
     <div class="d-flex justify-content-between p-1"> 
         <h5>

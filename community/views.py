@@ -8,6 +8,7 @@ from .models import Article, Comment, Board
 from .forms import ArticleForm, CommentForm
 
 def community(request):
+    boards = Board.objects.all()
     articles = Article.objects.order_by('-pk')
 
     paginator = Paginator(articles, 10)
@@ -17,12 +18,14 @@ def community(request):
     context = {
         'page_obj': page_obj,
         'nowDate': nowDate,
+        'boards' : boards,
     }
     return render(request, 'community/index.html', context)
 
 def board(request, board_name):
-    board = get_object_or_404(Board, url_name=board_name)
-    articles = board.article_set.all()
+    boards = Board.objects.all()
+    now_board = get_object_or_404(Board, url_name=board_name)
+    articles = now_board.article_set.all()
 
     paginator = Paginator(articles, 10)
     nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
@@ -31,7 +34,8 @@ def board(request, board_name):
     context = {
         'page_obj': page_obj,
         'nowDate': nowDate,
-        'board': board,
+        'now_board': now_board,
+        'boards' : boards,
     }
     return render(request, 'community/index.html', context)
 
