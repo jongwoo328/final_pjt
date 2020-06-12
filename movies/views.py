@@ -14,8 +14,14 @@ def main(request):
     '''
     pass
 
-def index(request):
-    movies = Movie.objects.order_by('-pk')
+def index(request, sort=None):
+    if sort == 'rank':
+        movies = Movie.objects.order_by('-vote_average')
+    elif sort == 'release':
+        movies = Movie.objects.order_by('release_date')
+    else:
+        movies = Movie.objects.order_by('-pk')
+        
     paginator = Paginator(movies, 12)
     nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
     page_number = request.GET.get('page')
