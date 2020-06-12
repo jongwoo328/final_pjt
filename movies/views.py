@@ -56,6 +56,7 @@ def movie_like(request, movie_pk):
         movie.liked_users.remove(user)
         liked = False
     else:
+        movie.liked_users.add(user)
         liked = True
     
     context = {
@@ -121,6 +122,7 @@ def review_like(request, movie_pk, review_pk):
         review.liked_users.remove(user)
         liked = False
     else:
+        review.liked_users.add(user)
         liked = True
     
     context = {
