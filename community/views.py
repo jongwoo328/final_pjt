@@ -15,10 +15,12 @@ def community(request):
     nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    boards = Board.objects.all()
     context = {
         'page_obj': page_obj,
         'nowDate': nowDate,
         'board': None,
+        'boards': boards,
     }
     return render(request, 'community/index.html', context)
 
@@ -34,10 +36,11 @@ def board(request, board_name=None):
     nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    boards = Board.objects.all()
     context = {
         'page_obj': page_obj,
         'nowDate': nowDate,
-        'now_board': now_board,
+        'now_board': board,
         'boards' : boards,
     }
     return render(request, 'community/index.html', context)
