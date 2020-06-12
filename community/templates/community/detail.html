@@ -89,8 +89,8 @@
             const articleId = event.target.dataset.id
         
             axios.get(`/community/${articleId}/like/`)
-        
             .then((response) => {
+                
                 // response.data.count -> json으로 응답(해당 게시글에 좋아요를 누른 사람의 수)
                 document.querySelector(`#like-article-count-${articleId}`).innerText = response.data.count
         
@@ -109,7 +109,7 @@
         likeCommentButtonList.forEach((likeButton) => {
             likeButton.addEventListener('click', function(event){
             const commentId = event.target.dataset.id
-            const articleId = event.target.dataseet.articleId
+            const articleId = event.target.dataset.articleId
         
             axios.get(`/community/${articleId}/comment/${commentId}/like/`)
         
