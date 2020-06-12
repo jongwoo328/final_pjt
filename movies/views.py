@@ -113,7 +113,7 @@ def review_delete(request, movie_pk, review_pk):
 
 
 @login_required
-def movie_like(request, movie_pk, review_pk):
+def review_like(request, movie_pk, review_pk):
     user = request.user
     review = get_object_or_404(Review, pk=review_pk)
 
