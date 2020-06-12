@@ -17,7 +17,13 @@
 <hr>
 {% for review in reviews %}
     <p>{{ review.rank }}</p>
+    {% if request.user in review.liked_users.all %}
+        <i class="fas fa-heart fa-lg like-button" style="color:crimson" data-id="{{ article.pk }}"></i>
+    {% else %}
+        <i class="fas fa-heart fa-lg like-button" style="color:black" data-id="{{ article.pk }}"></i>
+    {% endif %}
     <p>{{ review.author }} : {{ review.content }}</p>
+    <span id="like-count-{{ article.pk }}">좋아요 : {{ review.liked_users.all|length }}</span> 
     <small>
         <form action="{% url 'movies:review_delete' movie.pk review.pk %}" method="POST" class="d-inline">
             {% csrf_token %}
@@ -28,4 +34,33 @@
 {% empty %}
     <p>새 리뷰를 작성해주세요</p>
 {% endfor %}
+
+<script>
+
+    const likeButtonList = document.querySelectorAll('.like-button')
+
+    likeButtonList.forEach((likeButton) => {
+      likeButton.addEventListener('click', function(event){
+        const movieId = event.target.dataset.id
+
+        // {% if user.is_authenticated %}
+        axios.get(`/movies/${movieId}/like/`)
+
+        .then((response) => {
+          // response.data.count -> json으로 응답(해당 게시글에 좋아요를 누른 사람의 수)
+          document.querySelector(`#like-count-${movieId}`).innerText = response.data.count
+
+          if (response.data.liked) {
+            event.target.style.color = 'crimson'
+          } else {
+            event.target.style.color = 'black'
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+      })
+    })
+  </script>
+
 {% endblock %}
