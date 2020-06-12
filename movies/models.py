@@ -1,12 +1,8 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
+from django.contrib.auth import get_user_model
 
-# Create your models here.
-
-
-class Review(models.Model):
-    content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+User = get_user_model()
 
 class Genre(models.Model):
     name = models.CharField(max_length=100)
@@ -24,3 +20,12 @@ class Movie(models.Model):
     poster_path = models.CharField(max_length=100, default='')
     backdrop_path = models.CharField(max_length=100, default='')
     genres = models.ManyToManyField(Genre, related_name='movies')
+
+class Review(models.Model):
+    content = models.TextField()
+    rank = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    liked_users = models.ManyToManyField(User, related_name='liked_review')

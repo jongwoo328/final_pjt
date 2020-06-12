@@ -10,7 +10,7 @@ class Board(models.Model):
     name = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.name
+        return f'{self.name}'
 
 class Article(models.Model):
     title = models.CharField(max_length=100)
@@ -19,6 +19,14 @@ class Article(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     board = models.ForeignKey(Board, on_delete=models.CASCADE)
+    hits = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f'{self.title}'
+
+    def hit(self):
+        self.hits += 1
+        self.save()
 
     def dummy(count):
         faker = Faker('ko-KR')
