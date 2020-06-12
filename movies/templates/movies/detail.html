@@ -2,10 +2,52 @@
 {% load bootstrap4 %}
 
 {% block title %}
+Movie
 {% endblock %}
-<style>
 
+
+
+{% block style %}
+<style>
+  
+/* label{
+  display: block;
+}
+.form-group{
+  display: inline-block;
+  margin-top: 1px;
+}
+#content{
+  display: inline;
+  resize: none;
+  width: 120%;
+  height: 100px;
+}
+#submit{
+  height: 100px;
+  width:12%;
+  background-color: white;
+  color: black;
+  border-radius: 8px;
+  border-bottom-style: none;
+  border-top-style: none;
+  border-left-style: none;
+  border-right-style: none;
+  border: 2px solid #969696;
+  line-height: 0;
+  position: relative;
+  bottom:43px;
+  right:-100px;
+}
+#submit:hover {
+  background-color: #969696;
+  color: white;
+} */
 </style>
+{% endblock %}
+
+
+
 {% block context %}
 <a href="{%url 'movies:index' %}" class="text-dark"><i class="fas fa-angle-double-left"></i></a>
 <i class="fas"> 영화 상세 </i>
@@ -54,30 +96,55 @@
   </div>
 </div>
 
-
+<!-- 댓글 작성 -->
+<i class="fas mt-3"> 내 평점 등록 </i>
+<hr>
 <form action="{% url 'movies:review_create' movie.pk %}" method="POST">
     {% csrf_token %}
-    {% bootstrap_form form %}
-    <button>작성</button>
+    {% bootstrap_form form %}   
+    <input type="submit" value="등록" id="submit">
 </form>
-<hr>
-{{ reviews|length }}의 댓글
+
+<!-- 댓글 조회 -->
+<div class="mt-4">
+<span><i class="fas fa-star fa-lg" style="color:crimson"> {{ movie.vote_average }}</i></span> 
+<span><i class="fas"> (총 {{ reviews|length }}의 댓글) </i></span>
+</div>
 <hr>
 {% for review in reviews %}
-    <p>{{ review.rank }}</p>
-    {% if request.user in review.liked_users.all %}
-        <i class="fas fa-heart fa-lg like-button" style="color:crimson" data-id="{{ review.pk }}" data-movie-id="{{ movie.pk }}"></i>
-    {% else %}
-        <i class="fas fa-heart fa-lg like-button" style="color:black" data-id="{{ review.pk }}" data-movie-id="{{ movie.pk }}"></i>
-    {% endif %}
-    <p>{{ review.author }} : {{ review.content }}</p>
-    <p>좋아요 : <span id="like-count-{{ review.pk }}">{{ review.liked_users.all|length }}</span></p>
-    <small>
-        <form action="{% url 'movies:review_delete' movie.pk review.pk %}" method="POST" class="d-inline">
-            {% csrf_token %}
-        <button style="border:0; background-color: transparent" class="text-decoration-none">삭제</button>
-        </form>
-    </small>
+    <div class="d-flex justify-content-between">
+      <div>
+      <span><strong>{{ review.author }} </strong></span>
+      <span class="rank_star">{{ review.rank }}</span>
+      </div>
+      <div>
+        {% if request.user in review.liked_users.all %}
+            <i class="far fa-thumbs-up fa-lg like-button" style="color:rgb(1, 47, 250)" data-id="{{ review.pk }}" data-movie-id="{{ movie.pk }}">
+              <span id="like-count-{{ review.pk }}" style="color:black">{{ review.liked_users.all|length }}</span>
+            </i>
+        {% else %}
+            <i class="far fa-thumbs-up fa-lg like-button" style="color:black" data-id="{{ review.pk }}" data-movie-id="{{ movie.pk }}">
+              <span id="like-count-{{ review.pk }}" style="color:black">{{ review.liked_users.all|length }}</span>
+            </i>
+        {% endif %}
+      </div>
+    </div>
+    
+
+    <p class="my-3">{{ review.content }}</p>
+    <div class="d-flex justify-content-between">
+      <p>{{ review.created_at }}</p>
+      <div>
+        <a href="#"><small class="text-decoration-none text-dark">수정</small></a>
+        <small>
+          <form action="{% url 'movies:review_delete' movie.pk review.pk %}" method="POST" class="d-inline">
+              {% csrf_token %}
+          <button style="border:0; background-color: transparent" class="text-decoration-none">삭제</button>
+          </form>
+      </small>
+      </div>
+    </div> 
+    
     <hr>
 {% empty %}
     <p>새 리뷰를 작성해주세요</p>
@@ -120,6 +187,33 @@
   const language = document.getElementById('language').innerText
   document.getElementById('language').innerText = contries[language]
 
+  // 댓글 form
+  // 별점
+  const ranks = document.querySelectorAll('.rank_star')
+  console.log(ranks, typeof(ranks))
+  ranks.forEach((rank) => {
+      console.log(rank.innerText)
+      var InputStar = ""
+      
+      if (rank.innerText == "1") {
+        InputStar = "★☆☆☆☆"
+      } else if (rank.innerText == "2") {
+        InputStar = "★★☆☆☆"
+      } else if (rank.innerText == "3") {
+        InputStar ="★★★☆☆"
+      } else if (rank.innerText == '4') {
+        InputStar = "★★★★☆"
+      } else if (rank.innerText == '5') {
+        InputStar = "★★★★★"
+      }
+      console.log(InputStar)
+      
+  })
+  
+  
+
+
+
   // 좋아요
   const likeButtonList = document.querySelectorAll('.like-button')
 
@@ -129,13 +223,12 @@
       const movieId = event.target.dataset.movieId
 
       axios.get(`/movies/${movieId}/review/${reviewId}/like/`)
-
       .then((response) => {
         // response.data.count -> json으로 응답(해당 게시글에 좋아요를 누른 사람의 수)
         document.querySelector(`#like-count-${reviewId}`).innerText = response.data.count
 
         if (response.data.liked) {
-          event.target.style.color = 'crimson'
+          event.target.style.color = 'rgb(1, 47, 250)'
         } else {
           event.target.style.color = 'black'
         }
