@@ -5,7 +5,10 @@
 {% block title %}{{ user.username }}{% endblock %}
 
 {% block context %}
-<h3>{{ user.username }}님의 프로필</h3>
+<div class="d-flex justify-content-between">
+    <h3><i class="fas fa-user-circle align-self-center mx-3 py-3"></i>{{ user.username }}님의 프로필</h3>
+    <a href="{% url 'accounts:update' %}" class="text-dark align-self-end">회원정보수정</a>
+</div>
 <hr>
 
 <h4> 좋아하는 영화 </h4>
