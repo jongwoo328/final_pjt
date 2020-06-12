@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- w3 school - style css -->
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-teal.css">
     <!-- icon -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
     <title>{% block title %}{% endblock %}</title>
@@ -16,61 +17,89 @@
 
 </script>
 <body>
-    <div class="w3-sidebar w3-bar-block w3-card w3-animate-left" style="display:none" id="mySidebar">
-        <h3 class="w3-bar-item d-flex justify-content-between">
-            <p>Menu</p> 
-            <a href="#" onclick="w3_close()" class="w3-text-black">x</a>
-        </h3>
-        <a href="{% url 'community:community' %}" class="w3-bar-item w3-button text-decoration-none">커뮤니티</a>
-        {% if request.user.is_authenticated %}
-            <a href="{% url 'accounts:update' %}" class="w3-bar-item w3-button text-decoration-none">회원정보수정</a>
-            <form action="{% url 'accounts:logout' %}" method="POST">
-                {% csrf_token %}
-                <button class="w3-bar-item w3-button text-decoration-none">로그아웃</button>
-            </form>
-        {% else %}
-            <a href="{% url 'accounts:login' %}" class="w3-bar-item w3-button text-decoration-none">로그인</a>
-            <a href="{% url 'accounts:signup' %}" class="w3-bar-item w3-button text-decoration-none">회원가입</a>
-        {% endif %}
-    </div>
-      
-      <div id="main">
-      <div class="w3-light-gray d-flex justify-content-between">
-        <div class="w3-container d-flex px-0">
-            <button id="openNav" class="w3-button w3-light-gray w3-xlarge" onclick="w3_open()">&#9776;</button>
-            <div class="align-self-center">
-                <a href="{% url 'community:community' %}" class=""><i class="fas fa-paint-brush" style="color:black">CINEMA</i></a>
-            </div>
+    <div class="w3-sidebar w3-collapse w3-white w3-animate-left w3-large" style="z-index:3;width:300px;" id="mySidebar">        
+        <div class="w3-bar w3-black w3-center d-flex justify-content-between">
+            <i class="fas align-self-center mx-1">MENU</i>
+            <a class="w3-button w3-hover-black w3-hide-large w3-large w3-right mx-0 px-0" href="javascript:void(0)" onclick="w3_close()">×</a>
+            <!-- <a class="w3-bar-item w3-button" style="width:33.33%" href="javascript:void(0)" onclick="openNav('nav01')">
+            <i class="fa fa-bars w3-xlarge"></i></a>
+            <a class="w3-bar-item w3-button" style="width:33.33%" href="javascript:void(0)" onclick="openNav('nav03')">
+            <i class="fa fa-file w3-xlarge"></i></a>
+            <a class="w3-bar-item w3-button" style="width:33.33%" href="javascript:void(0)" onclick="openNav('nav02')">
+            <i class="fa fa-camera w3-xlarge"></i></a> -->
         </div>
-        <div class="align-self-center">
+
+        <div id="nav01" class="w3-bar-block">
+            <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'movies:index' %}">전체 영화</a>
+            <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'community:community' %}">커뮤니티</a>
             {% if request.user.is_authenticated %}
-                <a class="nav-link text-secondary" href="{% url 'accounts:profile' %}" tabindex="-1" aria-disabled="true">Hello, {{ request.user }}</a>
+                <a href="{% url 'accounts:update' %}" class="w3-bar-item w3-button text-decoration-none">회원정보수정</a>
+                <form action="{% url 'accounts:logout' %}" method="POST">
+                    {% csrf_token %}
+                    <button class="w3-bar-item w3-button text-decoration-none">로그아웃</button>
+                </form>
             {% else %}
-                <p class='text-secondary'>로그인 해주세요.</p>
+                <a href="{% url 'accounts:login' %}" class="w3-bar-item w3-button text-decoration-none">로그인</a>
+                <a href="{% url 'accounts:signup' %}" class="w3-bar-item w3-button text-decoration-none">회원가입</a>
             {% endif %}
         </div>
-        
-      </div>
-      </div>
-      
 
-    <div id="content" class="container mt-5" onclick="w3_close()">
-        {% block context %}
-        {% endblock %}
     </div>
+
+
+    <div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" id="myOverlay"></div>
+        <div class="w3-main" style="margin-left:300px;"> 
+            <div class="w3-top w3-light-gray w3-large w3-hide-large">
+                <i class="fa fa-bars w3-button w3-light-gray w3-xlarge" onclick="w3_open()"></i>
+            </div>
+            
+            <header class="w3-container w3-light-gray w3-padding-64 w3-center">
+                <h1 class="w3-xxxlarge w3-padding-16">CINEMA</h1>
+            </header>
+
+            <div class="w3-container w3-padding-large w3-section">
+                {% block context %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+      <!-- Main header
+      <div id="main">
+        <div class="w3-light-gray d-flex justify-content-between">
+            <div class="w3-container d-flex px-0">
+                <button id="openNav" class="w3-button w3-light-gray w3-xlarge" onclick="w3_open()">&#9776;</button>
+                <div class="align-self-center">
+                    <a href="{% url 'community:community' %}" class=""><i class="fas fa-paint-brush" style="color:black">CINEMA</i></a>
+                </div>
+            </div>
+
+            <div class="align-self-center">
+                {% if request.user.is_authenticated %}
+                    <a class="nav-link text-secondary" href="{% url 'accounts:profile' %}" tabindex="-1" aria-disabled="true">Hello, {{ request.user }}</a>
+                {% else %}
+                    <p class='text-secondary'>로그인 해주세요.</p>
+                {% endif %}
+            </div>
+        
+        </div>
+      </div> -->
+
     <script>
         function w3_open() {
-          document.getElementById("main").style.marginLeft = "25%";
-          document.getElementById("mySidebar").style.width = "25%";
-          document.getElementById("mySidebar").style.display = "block";
-        //   document.getElementById("openNav").style.display = 'none';
+            document.getElementById("mySidebar").style.display = "block";
+            document.getElementById("myOverlay").style.display = "block";
         }
+
         function w3_close() {
-          document.getElementById("main").style.marginLeft = "0%";
-          document.getElementById("mySidebar").style.display = "none";
-          document.getElementById("openNav").style.display = "inline-block";
+            document.getElementById("mySidebar").style.display = "none";
+            document.getElementById("myOverlay").style.display = "none";
         }
-        </script>
+
+        // openNav("nav01");
+        // function openNav(id)/ {
+            // document.getElementById("nav01").style.display = "block";
+        // }
+    </script>
     {% bootstrap_javascript jquery='full' %}
 </body>
 </html>
