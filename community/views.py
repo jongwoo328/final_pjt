@@ -39,6 +39,7 @@ def create_article(request):
 @login_required
 def detail(request, article_pk):
     article = get_object_or_404(Article, pk=article_pk)
+    article.hit()
     comments = article.comment_set.order_by('-pk')
     nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
     form = CommentForm()
@@ -89,14 +90,16 @@ def create_comment(request, article_pk):
 @login_required
 def update_comment(request, article_pk, comment_pk):
     comment = get_object_or_404(Comment, pk=comment_pk)
+
+    if request.user != comment.author:
+        return redirect('community:detail', article_pk)
+        
     if request.method == 'POST':
         form = CommentForm(request.POST, instance=comment)
         if form.is_valid():
             form.save()
             return redirect('community:detail', article_pk)
     else:
-        if request.user != comment.author:
-            return redirect('community:detail', article_pk)
         form = CommentForm(instance=comment)
     context = {
         'form': form,
