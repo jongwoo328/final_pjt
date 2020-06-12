@@ -9,6 +9,7 @@ from .forms import ArticleForm, CommentForm
 
 def community(request):
     articles = Article.objects.order_by('-pk')
+
     paginator = Paginator(articles, 10)
     nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
     page_number = request.GET.get('page')
@@ -16,6 +17,21 @@ def community(request):
     context = {
         'page_obj': page_obj,
         'nowDate': nowDate,
+    }
+    return render(request, 'community/index.html', context)
+
+def board(request, board_name):
+    board = get_object_or_404(Board, url_name=board_name)
+    articles = board.article_set.all()
+
+    paginator = Paginator(articles, 10)
+    nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    context = {
+        'page_obj': page_obj,
+        'nowDate': nowDate,
+        'board': board,
     }
     return render(request, 'community/index.html', context)
 
