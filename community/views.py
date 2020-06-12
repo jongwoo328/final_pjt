@@ -1,8 +1,10 @@
+import datetime # 날짜 가져오기
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
-import datetime # 날짜 가져오기
+from django.http import JsonResponse
 
 from .models import Article, Comment, Board
 from .forms import ArticleForm, CommentForm
