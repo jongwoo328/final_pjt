@@ -8,9 +8,30 @@ from django.contrib.auth import get_user_model
 
 class Board(models.Model):
     name = models.CharField(max_length=100)
+    url_name = models.CharField(max_length=100)
 
     def __str__(self):
         return f'{self.name}'
+
+    @classmethod
+    def init(cls):
+        board_data = [
+            {
+                'name': '공지사항',
+                'url_name': 'notice',
+            },
+            {
+                'name': '자유게시판',
+                'url_name': 'free',
+            },
+            {
+                'name': '추천게시판',
+                'url_name': 'recommend',
+            },
+        ]
+        for board in board_data:
+            Board.objects.create(**board)
+        
 
 class Article(models.Model):
     title = models.CharField(max_length=100)
