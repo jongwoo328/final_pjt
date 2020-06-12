@@ -18,14 +18,17 @@ def community(request):
     context = {
         'page_obj': page_obj,
         'nowDate': nowDate,
-        'boards' : boards,
+        'board': None,
     }
     return render(request, 'community/index.html', context)
 
-def board(request, board_name):
-    boards = Board.objects.all()
-    now_board = get_object_or_404(Board, url_name=board_name)
-    articles = now_board.article_set.all()
+def board(request, board_name=None):
+    if board_name is None:
+        board = None
+        articles = Article.objects.order_by('-pk')
+    else:
+        board = get_object_or_404(Board, url_name=board_name)
+        articles = board.article_set.all()
 
     paginator = Paginator(articles, 10)
     nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
@@ -40,7 +43,7 @@ def board(request, board_name):
     return render(request, 'community/index.html', context)
 
 @login_required
-def create_article(request):
+def create_article(request, board_name=None):
     if request.method == 'POST':
         form = ArticleForm(request.POST)
         if form.is_valid():
@@ -50,7 +53,11 @@ def create_article(request):
             article.save()
             return redirect('community:detail', article.pk)
     else:
-        form = ArticleForm()
+        if board_name:
+            board = Board.objects.get(url_name=board_name)
+            form = ArticleForm(initial={'board': board})
+        else:
+            form = ArticleForm()
     context = {
         'form': form,
     }

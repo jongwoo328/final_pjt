@@ -21,7 +21,11 @@
         <div class="align-self-center">
             <h5>
                 <!-- <i class="fas fa-search"> | </i> -->
-            <a href="{% url 'community:create_article' %}" class="text-dark"><i class="fas fa-edit"></i></a></h5>
+            {% if board %}
+            <a href="{% url 'community:create_article' board.url_name %}" class="text-dark"><i class="fas fa-edit"></i></a></h5>
+            {% else %}
+            <a href="{% url 'community:create_article_noboard' %}" class="text-dark"><i class="fas fa-edit"></i></a></h5>
+            {% endif %}
         </div>
         
     </div>
