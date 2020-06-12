@@ -23,6 +23,12 @@
                     <a href="{% url 'movies:detail' movie.pk %}" class="font-weight-bold">{{ movie.title }}</a>
                     <p>평점 <i class="fas fa-star"></i>{{ movie.vote_average }}</p>
                     <p><small>{{ movie.release_date }} 개봉</small></p>
+                    {% if request.user in review.liked_users.all %}
+                        <i class="fas fa-heart fa-lg like-button" style="color:crimson" data-id="{{ movie.pk }}"></i>
+                    {% else %}
+                        <i class="fas fa-heart fa-lg like-button" style="color:black" data-id="{{ movie.pk }}"></i>
+                    {% endif %}
+                    <p>좋아요 : <span id="like-count-{{ review.pk }}">{{ movie.liked_users.all|length }}</span></p>
                     
                 </div>
             </div>
@@ -35,4 +41,30 @@
 <div class="d-flex justify-content-center">
     {% bootstrap_paginate page_obj range=10 show_prev_next="false" show_first_last="true" %}
 </div>
+
+<script>
+    const likeButtonList = document.querySelectorAll('.like-button')
+  
+    likeButtonList.forEach((likeButton) => {
+      likeButton.addEventListener('click', function(event){
+        const movieId = event.target.dataset.id
+  
+        axios.get(`/movies/${movieId}/like/`)
+  
+        .then((response) => {
+          // response.data.count -> json으로 응답(해당 게시글에 좋아요를 누른 사람의 수)
+          document.querySelector(`#like-count-${movieId}`).innerText = response.data.count
+  
+          if (response.data.liked) {
+            event.target.style.color = 'crimson'
+          } else {
+            event.target.style.color = 'black'
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+      })
+    })
+  </script>
 {% endblock %}
