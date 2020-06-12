@@ -32,7 +32,6 @@
             {% for article in page_obj %}
                 <div class="row">
                     <div class="col-6">
-                        {{ article.comment_set }}
                         <a href="{% url 'community:detail' article.pk %}" class="text-dark">{{article.title}}</a>
                     </div>
                     <div class="col-2">{{ article.author }}</div>
