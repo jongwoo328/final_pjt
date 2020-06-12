@@ -5,7 +5,12 @@
 {% block title %}Community{% endblock %}
 
 {% block context %}
-    <div class="d-flex justify-content-between"> 
+    <div class="w3-bar w3-dark-gray mb-3">
+        <a href="#" class="w3-bar-item w3-button w3-mobile text-decoration-none">전체게시판</a>
+        <a href="#" class="w3-bar-item w3-button w3-mobile text-decoration-none">자유게시판</a>
+        <a href="#" class="w3-bar-item w3-button w3-mobile text-decoration-none">추천해요~</a>
+    </div>
+    <div class="d-flex justify-content-between p-1"> 
         <h5>
             <!-- <a href="{%url 'community:community' %}" class="text-dark"><i class="fas fa-angle-double-left"></i></a> -->
             <!-- <a href="{%url 'community:community' %}" class="text-dark">커뮤니티</a> -->
@@ -19,7 +24,7 @@
         
     </div>
     
-    <div class="container mt-3">
+    <div class="container mt-0 p-1">
         <hr class="my-2">
         <div class="row" >
             <div class="col-6 text-center">제목</div>
@@ -43,14 +48,15 @@
                         {% else %}
                             {{ article.created_at | date:"Y-m-d" }}
                         {% endif %}
-                        </div>
+                    </div>
                 </div>
                 <hr class="my-2">
                 
             {% endfor %}
         </tbody>
-    </table>
-</div>
+    </div>
+    
+    <!-- pagination -->
     <div class="d-flex justify-content-center">
     {% bootstrap_paginate page_obj range=10 show_prev_next="false" show_first_last="true" %}
     </div>
