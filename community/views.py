@@ -106,6 +106,7 @@ def update_article(request, article_pk):
     return render(request, 'community/form.html', context)
 
 
+@login_required
 def article_like(request, article_pk):
     user = request.user
     article = get_object_or_404(Article, pk=review_pk)
@@ -170,3 +171,23 @@ def delete_comment(request, article_pk, comment_pk):
     if request.user == comment.author:
         comment.delete()
     return redirect('community:detail', article_pk)
+
+
+@login_required
+def comment_like(request, article_pk, comment_pk):
+    user = request.user
+    comment = get_object_or_404(Comment, pk=comment_pk)
+
+    if comment.liked_users.filter(pk=user.pk).exists():
+        comment.liked_users.remove(user)
+        liked = False
+    else:
+        comment.liked_users.add(user)
+        liked = True
+    
+    context = {
+        'liked': liked,
+        'count': comment.liked_users.count(),
+    }
+
+    return JsonResponse(context)
