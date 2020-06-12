@@ -8,6 +8,7 @@ urlpatterns = [
     path('', views.community, name='community'),
     path('create/', views.create_article, name='create_article_noboard'),
     path('<int:article_pk>/', views.detail, name='detail'),
+    path('<int:article_pk>/like/', views.article_like, name='article_like'),
     path('<int:article_pk>/update/', views.update_article, name='update_article'),
     path('<int:article_pk>/delete/', views.delete_article, name='delete_article'),
     path('<int:article_pk>/comment/create/', views.create_comment, name='create_comment'),

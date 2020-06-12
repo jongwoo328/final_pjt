@@ -1,8 +1,10 @@
+import datetime # 날짜 가져오기
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
-import datetime # 날짜 가져오기
+from django.http import JsonResponse
 
 from .models import Article, Comment, Board
 from .forms import ArticleForm, CommentForm
@@ -23,6 +25,7 @@ def community(request):
         'boards': boards,
     }
     return render(request, 'community/index.html', context)
+
 
 def board(request, board_name=None):
     
@@ -46,6 +49,7 @@ def board(request, board_name=None):
     }
     return render(request, 'community/index.html', context)
 
+
 @login_required
 def create_article(request, board_name=None):
     if request.method == 'POST':
@@ -67,6 +71,7 @@ def create_article(request, board_name=None):
     }
     return render(request, 'community/form.html', context)
 
+
 @login_required
 def detail(request, article_pk):
     article = get_object_or_404(Article, pk=article_pk)
@@ -81,6 +86,7 @@ def detail(request, article_pk):
         'nowDate': nowDate,
     }
     return render(request, 'community/detail.html', context)
+
 
 @login_required
 def update_article(request, article_pk):
@@ -99,6 +105,25 @@ def update_article(request, article_pk):
     }
     return render(request, 'community/form.html', context)
 
+
+def article_like(request, article_pk):
+    user = request.user
+    article = get_object_or_404(Article, pk=review_pk)
+
+    if article.liked_users.filter(pk=user.pk).exists():
+        article.liked_users.remove(user)
+        liked = False
+    else:
+        article.liked_users.add(user)
+        liked = True
+    
+    context = {
+        'liked': liked,
+        'count': article.liked_users.count(),
+    }
+
+    return JsonResponse(context)
+
 @login_required
 @require_POST
 def delete_article(request, article_pk):
@@ -107,6 +132,7 @@ def delete_article(request, article_pk):
         article.delete()
         return redirect('community:community')
     return redirect('community:detail', article_pk)
+
 
 @login_required
 def create_comment(request, article_pk):
