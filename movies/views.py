@@ -1,8 +1,10 @@
+import datetime
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
-import datetime
+from django.http import JsonResponse
 
 from .models import Movie, Genre, Review
 from .forms import ReviewForm
@@ -21,7 +23,7 @@ def index(request, sort=None):
         movies = Movie.objects.order_by('release_date')
     else:
         movies = Movie.objects.order_by('-pk')
-        
+
     paginator = Paginator(movies, 12)
     nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
     page_number = request.GET.get('page')
@@ -44,6 +46,25 @@ def detail(request, movie_pk):
         'reviews': reviews,
     }
     return render(request, 'movies/detail.html', context)
+
+@login_required
+def movie_like(request, movie_pk):
+    user = request.user
+    movie = get_object_or_404(Movie, pk=movie_pk)
+
+    if movie.liked_users.filter(pk=user.pk).exists():
+        movie.liked_users.remove(user)
+        liked = False
+    else:
+        liked = True
+    
+    context = {
+        'liked': liked,
+        'count': movie.liked_users.count(),
+    }
+
+    return JsonResponse(context)
+
 
 @login_required
 @require_POST
@@ -89,3 +110,22 @@ def review_delete(request, movie_pk, review_pk):
     if request.user == review.author:
         review.delete()
     return redirect('movies:detail', movie_pk)
+
+
+@login_required
+def movie_like(request, movie_pk, review_pk):
+    user = request.user
+    review = get_object_or_404(Review, pk=review_pk)
+
+    if review.liked_users.filter(pk=user.pk).exists():
+        review.liked_users.remove(user)
+        liked = False
+    else:
+        liked = True
+    
+    context = {
+        'liked': liked,
+        'count': review.liked_users.count(),
+    }
+
+    return JsonResponse(context)
