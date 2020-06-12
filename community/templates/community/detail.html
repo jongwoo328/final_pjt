@@ -18,7 +18,7 @@
         <h4 class="font-weight-bold mb-3">{{ article.title }}</h4>
         <div class="d-flex justify-content-between">
             <p class="text-muted"><small>{{ article.created_at }}</small></p>
-            <p class="text-muted"><small>댓글 수 {{ comments|length }}</small></p>
+            <p class="text-muted"><small>조회 수 {{ article.hits }}</small></p>
         </div>
         <hr class="mt-0 mb-3">
         <p>{{ article.content }}</p>

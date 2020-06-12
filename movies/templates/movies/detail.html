@@ -18,6 +18,12 @@
 {% for review in reviews %}
     <p>{{ review.rank }}</p>
     <p>{{ review.author }} : {{ review.content }}</p>
+    <small>
+        <form action="{% url 'movies:review_delete' movie.pk review.pk %}" method="POST" class="d-inline">
+            {% csrf_token %}
+        <button style="border:0; background-color: transparent" class="text-decoration-none">삭제</button>
+        </form>
+    </small>
     <hr>
 {% empty %}
     <p>새 리뷰를 작성해주세요</p>

@@ -18,7 +18,7 @@
     <div class="row row-cols-4">
         {% for movie in page_obj %}
             <div class="col w3-card-4">
-                <img src="https://image.tmdb.org/t/p/w154/{{ movie.poster_path }}" alt="Alps">
+                <a href="{% url 'movies:detail' movie.pk %}"><img src="https://image.tmdb.org/t/p/w154/{{ movie.poster_path }}" alt="Alps"></a>
                 <div class="w3-container w3-center">
                     <a href="{% url 'movies:detail' movie.pk %}" class="font-weight-bold">{{ movie.title }}</a>
                     <p>평점 <i class="fas fa-star"></i>{{ movie.vote_average }}</p>
