@@ -25,6 +25,7 @@ def community(request):
     return render(request, 'community/index.html', context)
 
 def board(request, board_name=None):
+    
     if board_name is None:
         board = None
         articles = Article.objects.order_by('-pk')

@@ -23,6 +23,7 @@
                     <a href="{% url 'movies:detail' movie.pk %}" class="font-weight-bold">{{ movie.title }}</a>
                     <p>평점 <i class="fas fa-star"></i>{{ movie.vote_average }}</p>
                     <p><small>{{ movie.release_date }} 개봉</small></p>
+                    
                 </div>
             </div>
         {% endfor %}
