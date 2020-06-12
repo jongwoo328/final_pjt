@@ -29,10 +29,12 @@
     <hr>
     <p><strong>{{ comments|length }}</strong>개의 댓글</p>
     <!-- 댓글 작성 -->
-
     <form action="{% url 'community:create_comment' article.pk %}" method="POST">
         {% csrf_token %}
-        {% bootstrap_form form %}
+        <!-- {% bootstrap_form form %} -->
+        {{ form.content }}
+        <!-- {{ form.submit }} -->
+
         <button>댓글 작성</button>
     </form>
     <!-- 댓글 목록 -->
@@ -63,6 +65,8 @@
         </div>
         {{ comment.content }}
         <hr>
+    {% empty %}
+        <p>새 댓글을 써주세요!</p>
     {% endfor %}
 
 {% endblock %}
