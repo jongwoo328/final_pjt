@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load bootstrap4 %}
+{% load bootstrap_pagination %}
 
 {% block title %}
 {% endblock %}
@@ -31,6 +32,6 @@
 
 <!-- Pagination -->
 <div class="d-flex justify-content-center">
-{% bootstrap_paginate page_obj range=10 show_prev_next="false" show_first_last="true" %}
+    {% bootstrap_paginate page_obj range=10 show_prev_next="false" show_first_last="true" %}
 </div>
 {% endblock %}
