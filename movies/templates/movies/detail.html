@@ -5,4 +5,21 @@
 {% endblock %}
 
 {% block context %}
+<img src="https://image.tmdb.org/t/p/w154/{{ movie.poster_path }}" alt="Alps">
+{{ movie.title }}
+<form action="{% url 'movies:review_create' movie.pk %}" method="POST">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    <button>작성</button>
+</form>
+<hr>
+{{ reviews|length }}의 댓글
+<hr>
+{% for review in reviews %}
+    <p>{{ review.rank }}</p>
+    <p>{{ review.author }} : {{ review.content }}</p>
+    <hr>
+{% empty %}
+    <p>새 리뷰를 작성해주세요</p>
+{% endfor %}
 {% endblock %}

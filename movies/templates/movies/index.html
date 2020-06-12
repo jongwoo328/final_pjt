@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load bootstrap4 %}
+{% load bootstrap_pagination %}
 
 {% block title %}
 {% endblock %}
@@ -17,11 +18,11 @@
     <div class="row row-cols-4">
         {% for movie in page_obj %}
             <div class="col w3-card-4">
-                <img src="{{ poster_path }}" alt="Alps">
+                <img src="https://image.tmdb.org/t/p/w154/{{ movie.poster_path }}" alt="Alps">
                 <div class="w3-container w3-center">
-                    <p class="font-weight-bold">{{ movie.title }}</p>
+                    <a href="{% url 'movies:detail' movie.pk %}" class="font-weight-bold">{{ movie.title }}</a>
                     <p>평점 <i class="fas fa-star"></i>{{ movie.vote_average }}</p>
-                    <p><small>{{ movie.released_date }} 개봉</small></p>
+                    <p><small>{{ movie.release_date }} 개봉</small></p>
                 </div>
             </div>
         {% endfor %}
@@ -31,6 +32,6 @@
 
 <!-- Pagination -->
 <div class="d-flex justify-content-center">
-{% bootstrap_paginate page_obj range=10 show_prev_next="false" show_first_last="true" %}
+    {% bootstrap_paginate page_obj range=10 show_prev_next="false" show_first_last="true" %}
 </div>
 {% endblock %}
