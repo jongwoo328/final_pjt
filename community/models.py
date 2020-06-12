@@ -1,10 +1,16 @@
+from faker import Faker
+
 from django.db import models
 from django.conf import settings
 from django.shortcuts import get_object_or_404
+from django.contrib.auth import get_user_model
 
 
 class Board(models.Model):
     name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
 
 class Article(models.Model):
     title = models.CharField(max_length=100)
@@ -13,6 +19,23 @@ class Article(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     board = models.ForeignKey(Board, on_delete=models.CASCADE)
+
+    def dummy(count):
+        faker = Faker('ko-KR')
+        if Board.objects.count() == 0:
+            Board.objects.create(name="testboard")
+        if get_user_model().objects.count() == 0:
+            get_user_model().objects.create(
+                username=faker.name(),
+                password="1"
+            )
+        for _ in range(count):
+            Article.objects.create(
+                title=faker.sentence(),
+                content=str(faker.text()) * 10,
+                author=get_user_model().objects.get(pk=1),
+                board=Board.objects.get(pk=1)
+            )
 
 class Comment(models.Model):
     content = models.TextField()
