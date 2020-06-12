@@ -63,7 +63,7 @@ class Article(models.Model):
                 title=faker.sentence(),
                 content=str(faker.text()) * 10,
                 author=get_user_model().objects.get(pk=1),
-                board=Board.objects.get(pk=1)
+                board=Board.objects.get(pk=3)
             )
 
 class Comment(models.Model):
