@@ -109,7 +109,7 @@ def update_article(request, article_pk):
 @login_required
 def article_like(request, article_pk):
     user = request.user
-    article = get_object_or_404(Article, pk=review_pk)
+    article = get_object_or_404(Article, pk=article_pk)
 
     if article.liked_users.filter(pk=user.pk).exists():
         article.liked_users.remove(user)
