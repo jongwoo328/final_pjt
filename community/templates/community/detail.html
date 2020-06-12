@@ -19,6 +19,12 @@
         <div class="d-flex justify-content-between">
             <p class="text-muted"><small>{{ article.created_at }}</small></p>
             <p class="text-muted"><small>조회 수 {{ article.hits }}</small></p>
+            {% if request.user in article.liked_users.all %}
+                <i class="fas fa-heart fa-lg like-article-button" style="color:crimson" data-id="{{ article.pk }}"></i>
+            {% else %}
+                <i class="fas fa-heart fa-lg like-article-button" style="color:black" data-id="{{ article.pk }}"></i>
+            {% endif %}
+            <p>좋아요 : <span id="like-article-count-{{ article.pk }}">{{ article.liked_users.all|length }}</span></p>
         </div>
         <hr class="mt-0 mb-3">
         <p>{{ article.content }}</p>
@@ -31,9 +37,7 @@
     <!-- 댓글 작성 -->
     <form action="{% url 'community:create_comment' article.pk %}" method="POST">
         {% csrf_token %}
-        <!-- {% bootstrap_form form %} -->
-        {{ form.content }}
-        <!-- {{ form.submit }} -->
+        {% bootstrap_form form %}
 
         <button>댓글 작성</button>
     </form>
@@ -63,10 +67,67 @@
         </div>
         {% endif %}
         </div>
-        {{ comment.content }}
+        <p>{{ comment.content }}</p>
+        {% if request.user in article.liked_users.all %}
+            <i class="fas fa-heart fa-lg like-comment-button" style="color:crimson" data-id="{{ comment.pk }}" data-article-id="{{ article.pk }}"></i>
+        {% else %}
+            <i class="fas fa-heart fa-lg like-comment-button" style="color:black" data-id="{{ comment.pk }}" data-article-id="{{ article.pk }}"></i>
+        {% endif %}
+        <p>좋아요 : <span id="like-comment-count-{{ comment.pk }}">{{ comment.liked_users.all|length }}</span></p>
         <hr>
     {% empty %}
         <p>새 댓글을 써주세요!</p>
     {% endfor %}
+
+
+    <script>
+        const likeArticleButtonList = document.querySelectorAll('.like-article-button')
+        const likeCommentButtonList = document.querySelectorAll('.like-comment-button')
+        
+        likeArticleButtonList.forEach((likeButton) => {
+            likeButton.addEventListener('click', function(event){
+            const articleId = event.target.dataset.id
+        
+            axios.get(`/community/${articleId}/like/`)
+        
+            .then((response) => {
+                // response.data.count -> json으로 응답(해당 게시글에 좋아요를 누른 사람의 수)
+                document.querySelector(`#like-article-count-${articleId}`).innerText = response.data.count
+        
+                if (response.data.liked) {
+                event.target.style.color = 'crimson'
+                } else {
+                event.target.style.color = 'black'
+                }
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+            })
+        })
+
+        likeCommentButtonList.forEach((likeButton) => {
+            likeButton.addEventListener('click', function(event){
+            const commentId = event.target.dataset.id
+            const articleId = event.target.dataseet.articleId
+        
+            axios.get(`/community/${articleId}/comment/${commentId}/like/`)
+        
+            .then((response) => {
+                // response.data.count -> json으로 응답(해당 게시글에 좋아요를 누른 사람의 수)
+                document.querySelector(`#like-comment-count-${commentId}`).innerText = response.data.count
+        
+                if (response.data.liked) {
+                event.target.style.color = 'crimson'
+                } else {
+                event.target.style.color = 'black'
+                }
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+            })
+        })
+    </script>
 
 {% endblock %}
