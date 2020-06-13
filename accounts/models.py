@@ -5,6 +5,8 @@ from community.models import Article, Comment
 from movies.models import Movie
 
 
+MAX_RECENTS = 3
+
 class CustomUser(AbstractUser):
     liked_articles = models.ManyToManyField(Article, related_name='liked_users')
     liked_movies = models.ManyToManyField(Movie, related_name='liked_users')
@@ -43,8 +45,7 @@ class CustomUser(AbstractUser):
     liked_war = models.IntegerField(default=0)
     liked_tvmovie = models.IntegerField(default=0)
 
-    # 최근 기록 ..
-    liked_recents = models.ManyToManyField(Movie)
+    liked_recents = models.CharField(max_length=50, default='')
 
     def liked(self, movie):
         year = movie.release_date.year
@@ -70,6 +71,13 @@ class CustomUser(AbstractUser):
             value = getattr(self, attrname)
             setattr(self,attrname, value + 1)
 
+        recents_data = self.liked_recents.split()
+
+        if len(recents_data) == MAX_RECENTS:
+            recents_data.pop(0)
+        recents_data.append(str(movie.pk))
+
+        self.liked_recents = ' '.join(recents_data)
         self.save()
     
     def disliked(self, movie):
@@ -95,5 +103,11 @@ class CustomUser(AbstractUser):
             attrname = f'liked_{"".join(genre.name.lower().split())}'
             value = getattr(self, attrname)
             setattr(self,attrname, value - 1)
-            
+        
+        recents_data = self.liked_recents.split()
+
+        if str(movie.pk) in recents_data:
+            recents_data.remove(str(movie.pk))
+
+        self.liked_recents = ' '.join(recents_data)
         self.save()
