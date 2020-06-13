@@ -20,7 +20,7 @@ def index(request, sort=None):
     if sort == 'rank':
         movies = Movie.objects.order_by('-vote_average')
     elif sort == 'release':
-        movies = Movie.objects.order_by('release_date')
+        movies = Movie.objects.order_by('-release_date')
     else:
         movies = Movie.objects.order_by('-pk')
 

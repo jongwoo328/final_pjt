@@ -3,11 +3,26 @@
 
 {% block title %}Community{% endblock %}
 
+
+{% block style %}
+<style>
+#content{
+    resize: none;
+    height: 100px;
+  }
+  
+
+</style>
+
+{% endblock %}
+
 {% block context %}
     {% if request.resolver_match.url_name == 'create_article' or request.resolver_match.url_name == 'create_article_noboard' %}
     <h2>게시글 작성</h2>
-    {% else %}
+    {% elif request.resolver_match.url_name == 'update_article' %}
     <h2>게시글 수정</h2>
+    {% elif request.resolver_match.url_name == 'update_comment' %}
+    <h2>댓글 수정</h2>
     {% endif %}
     <hr>
 
@@ -17,8 +32,10 @@
         
         {% if request.resolver_match.url_name == 'create_article' %}
             <button class="btn btn-primary">게시글 작성</button>
-        {% else %}
+        {% elif request.resolver_match.url_name == 'update_article' %}
             <button class="btn btn-primary">게시글 수정</button>
+        {% else %}
+        <button class="btn btn-primary">댓글 수정</button>
         {% endif %}
     
     </form>

@@ -11,9 +11,11 @@
 
 {% block context %}
 <div class="d-flex justify-content-between"> 
-    <h5>
-        <i class="fas"> 전체 영화 </i>
-    </h5>    
+    <h5><i class="fas"> 전체 영화 </i></h5>
+    <div>
+      <a href="{% url 'movies:index_sort' 'rank' %}" class="mr-2 text-dark"><i class="fas fa-check">평점순</i></a> 
+      <a href="{% url 'movies:index_sort' 'release' %}" class="mr-2 text-dark"><i class="fas fa-check">개봉순</i></a>
+    </div>    
 </div>
 <hr>
 {{ movies }}
@@ -25,7 +27,7 @@
         <div class="card h-100">
 
           <a href="{% url 'movies:detail' movie.pk %}">
-            <img src="https://image.tmdb.org/t/p/w342/{{ movie.poster_path }}" class=" card-img-top">
+            <img src="https://image.tmdb.org/t/p/w342/{{ movie.poster_path }}" alt="{{ movie.title }}" class=" card-img-top">
           </a>
           <div class="card-body">
             <div class="d-flex justify-content-between">

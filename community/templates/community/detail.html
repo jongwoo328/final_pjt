@@ -3,6 +3,19 @@
 
 {% block title %}Community{% endblock %}
 
+{% block style %}
+<style>
+#content{
+    resize: none;
+    height: 100px;
+  }
+  
+
+</style>
+
+{% endblock %}
+
+
 {% block context %}
     <div class="d-flex justify-content-between"> 
         <h5>
@@ -31,11 +44,28 @@
         </div>
         <div class="d-flex justify-content-between">
             <p class="text-muted"><small>{{ article.created_at }}</small></p>
-            <span class="text-muted"><small>조회 수 {{ article.hits }}</small></span>
+            <div>
+                <span class="text-muted"><small>조회 수 {{ article.hits }}</small></span>
+                
+            </div>
+            
+
             
         </div>
         <hr class="mt-0 mb-3">
         <p>{{ article.content }}</p>
+        <!-- 게시글 수정&삭제 버튼 -->
+        <div class="d-flex justify-content-end">
+        {% if article.author == request.user %}
+            <small><a href="{% url 'community:update_article' article.pk %}" class="text-dark">수정</a></small>
+            <small>
+                <form action="{% url 'community:delete_article' article.pk %}" method="POST" class="d-inline">
+                    {% csrf_token %}
+                <button style="border:0; background-color: transparent" class="text-decoration-none">삭제</button>
+                </form>
+            </small>
+        {% endif %}
+        </div>
     </div>
     
 
@@ -67,7 +97,7 @@
         {% if comment.author == request.user %}
         <div>
             <!-- <small><a href="{% url 'community:update_comment' article.pk comment.pk %}" class="text-dark">수정</a></small> -->
-            <small><a href="#" class="text-dark">수정</a></small>
+            <small><a href="{% url 'community:update_comment' article.pk comment.pk %}" class="text-dark">수정</a></small>
             <small>
                 <form action="{% url 'community:delete_comment' article.pk comment.pk %}" method="POST" class="d-inline">
                     {% csrf_token %}
@@ -78,12 +108,10 @@
         {% endif %}
         </div>
         <p>{{ comment.content }}</p>
-        {% if request.user in article.liked_users.all %}
-            hello
+        {% if request.user in comment.liked_users.all %}
             <span><i class="far fa-thumbs-up fa-lg like-comment-button" style="color: #0077ff" data-id="{{ comment.pk }}" data-article-id="{{ article.pk }}"></i></span>
             <small id="like-comment-count-{{ comment.pk }}" style="color:black">{{ comment.liked_users.all|length }}</small>
         {% else %}
-            nothello
             <span><i class="far fa-thumbs-up fa-lg like-comment-button" style="color:black" data-id="{{ comment.pk }}" data-article-id="{{ article.pk }}"></i></i></span>
             <small id="like-comment-count-{{ comment.pk }}" style="color:black">{{ comment.liked_users.all|length }}</small>
         {% endif %}
@@ -94,29 +122,28 @@
 
 
     <script>
-        const likeArticleButtonList = document.querySelectorAll('.like-article-button')
+        const likeArticleButton = document.querySelector('.like-article-button')
         const likeCommentButtonList = document.querySelectorAll('.like-comment-button')
         
-        likeArticleButtonList.forEach((likeButton) => {
-            likeButton.addEventListener('click', function(event){
-            const articleId = event.target.dataset.id
         
-            axios.get(`/community/${articleId}/like/`)
-            .then((response) => {
-                
-                // response.data.count -> json으로 응답(해당 게시글에 좋아요를 누른 사람의 수)
-                document.querySelector(`#like-article-count-${articleId}`).innerText = "(스크랩 : " + response.data.count + ")"
-        
-                if (response.data.liked) {
-                event.target.style.color = 'rgb(31, 185, 0)'
-                } else {
-                event.target.style.color = 'black'
-                }
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-            })
+        likeArticleButton.addEventListener('click', function(event){
+        const articleId = event.target.dataset.id
+    
+        axios.get(`/community/${articleId}/like/`)
+        .then((response) => {
+            
+            // response.data.count -> json으로 응답(해당 게시글에 좋아요를 누른 사람의 수)
+            document.querySelector(`#like-article-count-${articleId}`).innerText = "(스크랩 : " + response.data.count + ")"
+            console.log(response.data)
+            if (response.data.article_liked) {
+            event.target.style.color = 'rgb(31, 185, 0)'
+            } else {
+            event.target.style.color = 'black'
+            }
+        })
+        .catch((error) => {
+            console.log(error)
+        })
         })
 
         likeCommentButtonList.forEach((likeButton) => {
@@ -129,8 +156,8 @@
             .then((response) => {
                 // response.data.count -> json으로 응답(해당 게시글에 좋아요를 누른 사람의 수)
                 document.querySelector(`#like-comment-count-${commentId}`).innerText = response.data.count
-        
-                if (response.data.liked) {
+                console.log(response.data)
+                if (response.data.comment_liked) {
                 event.target.style.color = '#0077ff'
                 } else {
                 event.target.style.color = 'black'

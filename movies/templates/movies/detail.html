@@ -106,7 +106,7 @@ Movie
     <div class="d-flex justify-content-between">
       <p>{{ review.created_at }}</p>
       <div>
-        <a href="#"><small class="text-decoration-none text-dark">수정</small></a>
+        <a href="{% url 'movies:review_update' movie.pk review.pk %}"><small class="text-decoration-none text-dark">수정</small></a>
         <small>
           <form action="{% url 'movies:review_delete' movie.pk review.pk %}" method="POST" class="d-inline">
               {% csrf_token %}
@@ -159,6 +159,10 @@ Movie
   document.getElementById('language').innerText = contries[language]
 
   // 댓글 form
+
+
+
+
   // 별점
   const ranks = document.querySelectorAll('.rank_star')
   console.log(ranks, typeof(ranks))
