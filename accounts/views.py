@@ -36,7 +36,6 @@ def signup(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            user.created()
             auth_login(request, user)
             return redirect('community:community')
     else:

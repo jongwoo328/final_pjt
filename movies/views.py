@@ -1,4 +1,5 @@
 import datetime
+import random
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
@@ -10,12 +11,15 @@ from .models import Movie, Genre, Review, MAX_RANK
 from .forms import ReviewForm
 
 
+ALL_MOVIE_COUNT = 2000
+RANDOM_MOVIE_COUNT = 10
+
 def main(request):
     # 랜덤 영화
     random_movies = Movie.objects.filter(
-        pk__in=random.sample(
+        pk__in=list(random.sample(
             range(1, ALL_MOVIE_COUNT+1), RANDOM_MOVIE_COUNT
-            )
+            ))
         )
     
     # 최근 기록
