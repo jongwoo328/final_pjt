@@ -5,6 +5,10 @@
 {% block title %}
 {% endblock %}
 
+{% block style %}
+{% endblock %}
+
+
 {% block context %}
 <div class="d-flex justify-content-between"> 
     <h5>
@@ -17,20 +21,31 @@
 <div class="container">
   <div class="row">
     {% for movie in page_obj %}
-      <div class="col-3 mb-3">
+      <div class="col-12 col-md-6 col-lg-3 mb-3">
         <div class="card h-100">
 
           <a href="{% url 'movies:detail' movie.pk %}">
             <img src="https://image.tmdb.org/t/p/w342/{{ movie.poster_path }}" class=" card-img-top">
           </a>
           <div class="card-body">
-            <a href="{% url 'movies:detail' movie.pk %}" class="font-weight-bold">{{ movie.title }}</a>
-            {% if request.user in movie.liked_users.all %}
-                <i class="fas fa-heart fa-lg like-button" style="color:crimson" data-id="{{ movie.pk }}"></i>
-            {% else %}
-                <i class="fas fa-heart fa-lg like-button" style="color:black" data-id="{{ movie.pk }}"></i>
-            {% endif %}
-            <p>좋아요 : <span id="like-count-{{ movie.pk }}">{{ movie.liked_users.all|length }}</span></p>
+            <div class="d-flex justify-content-between">
+                <div>
+                  <a href="{% url 'movies:detail' movie.pk %}" class="font-weight-bold">{{ movie.title }}</a>
+                  <span><i class="fas fa-star fa-sm" style="color:crimson"> {{ movie.vote_average }}</i></span>
+                </div>
+                <div>
+                {% if request.user in movie.liked_users.all %}
+                    <i class="fas fa-heart fa-lg like-button" style="color:crimson" data-id="{{ movie.pk }}"></i>
+                    <span id="like-count-{{ movie.pk }}">{{ movie.liked_users.all|length }}</span>
+                {% else %}
+                    <i class="fas fa-heart fa-lg like-button" style="color:black" data-id="{{ movie.pk }}"></i>
+                    <span id="like-count-{{ movie.pk }}">{{ movie.liked_users.all|length }}</span>
+                {% endif %}
+                </div>
+            </div>
+            <!-- 개봉일 -->
+            <p class="mt-2 mb-0"><small>{{ movie.release_date|date:"Y-m-d" }} 개봉</small></p>
+              
           </div>
 
         </div>

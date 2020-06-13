@@ -9,40 +9,11 @@ Movie
 
 {% block style %}
 <style>
-  
-/* label{
-  display: block;
-}
-.form-group{
-  display: inline-block;
-  margin-top: 1px;
-}
+
 #content{
-  display: inline;
   resize: none;
-  width: 120%;
-  height: 100px;
 }
-#submit{
-  height: 100px;
-  width:12%;
-  background-color: white;
-  color: black;
-  border-radius: 8px;
-  border-bottom-style: none;
-  border-top-style: none;
-  border-left-style: none;
-  border-right-style: none;
-  border: 2px solid #969696;
-  line-height: 0;
-  position: relative;
-  bottom:43px;
-  right:-100px;
-}
-#submit:hover {
-  background-color: #969696;
-  color: white;
-} */
+
 </style>
 {% endblock %}
 
@@ -115,7 +86,7 @@ Movie
     <div class="d-flex justify-content-between">
       <div>
       <span><strong>{{ review.author }} </strong></span>
-      <span class="rank_star">{{ review.rank }}</span>
+      <span class="rank_star">{{ review.rank_star }}</span>
       </div>
       <div>
         {% if request.user in review.liked_users.all %}
