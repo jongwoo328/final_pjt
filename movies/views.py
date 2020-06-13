@@ -24,11 +24,11 @@ def main(request):
 
 def index(request, sort=None):
     if sort == 'rank':
-        movies = Movie.objects.order_by('-vote_average')
+        movies = Movie.objects.order_by('-vote_average').filter(release_date__lte=datetime.datetime.now())
     elif sort == 'release':
-        movies = Movie.objects.order_by('-release_date')
+        movies = Movie.objects.order_by('-release_date').filter(release_date__lte=datetime.datetime.now())
     else:
-        movies = Movie.objects.order_by('-pk')
+        movies = Movie.objects.order_by('-pk').filter(release_date__lte=datetime.datetime.now())
 
     paginator = Paginator(movies, 12)
     nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
