@@ -82,7 +82,7 @@ def review_create(request, movie_pk):
         'movie': movie,
         'form': form,
     }
-    return render(request, 'movies:detail', movie_pk)
+    return render(request, 'movies/detail.html', movie_pk)
 
 
 @login_required
