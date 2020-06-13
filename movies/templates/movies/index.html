@@ -27,7 +27,7 @@
         <div class="card h-100">
 
           <a href="{% url 'movies:detail' movie.pk %}">
-            <img src="https://image.tmdb.org/t/p/w342/{{ movie.poster_path }}" class=" card-img-top">
+            <img src="https://image.tmdb.org/t/p/w342/{{ movie.poster_path }}" alt="{{ movie.title }}" class=" card-img-top">
           </a>
           <div class="card-body">
             <div class="d-flex justify-content-between">
