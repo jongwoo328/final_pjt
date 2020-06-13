@@ -11,10 +11,16 @@ from .forms import ReviewForm
 
 
 def main(request):
-    '''
-    추천 로직
-    '''
-    pass
+    # 랜덤 영화
+    random_movies = Movie.objects.filter(
+        pk__in=random.sample(
+            range(1, ALL_MOVIE_COUNT+1), RANDOM_MOVIE_COUNT
+            )
+        )
+    
+    # 최근 기록
+    if request.user.is_authenticated:
+        print(request.user.liked_movies.all())
 
 def index(request, sort=None):
     if sort == 'rank':
