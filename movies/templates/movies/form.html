@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block title %}Community{% endblock %}
+
+
+{% block style %}
+<style>
+#content{
+    resize: none;
+    height: 100px;
+  }
+  
+
+</style>
+
+{% endblock %}
+
+{% block context %}
+    <h2>평점 수정</h2>
+    <hr>
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        
+        <button class="btn btn-primary">평점 수정</button>
+    
+    </form>
+
+{% endblock %}
