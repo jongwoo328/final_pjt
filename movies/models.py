@@ -3,6 +3,8 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.conf import settings
 
 
+MAX_RANK = 5
+
 class Genre(models.Model):
     name = models.CharField(max_length=100)
 
@@ -21,7 +23,8 @@ class Movie(models.Model):
     genres = models.ManyToManyField(Genre, related_name='movies')
 
 class Review(models.Model):
-    rank = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
+    rank = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(MAX_RANK)])
+    rank_star = models.CharField(max_length=10)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
