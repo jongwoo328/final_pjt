@@ -6,14 +6,119 @@
 
 {% block context %}
 <div class="d-flex justify-content-between">
+    <div>
     <h3><i class="fas fa-user-circle align-self-center mx-3 py-3"></i>{{ user.username }}님의 프로필</h3>
+    <p class="text-lg" style="font-size: large;">이름 : {{ user.first_name }} {{ user.last_name }}</p>
+    <p class="text-lg" style="font-size: large;">이메일 : {{ user.email }}</p>
+    </div>
     <a href="{% url 'accounts:update' %}" class="text-dark align-self-end">회원정보수정</a>
 </div>
 <hr>
 
 <h4> 좋아하는 영화 </h4>
+<div class="d-flex">
+    <button class="w3-button w3-white">&laquo;</button>
+    <div >
+        <div class="d-flex">
+        {% for movie in user.liked_movies.all %}
+            <div class="card">
+                <a href="{% url 'movies:detail' movie.pk %}">
+                    <img src="https://image.tmdb.org/t/p/w154/{{ movie.poster_path }}" 
+                         alt="{{ movie.title }}"
+                         class="card-img-top ReSizeImage"
+                         >
+
+                </a>
+                <div class="card-body">
+                    <a href="{% url 'movies:detail' movie.pk %}" class="font-weight-bold">{{ movie.title }}</a>
+                    <!-- 개봉일 -->
+                    <p class="mt-2 mb-0"><small>{{ movie.release_date|date:"Y-m-d" }} 개봉</small></p>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+
+    <button class="w3-button w3-white">&raquo;</button>
+
+</div>
 <hr>
 
 <h4> 작성하신 게시글 </h4>
-<hr>
+<div class="container mt-0 mb-5 p-1">
+    <hr class="my-2">
+    <div class="row" >
+        <div class="col-6 text-center">제목</div>
+        <div class="col-2 text-center">스크랩</div>
+        <div class="col-2 text-center">조회 수</div>
+        <div class="col-2 text-center">작성일</div>
+    </div>
+    <hr class="my-2">
+    <tbody>
+        {% for article in user.article_set.all %}
+            <div class="row">
+                <div class="col-6">
+                    <a href="{% url 'community:detail' article.pk %}" class="text-dark">{{article.title}}</a>
+                </div>
+                <div class="col-2 text-center">{{ article.liked_users|length }}</div>
+                <div class="col-2 text-center">{{ article.hits }}</div>
+                <div class="col-2 text-center">
+                    <!-- 오늘 날짜면 시간만 / 아니면 날짜 출력 -->
+                    {% if article.created_at|date:"Y-m-d" == nowDate %}
+                        {{ article.created_at | date:"H:i" }}
+                    {% else %}
+                        {{ article.created_at | date:"Y-m-d" }}
+                    {% endif %}
+                </div>
+            </div>
+            <hr class="my-2">
+            
+        {% endfor %}
+    </tbody>
+</div>
+
+<h4> 스크랩한 게시글 </h4>
+<div class="container mt-0 p-1">
+    <hr class="my-2">
+    <div class="row" >
+        <div class="col-6 text-center">제목</div>
+        <div class="col-2 text-center">스크랩</div>
+        <div class="col-2 text-center">조회 수</div>
+        <div class="col-2 text-center">작성일</div>
+    </div>
+    <hr class="my-2">
+    <tbody>
+        {% for article in user.liked_articles.all %}
+            <div class="row">
+                <div class="col-6">
+                    <a href="{% url 'community:detail' article.pk %}" class="text-dark">{{article.title}}</a>
+                </div>
+                <div class="col-2 text-center">{{ article.liked_users|length }}</div>
+                <div class="col-2 text-center">{{ article.hits }}</div>
+                <div class="col-2 text-center">
+                    <!-- 오늘 날짜면 시간만 / 아니면 날짜 출력 -->
+                    {% if article.created_at|date:"Y-m-d" == nowDate %}
+                        {{ article.created_at | date:"H:i" }}
+                    {% else %}
+                        {{ article.created_at | date:"Y-m-d" }}
+                    {% endif %}
+                </div>
+            </div>
+            <hr class="my-2">
+            
+        {% endfor %}
+    </tbody>
+</div>
+<script>
+    $(document).ready(function(){
+        $('.ReSizeImage').each(function(){
+            var width = this.width
+            var ratio = 1.5
+            $(this).css("height", width*ratio)
+
+        })
+    })
+</script>
+
 {% endblock %}
+
