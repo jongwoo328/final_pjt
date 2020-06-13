@@ -115,7 +115,7 @@ Movie
     <div class="d-flex justify-content-between">
       <div>
       <span><strong>{{ review.author }} </strong></span>
-      <span class="rank_star">{{ review.rank }}</span>
+      <span class="rank_star">{{ review.rank_star }}</span>
       </div>
       <div>
         {% if request.user in review.liked_users.all %}
