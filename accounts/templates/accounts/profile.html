@@ -23,7 +23,11 @@
         {% for movie in user.liked_movies.all %}
             <div class="card">
                 <a href="{% url 'movies:detail' movie.pk %}">
-                    <img src="https://image.tmdb.org/t/p/w92/{{ movie.poster_path }}" alt="{{ movie.title }}" class=" card-img-top">
+                    <img src="https://image.tmdb.org/t/p/w154/{{ movie.poster_path }}" 
+                         alt="{{ movie.title }}"
+                         class="card-img-top ReSizeImage"
+                         >
+
                 </a>
                 <div class="card-body">
                     <a href="{% url 'movies:detail' movie.pk %}" class="font-weight-bold">{{ movie.title }}</a>
@@ -105,4 +109,16 @@
         {% endfor %}
     </tbody>
 </div>
+<script>
+    $(document).ready(function(){
+        $('.ReSizeImage').each(function(){
+            var width = this.width
+            var ratio = 1.5
+            $(this).css("height", width*ratio)
+
+        })
+    })
+</script>
+
 {% endblock %}
+

@@ -27,7 +27,7 @@
         <div class="card h-100">
 
           <a href="{% url 'movies:detail' movie.pk %}">
-            <img src="https://image.tmdb.org/t/p/w342/{{ movie.poster_path }}" alt="{{ movie.title }}" class=" card-img-top">
+            <img src="https://image.tmdb.org/t/p/w342/{{ movie.poster_path }}" alt="{{ movie.title }}" class=" card-img-top ReSizeImage">
           </a>
           <div class="card-body">
             <div class="d-flex justify-content-between">
@@ -62,6 +62,16 @@
 </div>
 
 <script>
+  // 이미지 사이즈 조절
+    $(document).ready(function(){
+        $('.ReSizeImage').each(function(){
+            var width = this.width
+            var ratio = 1.5
+            $(this).css("height", width*ratio)
+
+        })
+    })
+    // 좋아요
     const likeButtonList = document.querySelectorAll('.like-button')
   
     likeButtonList.forEach((likeButton) => {
