@@ -12,30 +12,29 @@
     </h5>    
 </div>
 <hr>
-
+{{ movies }}
 <!-- 영화 목록 - poster_path, adult, title, vote_average, released_date -->
-<div class="container mt-3">
-    <div class="row row-cols-4">
-        {% for movie in page_obj %}
-            <div class="col w3-card-4">
-                <a href="{% url 'movies:detail' movie.pk %}"><img src="https://image.tmdb.org/t/p/w154/{{ movie.poster_path }}" alt="Alps"></a>
-                <div class="w3-container w3-center">
-                    <a href="{% url 'movies:detail' movie.pk %}" class="font-weight-bold">{{ movie.title }}</a>
-                    <p>평점 <i class="fas fa-star"></i>{{ movie.vote_average }}</p>
-                    <p><small>{{ movie.release_date }} 개봉</small></p>
-                    {% if request.user in movie.liked_users.all %}
-                        <i class="fas fa-heart fa-lg like-button" style="color:crimson" data-id="{{ movie.pk }}"></i>
-                    {% else %}
-                        <i class="fas fa-heart fa-lg like-button" style="color:black" data-id="{{ movie.pk }}"></i>
-                    {% endif %}
-                    <p>좋아요 : <span id="like-count-{{ movie.pk }}">{{ movie.liked_users.all|length }}</span></p>
-                    
-                </div>
-            </div>
-        {% endfor %}
+<ul class="w3-row-padding w3-section w3-stretch">
+  {% for movie in page_obj %}
+    <li class="w3-card-2 w3-col s12 m6 l4 p-0 mx-1 my-3" style="list-style: none;">
+      <div>
+        <a href="{% url 'movies:detail' movie.pk %}">
+          <img src="https://image.tmdb.org/t/p/w342/{{ movie.poster_path }}" width="100%">
+        </a>
+      </div>
+      <div>
+        <a href="{% url 'movies:detail' movie.pk %}" class="font-weight-bold">{{ movie.title }}</a>
+        {% if request.user in movie.liked_users.all %}
+            <i class="fas fa-heart fa-lg like-button" style="color:crimson" data-id="{{ movie.pk }}"></i>
+        {% else %}
+            <i class="fas fa-heart fa-lg like-button" style="color:black" data-id="{{ movie.pk }}"></i>
+        {% endif %}
+        <p>좋아요 : <span id="like-count-{{ movie.pk }}">{{ movie.liked_users.all|length }}</span></p>
+      </div>
+    </li>
+  {% endfor %}
 
-    </div>
-</div>
+</ul>
 
 <!-- Pagination -->
 <div class="d-flex justify-content-center">

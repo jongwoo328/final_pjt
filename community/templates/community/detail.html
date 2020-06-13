@@ -15,16 +15,24 @@
 
     <!-- 게시글 -->
     <div>
-        <h4 class="font-weight-bold mb-3">{{ article.title }}</h4>
+        <div class="d-flex justify-content-between">
+            <h4 class="font-weight-bold mb-3">{{ article.title }}</h4>
+            <div>
+                {% if request.user in article.liked_users.all %}
+                    <span><i class="fas fa-star fa-lg like-article-button" style="color: rgb(31, 185, 0)" data-id="{{ article.pk }}"></i></span>
+                    <small id="like-article-count-{{ article.pk }}" style="color:black">(스크랩 : {{ article.liked_users.all|length }})</small>
+                                    
+                {% else %}
+                    <span><i class="fas fa-star fa-lg like-article-button" style="color:black" data-id="{{ article.pk }}"></i></span>
+                    <small id="like-article-count-{{ article.pk }}" style="color:black">(스크랩 : {{ article.liked_users.all|length }})</small>
+                    
+                {% endif %}
+                </div>
+        </div>
         <div class="d-flex justify-content-between">
             <p class="text-muted"><small>{{ article.created_at }}</small></p>
-            <p class="text-muted"><small>조회 수 {{ article.hits }}</small></p>
-            {% if request.user in article.liked_users.all %}
-                <i class="fas fa-heart fa-lg like-article-button" style="color:crimson" data-id="{{ article.pk }}"></i>
-            {% else %}
-                <i class="fas fa-heart fa-lg like-article-button" style="color:black" data-id="{{ article.pk }}"></i>
-            {% endif %}
-            <p>좋아요 : <span id="like-article-count-{{ article.pk }}">{{ article.liked_users.all|length }}</span></p>
+            <span class="text-muted"><small>조회 수 {{ article.hits }}</small></span>
+            
         </div>
         <hr class="mt-0 mb-3">
         <p>{{ article.content }}</p>
@@ -33,7 +41,6 @@
 
     <!-- 댓글 -->
     <hr>
-    <p><strong>{{ comments|length }}</strong>개의 댓글</p>
     <!-- 댓글 작성 -->
     <form action="{% url 'community:create_comment' article.pk %}" method="POST">
         {% csrf_token %}
@@ -41,7 +48,10 @@
 
         <button>댓글 작성</button>
     </form>
+    
     <!-- 댓글 목록 -->
+    <p class="mt-4"><strong>{{ comments|length }}</strong>개의 댓글</p>
+    <hr>
     {% for comment in comments %}
         <!-- 날짜 & 댓글 수정, 삭제 -->
         <div class="d-flex justify-content-between">
@@ -69,11 +79,14 @@
         </div>
         <p>{{ comment.content }}</p>
         {% if request.user in article.liked_users.all %}
-            <i class="fas fa-heart fa-lg like-comment-button" style="color:crimson" data-id="{{ comment.pk }}" data-article-id="{{ article.pk }}"></i>
+            hello
+            <span><i class="far fa-thumbs-up fa-lg like-comment-button" style="color: #0077ff" data-id="{{ comment.pk }}" data-article-id="{{ article.pk }}"></i></span>
+            <small id="like-comment-count-{{ comment.pk }}" style="color:black">{{ comment.liked_users.all|length }}</small>
         {% else %}
-            <i class="fas fa-heart fa-lg like-comment-button" style="color:black" data-id="{{ comment.pk }}" data-article-id="{{ article.pk }}"></i>
+            nothello
+            <span><i class="far fa-thumbs-up fa-lg like-comment-button" style="color:black" data-id="{{ comment.pk }}" data-article-id="{{ article.pk }}"></i></i></span>
+            <small id="like-comment-count-{{ comment.pk }}" style="color:black">{{ comment.liked_users.all|length }}</small>
         {% endif %}
-        <p>좋아요 : <span id="like-comment-count-{{ comment.pk }}">{{ comment.liked_users.all|length }}</span></p>
         <hr>
     {% empty %}
         <p>새 댓글을 써주세요!</p>
@@ -92,10 +105,10 @@
             .then((response) => {
                 
                 // response.data.count -> json으로 응답(해당 게시글에 좋아요를 누른 사람의 수)
-                document.querySelector(`#like-article-count-${articleId}`).innerText = response.data.count
+                document.querySelector(`#like-article-count-${articleId}`).innerText = "(스크랩 : " + response.data.count + ")"
         
                 if (response.data.liked) {
-                event.target.style.color = 'crimson'
+                event.target.style.color = 'rgb(31, 185, 0)'
                 } else {
                 event.target.style.color = 'black'
                 }
@@ -118,7 +131,7 @@
                 document.querySelector(`#like-comment-count-${commentId}`).innerText = response.data.count
         
                 if (response.data.liked) {
-                event.target.style.color = 'crimson'
+                event.target.style.color = '#0077ff'
                 } else {
                 event.target.style.color = 'black'
                 }
