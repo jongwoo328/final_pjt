@@ -12,9 +12,20 @@ User = get_user_model()
 @login_required
 def profile(request):
     user = request.user
-    context = {
-        'user': user,
-    }
+    movies = user.liked_movies.all()
+    if user.liked_movies.all().exists() : 
+        context = {
+            'user': user,
+            'movies' : movies,
+            'first_movie' : movies[0],
+            'rest_movies' : movies[1:],
+        }
+    else : 
+        context = {
+            'user' : user,
+            'movies' : movies,
+        }
+
     return render(request, 'accounts/profile.html', context)
 
 def login(request):
@@ -23,7 +34,7 @@ def login(request):
         if form.is_valid():
             user = form.get_user()
             auth_login(request, user)
-            return redirect('community:community')
+            return redirect('movies:main')
     else:
         form = AuthenticationForm(request)
     context = {
@@ -37,7 +48,7 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             auth_login(request, user)
-            return redirect('community:community')
+            return redirect('movies:main')
     else:
         form = CustomUserCreationForm()
     context = {
@@ -48,7 +59,7 @@ def signup(request):
 @login_required
 def logout(request):
     auth_logout(request)
-    return redirect('community:community')
+    return redirect('movies:main')
 
 @login_required
 def update(request):
@@ -69,7 +80,7 @@ def update(request):
 def delete(request):
     user = request.user
     user.delete()
-    return redirect('community:community')
+    return redirect('movies:main')
 
 @login_required
 def change_password(request):
