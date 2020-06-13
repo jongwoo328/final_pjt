@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 
-from .models import Movie, Genre, Review
+from .models import Movie, Genre, Review, MAX_RANK
 from .forms import ReviewForm
 
 
@@ -76,6 +76,7 @@ def review_create(request, movie_pk):
         review = form.save(commit=False)
         review.author = request.user
         review.movie = movie
+        review.rank_star =  ('★' * review.rank) + ('☆' * (MAX_RANK - review.rank))
         review.save()
         return redirect('movies:detail', movie_pk)
     context = {
