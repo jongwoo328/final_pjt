@@ -1,6 +1,7 @@
 from django import forms
+from django.core.validators import MinValueValidator, MaxValueValidator
 
-from .models import Review
+from .models import Review, MAX_RANK
 
 
 class ReviewForm(forms.ModelForm):
@@ -9,8 +10,11 @@ class ReviewForm(forms.ModelForm):
         widget = forms.NumberInput(
             attrs={
                 'id': 'rank',
+                'min': 1,
+                'max': MAX_RANK,
             },
-        )
+        ),
+        validators=[MinValueValidator(1), MaxValueValidator(MAX_RANK)],
     )
     content = forms.CharField(
         label="댓글",
