@@ -8,6 +8,9 @@ MAX_RANK = 5
 class Genre(models.Model):
     name = models.CharField(max_length=100)
 
+    def __str__(self):
+        return f'{self.name}'
+
 class Movie(models.Model):
     title = models.CharField(max_length=100)
     original_title = models.CharField(max_length=100)
@@ -21,6 +24,9 @@ class Movie(models.Model):
     poster_path = models.CharField(max_length=100, default='')
     backdrop_path = models.CharField(max_length=100, default='')
     genres = models.ManyToManyField(Genre, related_name='movies')
+
+    def __str__(self):
+        return f'{self.title}'
 
 class Review(models.Model):
     rank = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(MAX_RANK)])

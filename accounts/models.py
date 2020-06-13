@@ -47,4 +47,53 @@ class CustomUser(AbstractUser):
     liked_recents = models.ManyToManyField(Movie)
 
     def liked(self, movie):
-        print(movie.release_date)
+        year = movie.release_date.year
+        if year < 1960:
+            self.liked_under60 += 1
+        elif year < 1970:
+            self.liked_1960 += 1
+        elif year < 1980:
+            self.liked_1970 += 1
+        elif year < 1990:
+            self.liked_1980 += 1
+        elif year < 2000:
+            self.liked_1990 += 1
+        elif year < 2010:
+            self.liked_2000 += 1
+        elif year < 2020:
+            self.liked_2010 += 1
+        else:
+            self.liked_2020 += 1
+        
+        for genre in movie.genres.all():
+            attrname = f'liked_{"".join(genre.name.lower().split())}'
+            value = getattr(self, attrname)
+            setattr(self,attrname, value + 1)
+
+        self.save()
+    
+    def disliked(self, movie):
+        year = movie.release_date.year
+        if year < 1960:
+            self.liked_under60 -= 1
+        elif year < 1970:
+            self.liked_1960 -= 1
+        elif year < 1980:
+            self.liked_1970 -= 1
+        elif year < 1990:
+            self.liked_1980 -= 1
+        elif year < 2000:
+            self.liked_1990 -= 1
+        elif year < 2010:
+            self.liked_2000 -= 1
+        elif year < 2020:
+            self.liked_2010 -= 1
+        else:
+            self.liked_2020 -= 1
+        
+        for genre in movie.genres.all():
+            attrname = f'liked_{"".join(genre.name.lower().split())}'
+            value = getattr(self, attrname)
+            setattr(self,attrname, value - 1)
+            
+        self.save()

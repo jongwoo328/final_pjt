@@ -55,10 +55,11 @@ def movie_like(request, movie_pk):
     if movie.liked_users.filter(pk=user.pk).exists():
         movie.liked_users.remove(user)
         liked = False
+        user.disliked(movie)
     else:
         movie.liked_users.add(user)
         liked = True
-    
+        user.liked(movie)
     context = {
         'liked': liked,
         'count': movie.liked_users.count(),
