@@ -14,27 +14,30 @@
 <hr>
 {{ movies }}
 <!-- 영화 목록 - poster_path, adult, title, vote_average, released_date -->
-<ul class="w3-row-padding w3-section w3-stretch">
-  {% for movie in page_obj %}
-    <li class="w3-card-2 w3-col s12 m6 l4 p-0 mx-1 my-3" style="list-style: none;">
-      <div>
-        <a href="{% url 'movies:detail' movie.pk %}">
-          <img src="https://image.tmdb.org/t/p/w342/{{ movie.poster_path }}" width="100%">
-        </a>
-      </div>
-      <div>
-        <a href="{% url 'movies:detail' movie.pk %}" class="font-weight-bold">{{ movie.title }}</a>
-        {% if request.user in movie.liked_users.all %}
-            <i class="fas fa-heart fa-lg like-button" style="color:crimson" data-id="{{ movie.pk }}"></i>
-        {% else %}
-            <i class="fas fa-heart fa-lg like-button" style="color:black" data-id="{{ movie.pk }}"></i>
-        {% endif %}
-        <p>좋아요 : <span id="like-count-{{ movie.pk }}">{{ movie.liked_users.all|length }}</span></p>
-      </div>
-    </li>
-  {% endfor %}
+<div class="container">
+  <div class="row">
+    {% for movie in page_obj %}
+      <div class="col-3 mb-3">
+        <div class="card h-100">
 
-</ul>
+          <a href="{% url 'movies:detail' movie.pk %}">
+            <img src="https://image.tmdb.org/t/p/w342/{{ movie.poster_path }}" class=" card-img-top">
+          </a>
+          <div class="card-body">
+            <a href="{% url 'movies:detail' movie.pk %}" class="font-weight-bold">{{ movie.title }}</a>
+            {% if request.user in movie.liked_users.all %}
+                <i class="fas fa-heart fa-lg like-button" style="color:crimson" data-id="{{ movie.pk }}"></i>
+            {% else %}
+                <i class="fas fa-heart fa-lg like-button" style="color:black" data-id="{{ movie.pk }}"></i>
+            {% endif %}
+            <p>좋아요 : <span id="like-count-{{ movie.pk }}">{{ movie.liked_users.all|length }}</span></p>
+          </div>
+
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
 
 <!-- Pagination -->
 <div class="d-flex justify-content-center">
