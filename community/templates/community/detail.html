@@ -3,6 +3,19 @@
 
 {% block title %}Community{% endblock %}
 
+{% block style %}
+<style>
+#content{
+    resize: none;
+    height: 100px;
+  }
+  
+
+</style>
+
+{% endblock %}
+
+
 {% block context %}
     <div class="d-flex justify-content-between"> 
         <h5>
@@ -96,11 +109,9 @@
         </div>
         <p>{{ comment.content }}</p>
         {% if request.user in article.liked_users.all %}
-            hello
             <span><i class="far fa-thumbs-up fa-lg like-comment-button" style="color: #0077ff" data-id="{{ comment.pk }}" data-article-id="{{ article.pk }}"></i></span>
             <small id="like-comment-count-{{ comment.pk }}" style="color:black">{{ comment.liked_users.all|length }}</small>
         {% else %}
-            nothello
             <span><i class="far fa-thumbs-up fa-lg like-comment-button" style="color:black" data-id="{{ comment.pk }}" data-article-id="{{ article.pk }}"></i></i></span>
             <small id="like-comment-count-{{ comment.pk }}" style="color:black">{{ comment.liked_users.all|length }}</small>
         {% endif %}
