@@ -21,7 +21,7 @@ class Movie(models.Model):
     genres = models.ManyToManyField(Genre, related_name='movies')
 
 class Review(models.Model):
-    rank = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
+    rank = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)], default=5)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
