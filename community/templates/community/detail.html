@@ -31,11 +31,28 @@
         </div>
         <div class="d-flex justify-content-between">
             <p class="text-muted"><small>{{ article.created_at }}</small></p>
-            <span class="text-muted"><small>조회 수 {{ article.hits }}</small></span>
+            <div>
+                <span class="text-muted"><small>조회 수 {{ article.hits }}</small></span>
+                
+            </div>
+            
+
             
         </div>
         <hr class="mt-0 mb-3">
         <p>{{ article.content }}</p>
+        <!-- 게시글 수정&삭제 버튼 -->
+        <div class="d-flex justify-content-end">
+        {% if article.author == request.user %}
+            <small><a href="{% url 'community:update_article' article.pk %}" class="text-dark">수정</a></small>
+            <small>
+                <form action="{% url 'community:delete_article' article.pk %}" method="POST" class="d-inline">
+                    {% csrf_token %}
+                <button style="border:0; background-color: transparent" class="text-decoration-none">삭제</button>
+                </form>
+            </small>
+        {% endif %}
+        </div>
     </div>
     
 
@@ -67,7 +84,7 @@
         {% if comment.author == request.user %}
         <div>
             <!-- <small><a href="{% url 'community:update_comment' article.pk comment.pk %}" class="text-dark">수정</a></small> -->
-            <small><a href="#" class="text-dark">수정</a></small>
+            <small><a href="{% url 'community:update_comment' article.pk comment.pk %}" class="text-dark">수정</a></small>
             <small>
                 <form action="{% url 'community:delete_comment' article.pk comment.pk %}" method="POST" class="d-inline">
                     {% csrf_token %}
