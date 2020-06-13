@@ -119,7 +119,7 @@ def article_like(request, article_pk):
         liked = True
     
     context = {
-        'liked': liked,
+        'article_liked': liked,
         'count': article.liked_users.count(),
     }
 
@@ -186,7 +186,7 @@ def comment_like(request, article_pk, comment_pk):
         liked = True
     
     context = {
-        'liked': liked,
+        'comment_liked': liked,
         'count': comment.liked_users.count(),
     }
 

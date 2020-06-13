@@ -108,7 +108,7 @@
         {% endif %}
         </div>
         <p>{{ comment.content }}</p>
-        {% if request.user in article.liked_users.all %}
+        {% if request.user in comment.liked_users.all %}
             <span><i class="far fa-thumbs-up fa-lg like-comment-button" style="color: #0077ff" data-id="{{ comment.pk }}" data-article-id="{{ article.pk }}"></i></span>
             <small id="like-comment-count-{{ comment.pk }}" style="color:black">{{ comment.liked_users.all|length }}</small>
         {% else %}
@@ -122,29 +122,28 @@
 
 
     <script>
-        const likeArticleButtonList = document.querySelectorAll('.like-article-button')
+        const likeArticleButton = document.querySelector('.like-article-button')
         const likeCommentButtonList = document.querySelectorAll('.like-comment-button')
         
-        likeArticleButtonList.forEach((likeButton) => {
-            likeButton.addEventListener('click', function(event){
-            const articleId = event.target.dataset.id
         
-            axios.get(`/community/${articleId}/like/`)
-            .then((response) => {
-                
-                // response.data.count -> json으로 응답(해당 게시글에 좋아요를 누른 사람의 수)
-                document.querySelector(`#like-article-count-${articleId}`).innerText = "(스크랩 : " + response.data.count + ")"
-        
-                if (response.data.liked) {
-                event.target.style.color = 'rgb(31, 185, 0)'
-                } else {
-                event.target.style.color = 'black'
-                }
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-            })
+        likeArticleButton.addEventListener('click', function(event){
+        const articleId = event.target.dataset.id
+    
+        axios.get(`/community/${articleId}/like/`)
+        .then((response) => {
+            
+            // response.data.count -> json으로 응답(해당 게시글에 좋아요를 누른 사람의 수)
+            document.querySelector(`#like-article-count-${articleId}`).innerText = "(스크랩 : " + response.data.count + ")"
+            console.log(response.data)
+            if (response.data.article_liked) {
+            event.target.style.color = 'rgb(31, 185, 0)'
+            } else {
+            event.target.style.color = 'black'
+            }
+        })
+        .catch((error) => {
+            console.log(error)
+        })
         })
 
         likeCommentButtonList.forEach((likeButton) => {
@@ -157,8 +156,8 @@
             .then((response) => {
                 // response.data.count -> json으로 응답(해당 게시글에 좋아요를 누른 사람의 수)
                 document.querySelector(`#like-comment-count-${commentId}`).innerText = response.data.count
-        
-                if (response.data.liked) {
+                console.log(response.data)
+                if (response.data.comment_liked) {
                 event.target.style.color = '#0077ff'
                 } else {
                 event.target.style.color = 'black'
