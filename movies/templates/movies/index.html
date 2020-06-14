@@ -28,7 +28,7 @@
   <div class="row d-flex flex-fill">
     <h3 class="mr-5"><i class="fas">전체 영화</i></h3>
     <div>
-    <input class="w3-input w3-border w3-animate-input" value="Search" type="text">
+    <input id="mySearch" class="w3-input w3-border w3-animate-input" placeholder="Search" type="text">
   </div>
   </div>
   <div class="align-self-end">
@@ -56,7 +56,7 @@
             <div class="d-flex justify-content-between">
                 <div>
                   <!-- 영화 제목, 평점 -->
-                  <a href="{% url 'movies:detail' movie.pk %}" class="font-weight-bold">{{ movie.title }}</a>
+                  <a href="{% url 'movies:detail' movie.pk %}" class="font-weight-bold MovieTitle">{{ movie.title }}</a>
                   <span><i class="fas fa-star fa-sm" style="color:crimson"> {{ movie.vote_average }}</i></span>
                 </div>
                 <div>
@@ -115,14 +115,23 @@ $(document).ready(function(){
         return false
     })
 
+    // searchbar
+    $("#mySearch").on("keyup", function() {
+      var inputValue = $(this).val()
+      console.log(inputValue)
+      $('.MovieTitle').filter(function(){
+        console.log($(this).text())
+        console.log($(this).toggle($(this).text().toLowerCase().indexOf(inputValue) > -1))
+        $(this).toggle($(this).text().toLowerCase().indexOf(inputValue) > -1)
+      })
+    })
+
+
     // 이미지 사이즈 조절
     $('.ReSizeImage').each(function(){
         var width = $(this).innerWidth()
         var ratio = 1.5
-        console.log(width, width*ratio)
-        console.log($(this).innerHeight())
         $(this).innerHeight(width*ratio)
-        console.log($(this).innerHeight())
 
     })
   })
