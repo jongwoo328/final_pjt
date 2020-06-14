@@ -25,49 +25,67 @@ Movie
   <h4><a href="{%url 'movies:index' %}" class="text-dark"><i class="fas fa-angle-double-left"> </i></a>
     <i class="fas"> 영화 상세 </i></h4>
   <hr>
-  <div class="container">
-    <!-- 영화 줄거리 외 -->
-    <div class="row">
-      <span>
-        <!-- w185xh278 -->
-        <img src="https://image.tmdb.org/t/p/w185/{{ movie.poster_path }}" 
-            style="width: 185px; height: 278px; overflow:hidden;"
-            alt="Alps">
-      </span>
-      
-      <div class="ml-4 mt-1">
-        <!-- 제목 -->
-        <h4>{{ movie.title }}</h4>
-        <!-- origin제목 & 평점 -->
-        <div class="mb-1">
-          <span><small>{{ movie.original_title }}</small></span> |
-          <span><i class="fas fa-star fa-sm" style="color:crimson"> {{ movie.vote_average }}</i></span>
-        </div>
-        <!-- 장르, 국가 -->
-        <div class="mb-1">
-          <span id="genre">
-            {% for genre in movie.genres.all %}
-              {{ genre.name }}
-            {% endfor %}
-          </span> |
-          <span id="language">
-            {{ movie.original_language }}
-          </span>
-        </div class="mb-1">
-        <!-- 개봉일 -->
-        <div class="mb-3">
-          <span>{{ movie.release_date }} 개봉 </span>
-        </div>
-        <a href="" class="btn btn-primary">예고편</a>
-      </div>
-    </div>
-    <!-- 영화 줄거리 -->
-    <div class="row mt-4 d-flex flex-column">
-      <div class="block"><i class="fas"> 줄거리</i></div>
-      <hr>
-      <p>{{ movie.overview }}</p>
-    </div>
+  <div class="container d-flex">
+        <!-- 영화 포스터 -->
+        <span>
+          <!-- w185xh278 -->
+          <img src="https://image.tmdb.org/t/p/w185/{{ movie.poster_path }}" 
+              style="width: 185px; height: 278px; overflow:hidden;"
+              alt="Alps">
+        </span>
+        
+        <!-- 영화 정보 -->
+        <div class=" ml-4 mt-3 flex-fill">
+            <!-- 제목 -->
+            <div class="d-flex justify-content-between mb-2">
+                <h4>{{ movie.title }}</h4>
+                <!-- 좋아요 -->
+                <div>
+                {% if request.user in movie.liked_users.all %}
+                    <i class="fas fa-heart fa-lg movie_like-button" style="color:crimson" data-id="{{ movie.pk }}"></i>
+                    <span id="movie_like-count-{{ movie.pk }}">{{ movie.liked_users.all|length }}</span>
+                {% else %}
+                    <i class="fas fa-heart fa-lg movie_like-button" style="color:black" data-id="{{ movie.pk }}"></i>
+                    <span id="movie_like-count-{{ movie.pk }}">{{ movie.liked_users.all|length }}</span>
+                {% endif %}
+                </div>
+            </div>
+
+            <!-- origin제목 & 평점 -->
+            <div class="mb-1">
+              <span><small>{{ movie.original_title }}</small></span> |
+              <span><i class="fas fa-star fa-sm" style="color:crimson"> {{ movie.vote_average }}</i></span>
+            </div>
+
+            <!-- 장르, 국가 -->
+            <div class="mb-1">
+                <span id="genre">
+                  {% for genre in movie.genres.all %}
+                    {{ genre.name }}
+                  {% endfor %}
+                </span> |
+
+                <span id="language">
+                  {{ movie.original_language }}
+                </span>
+            </div>
+
+            <!-- 개봉일 -->
+            <div class="mb-3">
+              <span>{{ movie.release_date }} 개봉 </span>
+            </div>
+            <!-- 예고편 -->
+            <a href="" class="btn btn-primary">예고편</a>
+        </div>  
   </div>
+
+  <!-- 영화 줄거리 -->
+  <div class="row mt-4 d-flex flex-column">
+    <div class="block"><i class="fas"> 줄거리</i></div>
+    <hr>
+    <p>{{ movie.overview }}</p>
+  </div>
+
 
   <!-- 댓글 작성 -->
   <i class="fas mt-3"> 내 평점 등록 </i>
@@ -160,11 +178,6 @@ Movie
   const language = document.getElementById('language').innerText
   document.getElementById('language').innerText = contries[language]
 
-  // 댓글 form
-
-
-
-
   // 별점
   const ranks = document.querySelectorAll('.rank_star')
   console.log(ranks, typeof(ranks))
@@ -186,12 +199,32 @@ Movie
       console.log(InputStar)
       
   })
+
+  // 영화 좋아요
+  const movieLikeButton = document.querySelector('.movie_like-button')
+  
+  movieLikeButton.addEventListener('click', function(event){
+    const movieId = event.target.dataset.id
+
+    axios.get(`/movies/${movieId}/like/`)
+
+    .then((response) => {
+      // response.data.count -> json으로 응답(해당 게시글에 좋아요를 누른 사람의 수)
+      document.querySelector(`#movie_like-count-${movieId}`).innerText = response.data.count
+
+      if (response.data.movie_liked) {
+        event.target.style.color = 'crimson'
+      } else {
+        event.target.style.color = 'black'
+      }
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  })
   
   
-
-
-
-  // 좋아요
+  // 댓글 좋아요
   const likeButtonList = document.querySelectorAll('.like-button')
 
   likeButtonList.forEach((likeButton) => {
