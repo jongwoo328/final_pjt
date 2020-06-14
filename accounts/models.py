@@ -111,3 +111,8 @@ class CustomUser(AbstractUser):
 
         self.liked_recents = ' '.join(recents_data)
         self.save()
+    
+    def recents(self):
+        recents_data = self.liked_recents.split()
+        result = Movie.objects.filter(pk__in=recents_data)
+        return result

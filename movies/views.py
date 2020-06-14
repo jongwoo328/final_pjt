@@ -24,7 +24,7 @@ def main(request):
     
     # 최근 기록
     if request.user.is_authenticated:
-        print(request.user.liked_movies.all())
+        print(request.user.recents())
 
     context = {
         'movies' : random_movies,
