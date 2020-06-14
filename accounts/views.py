@@ -19,6 +19,7 @@ def profile(request):
             'movies' : movies,
             'first_movie' : movies[0],
             'rest_movies' : movies[1:],
+            'movie_count': len(movies),
         }
     else : 
         context = {

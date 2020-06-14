@@ -17,7 +17,7 @@
   .carousel-inner .active + .carousel-item,
   .carousel-inner .active + .carousel-item + .carousel-item,
   .carousel-inner .active + .carousel-item + .carousel-item + .carousel-item {
-    display: block !important;
+    display: block;
   }
 
   .carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left),
@@ -104,7 +104,7 @@
     <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="10000000000">
         <div class="carousel-inner row w-100 mx-0">
         {% if movies %}
-            <div class="carousel-item col-md-3 active px-0">
+            <div class="carousel-item col-md-3 active px-0 mx-0">
                 <a href="{% url 'movies:detail' first_movie.pk %}">
                     <img src="https://image.tmdb.org/t/p/w154{{ first_movie.poster_path }}" 
                         alt="{{ first_movie.title }}" 
@@ -113,7 +113,7 @@
             </div>
 
             {% for movie in rest_movies %}
-                <div class="carousel-item col-md-3 px-0">
+                <div class="carousel-item col-md-3 px-0 mx-0">
                     <a href="{% url 'movies:detail' movie.pk %}">
                         <img src="https://image.tmdb.org/t/p/w154{{ movie.poster_path }}" 
                         alt="{{ movie.title }}" 
@@ -122,6 +122,7 @@
                 </div>
             {% endfor %}
         </div>
+        {% if movie_count >= 5 %}
         <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="sr-only">Previous</span>
@@ -130,6 +131,7 @@
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="sr-only">Next</span>
         </a>
+        {% endif %}
 
 
         {% else %}
