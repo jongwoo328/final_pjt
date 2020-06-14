@@ -3,7 +3,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.conf import settings
 
 
-MAX_RANK = 5
+MAX_RANK = 10
 
 class Genre(models.Model):
     name = models.CharField(max_length=100)
@@ -37,3 +37,29 @@ class Review(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     liked_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked_review')
+
+    def __str__(self):
+        return f'{self.movie.title} : {self.rank_star}'
+    
+    def add_vote(self):
+        self.movie.vote_count += 1
+        vote_average = self.movie.vote_average
+        
+        self.movie.vote_average = round(((self.movie.vote_count - 1) * vote_average + self.rank) / self.movie.vote_count, 1)
+        self.movie.save()
+
+    def delete_vote(self):
+        self.movie.vote_count -= 1
+        vote_average = self.movie.vote_average
+
+        try:
+            self.movie.vote_average = round(((self.movie.vote_count + 1) * vote_average - self.rank) / (self.movie.vote_count), 1)
+        except ZeroDivisionError:
+            self.movie.vote_average = 0
+        
+        self.movie.save()
+    
+    def update_vote(self, before, after):
+        self.movie.vote_average = round((self.movie.vote_average * self.movie.vote_count - before + after) / self.movie.vote_count, 1)
+        self.movie.save()
+        

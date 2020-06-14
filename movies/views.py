@@ -87,14 +87,19 @@ def main(request):
     # 최근 기록은 user.recents() << method로 사용할것
     if request.user.is_authenticated:
         recents = request.user.recents()
-        recommends = recommend(recents)
+        if recents:
+            recommends = recommend(recents)
+        else:
+            recommends = Movie.objects.none()
+        is_logged_in = True
     else:
-        pass
+        recommends = Movie.objects.none()
+        is_logged_in = False
 
     context = {
         'movies' : random_movies,
         'recommends': recommends,
-        
+        'is_logged_in': is_logged_in,
     }
     return render(request, 'movies/main.html', context)
 
@@ -161,6 +166,7 @@ def review_create(request, movie_pk):
         review.movie = movie
         review.rank_star =  ('★' * review.rank) + ('☆' * (MAX_RANK - review.rank))
         review.save()
+        review.add_vote()
         return redirect('movies:detail', movie_pk)
     context = {
         'movie': movie,
@@ -172,14 +178,16 @@ def review_create(request, movie_pk):
 @login_required
 def review_update(request, movie_pk, review_pk):
     review = Review.objects.get(pk=review_pk)
-
+    before = review.rank
     if request.user != review.author:
         return redirect('movies:detail', movie_pk)
         
     if request.method == 'POST':
         form = ReviewForm(request.POST, instance=review)
         if form.is_valid():
-            form.save()
+            new_review = form.save()
+            after = new_review.rank
+            new_review.update_vote(before, after)
             return redirect('movies:detail', movie_pk)
     else:
         form = ReviewForm(instance=review)
@@ -193,6 +201,7 @@ def review_update(request, movie_pk, review_pk):
 def review_delete(request, movie_pk, review_pk):
     review = Review.objects.get(pk=review_pk)
     if request.user == review.author:
+        review.delete_vote()
         review.delete()
     return redirect('movies:detail', movie_pk)
 

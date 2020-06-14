@@ -34,7 +34,7 @@ def login(request):
         if form.is_valid():
             user = form.get_user()
             auth_login(request, user)
-            return redirect('movies:main')
+            return redirect(request.GET.get('next') or 'movies:main')
     else:
         form = AuthenticationForm(request)
     context = {
