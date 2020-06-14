@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load bootstrap4 %}
 {% load bootstrap_pagination %}
+{% load static %}
 
 {% block title %}
 {% endblock %}
@@ -25,9 +26,12 @@
     {% for movie in page_obj %}
       <div class="col-12 col-md-6 col-lg-3 mb-3">
         <div class="card h-100">
-
           <a href="{% url 'movies:detail' movie.pk %}">
+            {% if movie.poster_path %}
             <img src="https://image.tmdb.org/t/p/w342/{{ movie.poster_path }}" alt="{{ movie.title }}" class=" card-img-top ReSizeImage">
+            {% else %}
+            <img src="{% static 'image/noimage_index.png' %}" alt="{{ movie.title }}" class=" card-img-top ReSizeImage">
+            {% endif %}
           </a>
           <div class="card-body">
             <div class="d-flex justify-content-between">

@@ -106,9 +106,17 @@
         {% if movies %}
             <div class="carousel-item col-md-3 active px-0 mx-0">
                 <a href="{% url 'movies:detail' first_movie.pk %}">
-                    <img src="https://image.tmdb.org/t/p/w154{{ first_movie.poster_path }}" 
+                    {% if first_movie.poster_path %}
+                    <img 
+                        src="https://image.tmdb.org/t/p/w154{{ first_movie.poster_path }}" 
                         alt="{{ first_movie.title }}" 
                         class="card-img-top ReSizeImage">
+                    {% else %}
+                    <img 
+                        src="{% static 'image/noimage_index.png' %}" 
+                        alt="{{ first_movie.title }}" 
+                        class="card-img-top ReSizeImage">
+                    {% endif %}
                 </a>
             </div>
 
