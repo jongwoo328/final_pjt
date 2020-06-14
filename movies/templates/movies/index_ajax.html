@@ -39,3 +39,16 @@
   </div>
 </div>
 {% endfor %}
+<script>
+      $(document).ready(function(){
+        $('.ReSizeImage').each(function(){
+            var width = $(this).innerWidth()
+            var ratio = 1.5
+            console.log(width, width*ratio)
+            console.log($(this).innerHeight())
+            $(this).innerHeight(width*ratio)
+            console.log($(this).innerHeight())
+
+        })
+    })
+</script>

@@ -1,25 +1,42 @@
 {% extends 'base.html' %}
 {% load bootstrap4 %}
-{% load bootstrap_pagination %}
 {% load static %}
 
 {% block title %}
 {% endblock %}
 
 {% block style %}
+<style>
+  #ToTopButton{
+      position: fixed;
+      right: 2%;
+      bottom: 50px;
+      display: none;
+      z-index: 999;
+  }
+  </style>
 {% endblock %}
 
 
 {% block context %}
+<!-- TOP BUTTON -->
+  <a href="#myPage" title="To Top">
+    <i class="w3-button w3-circle w3-teal fas fa-chevron-up" id="ToTopButton"></i>
+  </a>
+<!-- CONTEXT -->
 <div class="container mt-5 mb-3 pb-3 d-flex justify-content-between w3-border-bottom"> 
-    <h3><i class="fas"> 전체 영화 </i></h3>
-    <div class="align-self-end">
-      <a href="{% url 'movies:index_sort' 'rank' %}" class="mr-2 text-dark"><i class="fas fa-check">평점순</i></a> 
-      <a href="{% url 'movies:index_sort' 'release' %}" class="mr-2 text-dark"><i class="fas fa-check">개봉순</i></a>
-    </div>    
+  <div class="row d-flex flex-fill">
+    <h3 class="mr-5"><i class="fas">전체 영화</i></h3>
+    <div>
+    <input class="w3-input w3-border w3-animate-input" value="Search" type="text">
+  </div>
+  </div>
+  <div class="align-self-end">
+    <a href="{% url 'movies:index_sort' 'rank' %}" class="mr-2 text-dark"><i class="fas fa-check">평점순</i></a> 
+    <a href="{% url 'movies:index_sort' 'release' %}" class="mr-2 text-dark"><i class="fas fa-check">개봉순</i></a>
+  </div>    
 </div>
 
-{{ movies }}
 <!-- 영화 목록 - poster_path, adult, title, vote_average, released_date -->
 <div class="container">
   <div class="row" id="movie_list">
@@ -67,53 +84,71 @@
 <!-- Pagination -->
 
 <script>
+  
+$(document).ready(function(){
   // 무한스크롤
-  const BASEURL = $(location).attr('pathname')
-  var page = 1
-  $(window).scroll(function() {
-      if ($(window).scrollTop() >= $(document).height() - $(window).height() - 2) {
-        page++
-        axios.get(BASEURL + `?page=${page}`)
-        .then((res) => {
-          $('#movie_list').append(res.data)
-        })
-        
-        
-      }
-  });
-
-  // 이미지 사이즈 조절
-    $(document).ready(function(){
-        $('.ReSizeImage').each(function(){
-            var width = this.width
-            var ratio = 1.5
-            $(this).css("height", width*ratio)
-
-        })
-    })
-    // 좋아요
-    const likeButtonList = document.querySelectorAll('.like-button')
-  
-    likeButtonList.forEach((likeButton) => {
-      likeButton.addEventListener('click', function(event){
-        const movieId = event.target.dataset.id
-  
-        axios.get(`/movies/${movieId}/like/`)
-  
-        .then((response) => {
-          // response.data.count -> json으로 응답(해당 게시글에 좋아요를 누른 사람의 수)
-          document.querySelector(`#like-count-${movieId}`).innerText = response.data.count
-  
-          if (response.data.movie_liked) {
-            event.target.style.color = 'crimson'
+    const BASEURL = $(location).attr('pathname')  
+    var page = 1
+    $(window).scroll(function() {
+        if ($(window).scrollTop() >= $(document).height() - $(window).height() - 2) {
+          page++
+          axios.get(BASEURL + `?page=${page}`)
+          .then((res) => {
+            $('#movie_list').append(res.data)
+          })
+        }
+    });
+    // TOP BUTTON
+    $(window).scroll(function() {
+          if ($(this).scrollTop() > 500) {
+              $('#ToTopButton').fadeIn();
           } else {
-            event.target.style.color = 'black'
+              $('#ToTopButton').fadeOut();
           }
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+      });
+
+
+    $("#ToTopButton").click(function(event) {
+        $('html, body').animate({
+            scrollTop: 0
+        }, 400);
+        return false
+    })
+
+    // 이미지 사이즈 조절
+    $('.ReSizeImage').each(function(){
+        var width = $(this).innerWidth()
+        var ratio = 1.5
+        console.log(width, width*ratio)
+        console.log($(this).innerHeight())
+        $(this).innerHeight(width*ratio)
+        console.log($(this).innerHeight())
+
+    })
+  })
+  // 좋아요
+  const likeButtonList = document.querySelectorAll('.like-button')
+
+  likeButtonList.forEach((likeButton) => {
+    likeButton.addEventListener('click', function(event){
+      const movieId = event.target.dataset.id
+
+      axios.get(`/movies/${movieId}/like/`)
+
+      .then((response) => {
+        // response.data.count -> json으로 응답(해당 게시글에 좋아요를 누른 사람의 수)
+        document.querySelector(`#like-count-${movieId}`).innerText = response.data.count
+
+        if (response.data.movie_liked) {
+          event.target.style.color = 'crimson'
+        } else {
+          event.target.style.color = 'black'
+        }
+      })
+      .catch((error) => {
+        console.log(error)
       })
     })
+  })
   </script>
 {% endblock %}
