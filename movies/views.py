@@ -14,9 +14,66 @@ from .forms import ReviewForm
 ALL_MOVIE_COUNT = 2000
 RANDOM_MOVIE_COUNT = 10
 
+
 def start(request) : 
     return redirect('movies:main')
 
+
+def recommend(recents):
+    '''
+    최근 좋아요 한 영화 기준으로 추천
+    1. 장르
+    2. 제목
+    '''
+    # 1.
+    # 가장 많이 중복된 장르 추출
+    # -> favorite_genres : list
+    # 2.
+    # 유사한 제목으로 추출
+    # 키워드는 보통 앞에 있을거라고 생각하고
+
+    genre_data = dict()
+    favorite_genres = []
+    keywords = []
+    for movie in recents:
+        # 1.
+        for genre in movie.genres.iterator():
+            genre_data[genre] = genre_data.get(genre, 0) + 1
+        
+        # 2.
+        keywords.append(movie.title.split()[0])
+
+    maxcount = 0
+    for genre, count in genre_data.items():
+        if count > maxcount:
+            maxcount = count
+            favorite_genres = [genre]
+        elif count == maxcount:
+            favorite_genres.append(genre)
+
+    genre_recommends = []
+    for genre in favorite_genres:
+        genre_recommends += random.sample(tuple(genre.movies.all()), RANDOM_MOVIE_COUNT)
+    
+    # 장르로 뽑은 결과 
+    # -> genre_recommends : list
+    genre_recommends = Movie.objects.filter(pk__in=[movie.id for movie in random.sample(genre_recommends, RANDOM_MOVIE_COUNT//2)])
+    
+    # keyword_recommends_with_pk -> keyword로 추출한 영화의 pk list
+    # recents_with_pk -> 입력 영화의 pk map
+    keyword_recommends_with_pk = []
+    for keyword in keywords:
+        keyword_recommends_with_pk += map(lambda movie: movie.pk ,Movie.objects.filter(title__icontains=keyword).iterator())
+    recents_with_pk = map(lambda movie: movie.pk, recents.iterator())
+
+    # 추출결과에서 이미 추천된 영화는 제외
+    keyword_recommends = \
+        Movie.objects.filter(pk__in=keyword_recommends_with_pk)\
+        .exclude(pk__in=recents_with_pk)
+
+    result = keyword_recommends | genre_recommends
+    
+    return result
 
 def main(request):
     # 랜덤 영화
@@ -27,11 +84,17 @@ def main(request):
         )
     
     # 최근 기록
+    # 최근 기록은 user.recents() << method로 사용할것
     if request.user.is_authenticated:
-        print(request.user.liked_movies.all())
+        recents = request.user.recents()
+        recommends = recommend(recents)
+    else:
+        pass
 
     context = {
         'movies' : random_movies,
+        'recommends': recommends,
+        
     }
     return render(request, 'movies/main.html', context)
 
