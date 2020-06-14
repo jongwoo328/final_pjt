@@ -17,6 +17,7 @@
 
 
 {% block context %}
+<div class="container mt-5">
     <div class="d-flex justify-content-between"> 
         <h5>
             <a href="{%url 'community:community' %}" class="text-dark"><i class="fas fa-angle-double-left"></i></a>
@@ -120,23 +121,45 @@
         <p>새 댓글을 써주세요!</p>
     {% endfor %}
 
-
-    <script>
-        const likeArticleButton = document.querySelector('.like-article-button')
-        const likeCommentButtonList = document.querySelectorAll('.like-comment-button')
-        
-        
-        likeArticleButton.addEventListener('click', function(event){
-        const articleId = event.target.dataset.id
+</div>
+<script>
+    const likeArticleButton = document.querySelector('.like-article-button')
+    const likeCommentButtonList = document.querySelectorAll('.like-comment-button')
     
-        axios.get(`/community/${articleId}/like/`)
+    
+    likeArticleButton.addEventListener('click', function(event){
+    const articleId = event.target.dataset.id
+
+    axios.get(`/community/${articleId}/like/`)
+    .then((response) => {
+        
+        // response.data.count -> json으로 응답(해당 게시글에 좋아요를 누른 사람의 수)
+        document.querySelector(`#like-article-count-${articleId}`).innerText = "(스크랩 : " + response.data.count + ")"
+        console.log(response.data)
+        if (response.data.article_liked) {
+        event.target.style.color = 'rgb(31, 185, 0)'
+        } else {
+        event.target.style.color = 'black'
+        }
+    })
+    .catch((error) => {
+        console.log(error)
+    })
+    })
+
+    likeCommentButtonList.forEach((likeButton) => {
+        likeButton.addEventListener('click', function(event){
+        const commentId = event.target.dataset.id
+        const articleId = event.target.dataset.articleId
+    
+        axios.get(`/community/${articleId}/comment/${commentId}/like/`)
+    
         .then((response) => {
-            
             // response.data.count -> json으로 응답(해당 게시글에 좋아요를 누른 사람의 수)
-            document.querySelector(`#like-article-count-${articleId}`).innerText = "(스크랩 : " + response.data.count + ")"
+            document.querySelector(`#like-comment-count-${commentId}`).innerText = response.data.count
             console.log(response.data)
-            if (response.data.article_liked) {
-            event.target.style.color = 'rgb(31, 185, 0)'
+            if (response.data.comment_liked) {
+            event.target.style.color = '#0077ff'
             } else {
             event.target.style.color = 'black'
             }
@@ -145,29 +168,7 @@
             console.log(error)
         })
         })
-
-        likeCommentButtonList.forEach((likeButton) => {
-            likeButton.addEventListener('click', function(event){
-            const commentId = event.target.dataset.id
-            const articleId = event.target.dataset.articleId
-        
-            axios.get(`/community/${articleId}/comment/${commentId}/like/`)
-        
-            .then((response) => {
-                // response.data.count -> json으로 응답(해당 게시글에 좋아요를 누른 사람의 수)
-                document.querySelector(`#like-comment-count-${commentId}`).innerText = response.data.count
-                console.log(response.data)
-                if (response.data.comment_liked) {
-                event.target.style.color = '#0077ff'
-                } else {
-                event.target.style.color = 'black'
-                }
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-            })
-        })
-    </script>
+    })
+</script>
 
 {% endblock %}

@@ -17,6 +17,7 @@
 {% endblock %}
 
 {% block context %}
+<div class="conatiner mt-5 px-5">
     {% if request.resolver_match.url_name == 'create_article' or request.resolver_match.url_name == 'create_article_noboard' %}
     <h2>게시글 작성</h2>
     {% elif request.resolver_match.url_name == 'update_article' %}
@@ -39,5 +40,5 @@
         {% endif %}
     
     </form>
-
+</div>
 {% endblock %}

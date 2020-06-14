@@ -26,6 +26,11 @@ def main(request):
     if request.user.is_authenticated:
         print(request.user.liked_movies.all())
 
+    context = {
+        'movies' : random_movies,
+    }
+    return render(request, 'movies/main.html', context)
+
 def index(request, sort=None):
     if sort == 'rank':
         movies = Movie.objects.order_by('-vote_average').filter(release_date__lte=datetime.datetime.now())
