@@ -98,7 +98,7 @@ def main(request):
 
     context = {
         'movies' : random_movies,
-        'recommends': recommends,
+        'recommends': sorted(recommends, key=lambda x: random.random()),
         'is_logged_in': is_logged_in,
     }
     return render(request, 'movies/main.html', context)
