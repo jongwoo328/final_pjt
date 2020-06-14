@@ -22,10 +22,11 @@
 {{ movies }}
 <!-- 영화 목록 - poster_path, adult, title, vote_average, released_date -->
 <div class="container">
-  <div class="row">
+  <div class="row" id="movie_list">
     {% for movie in page_obj %}
       <div class="col-12 col-md-6 col-lg-3 mb-3">
         <div class="card h-100">
+        <!-- 영화 이미지 -->
           <a href="{% url 'movies:detail' movie.pk %}">
             {% if movie.poster_path %}
             <img src="https://image.tmdb.org/t/p/w342/{{ movie.poster_path }}" alt="{{ movie.title }}" class=" card-img-top ReSizeImage">
@@ -33,13 +34,16 @@
             <img src="{% static 'image/noimage_index.png' %}" alt="{{ movie.title }}" class=" card-img-top ReSizeImage">
             {% endif %}
           </a>
+          <!-- 영화 제목, 좋아요, 평점, 개봉일 -->
           <div class="card-body">
             <div class="d-flex justify-content-between">
                 <div>
+                  <!-- 영화 제목, 평점 -->
                   <a href="{% url 'movies:detail' movie.pk %}" class="font-weight-bold">{{ movie.title }}</a>
                   <span><i class="fas fa-star fa-sm" style="color:crimson"> {{ movie.vote_average }}</i></span>
                 </div>
                 <div>
+                  <!-- 영화 좋아요 -->
                 {% if request.user in movie.liked_users.all %}
                     <i class="fas fa-heart fa-lg like-button" style="color:crimson" data-id="{{ movie.pk }}"></i>
                     <span id="like-count-{{ movie.pk }}">{{ movie.liked_users.all|length }}</span>
@@ -61,11 +65,28 @@
 </div>
 
 <!-- Pagination -->
-<div class="d-flex justify-content-center">
-    {% bootstrap_paginate page_obj range=10 show_prev_next="false" show_first_last="true" %}
-</div>
 
 <script>
+  // 무한스크롤
+  const BASEURL = $(location).attr('pathname')
+  var page = 1
+  $(window).scroll(function() {
+      if ($(window).scrollTop() >= $(document).height() - $(window).height() - 2) {
+        page++
+        console.log(page)
+        axios.get(BASEURL + `?page=${page}`)
+        .then((res) => {
+          console.log(res.data)
+          $('#movie_list').append(res.data)
+        })
+        
+        
+      }
+  });
+  
+
+
+
   // 이미지 사이즈 조절
     $(document).ready(function(){
         $('.ReSizeImage').each(function(){

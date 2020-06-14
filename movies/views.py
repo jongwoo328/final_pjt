@@ -119,7 +119,9 @@ def index(request, sort=None):
         'page_obj': page_obj,
         'nowDate': nowDate,
     }
-    return render(request, 'movies/index.html', context)
+    print(page_number, type(page_number))
+    if not page_number or int(page_number) == 1 : return render(request, 'movies/index.html', context)
+    else : return render(request, 'movies/index_ajax.html', context)
 
 @login_required
 def detail(request, movie_pk):
