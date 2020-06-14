@@ -127,10 +127,12 @@ def detail(request, movie_pk):
     reviews = movie.review_set.order_by('-pk')
     nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
     form = ReviewForm()
+    is_voted = movie.review_set.filter(author=request.user).exists()
     context = {
         'movie': movie,
         'form': form,
         'reviews': reviews,
+        'is_voted': is_voted,
     }
     return render(request, 'movies/detail.html', context)
 

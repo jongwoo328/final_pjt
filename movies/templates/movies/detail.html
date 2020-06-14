@@ -88,6 +88,7 @@ Movie
 
 
   <!-- 댓글 작성 -->
+  {% if not is_voted %}
   <i class="fas mt-3"> 내 평점 등록 </i>
   <hr>
   <form action="{% url 'movies:review_create' movie.pk %}" method="POST">
@@ -95,7 +96,7 @@ Movie
       {% bootstrap_form form %}   
       <input type="submit" value="등록" id="submit">
   </form>
-
+  {% endif %}
   <!-- 댓글 조회 -->
   <div class="mt-4">
   <span><i class="fas fa-star fa-lg" style="color:crimson"> {{ movie.vote_average }}</i></span> 
