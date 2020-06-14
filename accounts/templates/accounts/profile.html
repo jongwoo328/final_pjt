@@ -2,91 +2,16 @@
 {% load bootstrap4 %}
 {% load static %}
 
-
-{% block title %}{{ user.username }}{% endblock %}
-
 {% block head %}
-<!-- <link rel="stylesheet" href="{% static 'css/style.css' %}"> -->
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
 {% endblock %}
 
-{% block style %}
+
 <style>
-@media (min-width: 768px) {
-  /* show 4 items */
-  .carousel-inner .active,
-  .carousel-inner .active + .carousel-item,
-  .carousel-inner .active + .carousel-item + .carousel-item,
-  .carousel-inner .active + .carousel-item + .carousel-item + .carousel-item {
-    display: block;
-  }
-
-  .carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left),
-  .carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left) + .carousel-item,
-  .carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left) + .carousel-item + .carousel-item,
-  .carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left) + .carousel-item + .carousel-item + .carousel-item {
-    transition: none;
-  }
-
-  .carousel-inner .carousel-item-next,
-  .carousel-inner .carousel-item-prev {
-    position: relative;
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
-  }
-
-  .carousel-inner .active.carousel-item + .carousel-item + .carousel-item + .carousel-item + .carousel-item {
-    position: absolute !important;
-    top: 0;
-    right: -25%;
-    z-index: -1;
-    display: block;
-    visibility: visible;
-  }
-
-  /* left or forward direction */
-  .active.carousel-item-left + .carousel-item-next.carousel-item-left,
-  .carousel-item-next.carousel-item-left + .carousel-item,
-  .carousel-item-next.carousel-item-left + .carousel-item + .carousel-item,
-  .carousel-item-next.carousel-item-left + .carousel-item + .carousel-item + .carousel-item,
-  .carousel-item-next.carousel-item-left + .carousel-item + .carousel-item + .carousel-item + .carousel-item {
-    position: relative;
-    -webkit-transform: translate3d(-100%, 0, 0);
-    transform: translate3d(-100%, 0, 0);
-    visibility: visible;
-  }
-
-  /* farthest right hidden item must be absolue position for animations */
-  .carousel-inner .carousel-item-prev.carousel-item-right {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: -1;
-    display: block;
-    visibility: visible;
-  }
-
-  /* right or prev direction */
-  .active.carousel-item-right + .carousel-item-prev.carousel-item-right,
-  .carousel-item-prev.carousel-item-right + .carousel-item,
-  .carousel-item-prev.carousel-item-right + .carousel-item + .carousel-item,
-  .carousel-item-prev.carousel-item-right + .carousel-item + .carousel-item + .carousel-item,
-  .carousel-item-prev.carousel-item-right + .carousel-item + .carousel-item + .carousel-item + .carousel-item {
-    position: relative;
-    -webkit-transform: translate3d(100%, 0, 0);
-    transform: translate3d(100%, 0, 0);
-    visibility: visible;
-    display: block;
-    
-  }
-}
 
 </style>
-{% endblock %}
-
-
-
-
 {% block context %}
+<!-- 프로필 -->
 <div class="container my-5 w3-border-bottom">
     <h3><i class="fas fa-user-circle align-self-center mx-3 py-3"></i>{{ user.username }}님의 프로필</h3>
     <p class="text-lg" style="font-size: large;">이름 : {{ user.first_name }} {{ user.last_name }}</p>
@@ -97,62 +22,70 @@
     
 </div>
 
-
-
 <div class="container mb-5">
-    <h4 class="mb-3"> 좋아하는 영화 </h4>
-    <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="10000000000">
+    <h4 class="mb-4"><i class="fas">{{ user.username }}님이 좋아하는 영화 </i></h4>
+    <hr>
+
+    <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="1000000">
         <div class="carousel-inner row w-100 mx-0">
-        {% if movies %}
-            <div class="carousel-item col-md-3 active px-0 mx-0">
-                <a href="{% url 'movies:detail' first_movie.pk %}">
-                    {% if first_movie.poster_path %}
-                    <img 
-                        src="https://image.tmdb.org/t/p/w154{{ first_movie.poster_path }}" 
-                        alt="{{ first_movie.title }}" 
-                        class="card-img-top ReSizeImage">
-                    {% else %}
-                    <img 
-                        src="{% static 'image/noimage_index.png' %}" 
-                        alt="{{ first_movie.title }}" 
-                        class="card-img-top ReSizeImage">
-                    {% endif %}
+            {% if movies %}  
+                <div class="carousel-item col-md-3 active mx-0">
+                        <a href="{% url 'movies:detail' first_movie.pk %}">
+                            {% if first_movie.poster_path %}
+                            <img 
+                                src="https://image.tmdb.org/t/p/w154{{ first_movie.poster_path }}" 
+                                alt="{{ first_movie.title }}" 
+                                class="card-img-top ReSizeImage">
+                            {% else %}
+                            <img 
+                                src="{% static 'image/noimage_index.png' %}" 
+                                alt="{{ first_movie.title }}" 
+                                class="card-img-top ReSizeImage">
+                            {% endif %}
+                        </a>
+                </div>
+                {% for movie in rest_movies %}
+                <div class="carousel-item col-md-3 mx-0">
+                        <a href="{% url 'movies:detail' movie.pk %}">
+                        {% if first_movie.poster_path %}
+                            <img src="https://image.tmdb.org/t/p/w154{{ movie.poster_path }}" 
+                            alt="{{ movie.title }}" 
+                            class="card-img-top ReSizeImage">
+                        {% else %}
+                            <img 
+                                src="{% static 'image/noimage_index.png' %}" 
+                                alt="{{ first_movie.title }}" 
+                                class="card-img-top ReSizeImage">
+                        {% endif %}
+                    </a>
+                    <!-- </div> -->
+                </div>
+                {% endfor %}
+
+            {% else %}
+            <p class="my-3 text-muted">아직 좋아하는 영화가 없어요 ㅠㅠ</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mt-4">
+                <a class="btn btn-outline-secondary mx-1 prev" href="javascript:void(0)" title="Previous">
+                    <i class="fa fa-lg fa-chevron-left"></i>
+                </a>
+                <a class="btn btn-outline-secondary mx-1 next" href="javascript:void(0)" title="Next">
+                    <i class="fa fa-lg fa-chevron-right"></i>
                 </a>
             </div>
-
-            {% for movie in rest_movies %}
-                <div class="carousel-item col-md-3 px-0 mx-0">
-                    <a href="{% url 'movies:detail' movie.pk %}">
-                        <img src="https://image.tmdb.org/t/p/w154{{ movie.poster_path }}" 
-                        alt="{{ movie.title }}" 
-                        class="card-img-top ReSizeImage">
-                    </a>
-                </div>
-            {% endfor %}
         </div>
-        {% if movie_count >= 5 %}
-        <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </a>
-        {% endif %}
-
-
-        {% else %}
-        <p class="my-3 text-muted">아직 좋아하는 영화가 없어요 ㅠㅠ</p>
-        {% endif %}
-        
     </div>
 </div>
 
-  
 
-<h4> 작성하신 게시글 </h4>
+  
 <div class="container mt-0 mb-5 p-1">
+    <h4 class="mb-3"> 작성하신 게시글 </h4>
     <hr class="my-2">
     <div class="row" >
         <div class="col-6 text-center">제목</div>
@@ -184,8 +117,9 @@
     </tbody>
 </div>
 
-<h4> 스크랩한 게시글 </h4>
+
 <div class="container mt-0 p-1">
+    <h4 class="my-2"> 스크랩한 게시글 </h4>
     <hr class="my-2">
     <div class="row" >
         <div class="col-6 text-center">제목</div>
@@ -216,46 +150,62 @@
         {% endfor %}
     </tbody>
 </div>
-<script>
-    // 이미지 resize
-    $(document).ready(function(){
-        $('.ReSizeImage').each(function(){
-            var width = 154
-            var ratio = 1.5
-            $(this).css("width", 154)
-            $(this).css("height", width*ratio)
-
-        })
-    })
-
-
-        // 좋아하는 영화
-        $(document).ready(function() {
-        $("#myCarousel").on("slide.bs.carousel", function(e) {
-            
-            var $e = $(e.relatedTarget);
-            var idx = $e.index();
-            var itemsPerSlide = 4;
-            var totalItems = $("#myCarousel .carousel-item").length;
-            if (idx >= totalItems - (itemsPerSlide - 1)) {
-                var it = itemsPerSlide - (totalItems - idx);
-                for (var i = 0; i < it; i++) {
-                    // añade cards al final
-                    if (e.direction == "left") {
-                        $("#myCarousel .carousel-item").eq(0).appendTo(".carousel-inner");
-                        } 
-                    
-                    else {
-                    $("#myCarousel .carousel-item")
-                        .eq(0)
-                        .appendTo($(this).find(".carousel-inner"));
-                    }
-                }
-            }
-        });
-    });
-
-</script>
 
 {% endblock %}
 
+
+{% block script %}
+<script>
+
+(function ($) {
+  "use strict";
+  // Auto-scroll
+  $('#myCarousel').carousel({
+    interval: 5000000000
+  });
+
+  // Control buttons
+  $('.next').click(function () {
+    $('.carousel').carousel('next');
+    return false;
+  });
+  $('.prev').click(function () {
+    $('.carousel').carousel('prev');
+    return false;
+  });
+
+  // On carousel scroll
+  $("#myCarousel").on("slide.bs.carousel", function (e) {
+    var $e = $(e.relatedTarget);
+    var idx = $e.index();
+    var itemsPerSlide = 4;
+    var totalItems = $(".carousel-item").length;
+    if (idx >= totalItems - (itemsPerSlide - 1)) {
+      var it = itemsPerSlide -
+          (totalItems - idx);
+      for (var i = 0; i < it; i++) {
+        // append slides to end 
+        if (e.direction == "left") {
+          $(
+            ".carousel-item").eq(i).appendTo(".carousel-inner");
+        } else {
+          $(".carousel-item").eq(0).appendTo(".carousel-inner");
+        }
+      }
+    }
+  });
+})
+(jQuery);
+
+// 이미지 resize
+$(document).ready(function(){
+$('.ReSizeImage').each(function(){
+    var width = 154
+    var ratio = 1.5
+    $(this).css("width", 154)
+    $(this).css("height", width*ratio)
+
+    })
+})
+</script>
+{% endblock %}

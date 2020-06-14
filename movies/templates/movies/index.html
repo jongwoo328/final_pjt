@@ -73,19 +73,14 @@
   $(window).scroll(function() {
       if ($(window).scrollTop() >= $(document).height() - $(window).height() - 2) {
         page++
-        console.log(page)
         axios.get(BASEURL + `?page=${page}`)
         .then((res) => {
-          console.log(res.data)
           $('#movie_list').append(res.data)
         })
         
         
       }
   });
-  
-
-
 
   // 이미지 사이즈 조절
     $(document).ready(function(){
