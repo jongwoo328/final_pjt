@@ -148,7 +148,7 @@ def movie_like(request, movie_pk):
         liked = True
         user.liked(movie)
     context = {
-        'liked': liked,
+        'movie_liked': liked,
         'count': movie.liked_users.count(),
     }
 

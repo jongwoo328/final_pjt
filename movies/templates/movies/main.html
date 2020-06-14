@@ -9,9 +9,33 @@
 
 {% block context %}
     {% if request.user.is_authenticated %} 
-    <div class="container-fluid w3-dark-grey">
-        추천 알고리즘 
+    <div class="container-fluid border border-dark">
+        <h3>추천 영화</h3>
+        <div class="d-flex">
+            {% for recommend in recommends %}
+            <a href="{% url 'movies:detail' recommend.pk %}">
+                <img src="https://image.tmdb.org/t/p/w154{{ recommend.poster_path }}" 
+                    alt="{{ recommend.title }}" 
+                    class="card-img-top ReSizeImage">
+            </a>
+            {% endfor %}
+        </div>
     </div>
+
+    <div class="container-fluid border border-dark">
+        <h3>이런 영화는 어떠세요?</h3>
+        <div class="d-flex">
+            {% for movie in movies %}
+            <a href="{% url 'movies:detail' movie.pk %}">
+                <img src="https://image.tmdb.org/t/p/w154{{ movie.poster_path }}" 
+                    alt="{{ movie.title }}" 
+                    class="card-img-top ReSizeImage">
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+
     {% else %}
     <!-- cinema 소개 -->
     <div class="container-fluid bg-white w3-center mb-5">
