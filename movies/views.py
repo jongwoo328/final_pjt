@@ -14,6 +14,10 @@ from .forms import ReviewForm
 ALL_MOVIE_COUNT = 2000
 RANDOM_MOVIE_COUNT = 10
 
+def start(request) : 
+    return redirect('movies:main')
+
+
 def main(request):
     # 랜덤 영화
     random_movies = Movie.objects.filter(
