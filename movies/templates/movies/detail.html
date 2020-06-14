@@ -100,9 +100,48 @@ Movie
   <!-- 댓글 조회 -->
   <div class="mt-4">
   <span><i class="fas fa-star fa-lg" style="color:crimson"> {{ movie.vote_average }}</i></span> 
-  <span><i class="fas"> (총 {{ reviews|length }}의 댓글) </i></span>
+  <span><i class="fas"> (총 {{ review_count }}의 댓글) </i></span>
   </div>
   <hr>
+
+  <!-- 내 리뷰 표시 -->
+  {% if is_voted %}
+  <h4>내 리뷰</h4>
+  <div class="d-flex justify-content-between">
+    <div>
+    <span><strong>{{ my_review.0.author }} </strong></span>
+    <span class="rank_star">{{ my_review.0.rank }}</span>
+    </div>
+    <div>
+      {% if request.user in my_review.0.liked_users.all %}
+          <i class="far fa-thumbs-up fa-lg like-button" style="color:#0077ff" data-id="{{ my_review.0.pk }}" data-movie-id="{{ movie.pk }}">
+            <span id="like-count-{{ my_review.0.pk }}" style="color:black">{{ my_review.0.liked_users.all|length }}</span>
+          </i>
+      {% else %}
+          <i class="far fa-thumbs-up fa-lg like-button" style="color:black" data-id="{{ my_review.0.pk }}" data-movie-id="{{ movie.pk }}">
+            <span id="like-count-{{ my_review.0.pk }}" style="color:black">{{ my_review.0.liked_users.all|length }}</span>
+          </i>
+      {% endif %}
+    </div>
+  </div>
+
+  <p class="my-3">{{ my_review.0.content }}</p>
+  <div class="d-flex justify-content-between">
+    <p>{{ my_review.0.created_at }}</p>
+    <div>
+      <a href="{% url 'movies:review_update' movie.pk my_review.0.pk %}"><small class="text-decoration-none text-dark">수정</small></a>
+      <small>
+        <form action="{% url 'movies:review_delete' movie.pk my_review.0.pk %}" method="POST" class="d-inline">
+            {% csrf_token %}
+        <button style="border:0; background-color: transparent" class="text-decoration-none">삭제</button>
+        </form>
+    </small>
+    </div>
+  </div> 
+  <hr>
+  {% endif %}
+
+  <!-- 다른 리뷰 표시 -->
   {% for review in reviews %}
       <div class="d-flex justify-content-between">
         <div>
@@ -136,11 +175,12 @@ Movie
         </small>
         </div>
       </div> 
-      
       <hr>
-  {% empty %}
-      <p>새 리뷰를 작성해주세요</p>
-  {% endfor %}
+    {% endfor %}
+
+    {% if not review_count %}
+    <p>새 리뷰를 작성해주세요</p>
+    {% endif %}
 </div>
 
 <script>

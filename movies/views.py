@@ -124,7 +124,8 @@ def index(request, sort=None):
 @login_required
 def detail(request, movie_pk):
     movie = Movie.objects.get(pk=movie_pk)
-    reviews = movie.review_set.order_by('-pk')
+    reviews = movie.review_set.order_by('-pk').exclude(author=request.user)
+    my_review = movie.review_set.filter(author=request.user)
     nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
     form = ReviewForm()
     is_voted = movie.review_set.filter(author=request.user).exists()
@@ -132,7 +133,9 @@ def detail(request, movie_pk):
         'movie': movie,
         'form': form,
         'reviews': reviews,
+        'my_review': my_review,
         'is_voted': is_voted,
+        'review_count': len(reviews) + len(my_review),
     }
     return render(request, 'movies/detail.html', context)
 
