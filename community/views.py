@@ -11,9 +11,16 @@ from .models import Article, Comment, Board
 from .forms import ArticleForm, CommentForm
 
 
+NOTICE_BOARD_NAME = '공지사항'
+MAX_NOTICE_COUNT = 3
+
 def community(request):
     boards = Board.objects.all()
-    articles = Article.objects.order_by('-pk')
+    notice_board = Board.objects.get(name=NOTICE_BOARD_NAME)
+    noticed = notice_board.article_set.order_by('-pk')
+    if len(noticed) >= 3:
+        noticed = noticed[:3]
+    articles = Article.objects.order_by('-pk').exclude(board=notice_board)
 
     paginator = Paginator(articles, 10)
     nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
@@ -25,16 +32,20 @@ def community(request):
         'nowDate': nowDate,
         'board': None,
         'boards': boards,
+        'noticed': noticed,
     }
 
     return render(request, 'community/index.html', context)
 
 
 def board(request, board_name=None):
-    
+    notice_board = Board.objects.get(name=NOTICE_BOARD_NAME)
+    noticed = notice_board.article_set.order_by('-pk')
+    if len(noticed) >= 3:
+        noticed = noticed[:3]
     if board_name is None:
         board = None
-        articles = Article.objects.order_by('-pk')
+        articles = Article.objects.order_by('-pk').exclude(board=notice_board)
     else:
         board = get_object_or_404(Board, url_name=board_name)
         articles = board.article_set.all()
@@ -49,6 +60,7 @@ def board(request, board_name=None):
         'nowDate': nowDate,
         'now_board': board,
         'boards' : boards,
+        'noticed' : noticed,
     }
     return render(request, 'community/index.html', context)
 

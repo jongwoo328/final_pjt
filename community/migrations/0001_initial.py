@@ -33,6 +33,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=100)),
                 ('url_name', models.CharField(max_length=100)),
                 ('auth_required', models.BooleanField(default=False)),
+                ('name_short', models.CharField(max_length=10)),
             ],
         ),
         migrations.CreateModel(

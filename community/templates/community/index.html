@@ -40,22 +40,76 @@
     <div class="container mt-0 p-1">
         <hr class="my-2">
         <div class="row" >
-            <div class="col-2 text-center">게시판</div>
+            <div class="col-1 text-center">번호</div>
+            {% if not now_board %}
+            <div class="col-1 text-center">분류</div>
             <div class="col-4 text-center">제목</div>
+            {% else %}
+            <div class="col-5 text-center">제목</div>
+            {% endif %}
             <div class="col-2 text-center">작성자</div>
             <div class="col-2 text-center">조회 수</div>
             <div class="col-2 text-center">작성일</div>
         </div>
         <hr class="my-2">
         <tbody>
+            {% if not now_board or now_board.name != '공지사항' %}
+            {% for notice in noticed %}
+            <div class="row">
+                {% if not now_board %}
+                <div class="col-1 text-center font-weight-bold">{{ notice.pk }}</div>
+                <div class="col-1 text-center font-weight-bold">{{ notice.board.name_short }}</div>
+                <div class="col-4">
+                    <a href="{% url 'community:detail' notice.pk %}" class="text-dark article_title font-weight-bold">
+                        {{notice.title}}
+                    </a>
+                </div>
+                {% else %}
+                <div class="col-1 text-center font-weight-bold">{{ notice.board.name_short }}</div>
+                <div class="col-5">
+                    <a href="{% url 'community:detail' notice.pk %}" class="text-dark article_title font-weight-bold">
+                        {{notice.title}}
+                    </a>
+                </div>
+                {% endif %}
+                <!-- <div class="col-1 text-center">공지</div>
+                <div class="col-5">
+                    <a href="{% url 'community:detail' notice.pk %}" class="text-dark article_title">
+                        {{notice.title}}
+                    </a>
+                </div> -->
+                <div class="col-2 text-center font-weight-bold">{{ notice.author }}</div>
+                <div class="col-2 text-center font-weight-bold">{{ notice.hits }}</div>
+                <div class="col-2 text-center font-weight-bold">
+                    <!-- 오늘 날짜면 시간만 / 아니면 날짜 출력 -->
+                    {% if notice.created_at|date:"Y-m-d" == nowDate %}
+                        {{ notice.created_at | date:"H:i" }}
+                    {% else %}
+                        {{ notice.created_at | date:"Y-m-d" }}
+                    {% endif %}
+                </div>
+            </div>
+            <hr class="my-2">
+            {% endfor %}
+            {% endif %}
+
             {% for article in page_obj %}
                 <div class="row">
-                    <div class="col-2 text-center">{{ article.board }}</div>
+                    <div class="col-1 text-center">{{ article.pk }}</div>
+                    {% if not now_board %}
+                    <div class="col-1 text-center">{{ article.board.name_short }}</div>
                     <div class="col-4">
                         <a href="{% url 'community:detail' article.pk %}" class="text-dark article_title">
                             {{article.title}}
                         </a>
                     </div>
+                    {% else %}
+                    <div class="col-5">
+                        <a href="{% url 'community:detail' article.pk %}" class="text-dark article_title">
+                            {{article.title}}
+                        </a>
+                    </div>
+                    {% endif %}
                     <div class="col-2 text-center">{{ article.author }}</div>
                     <div class="col-2 text-center">{{ article.hits }}</div>
                     <div class="col-2 text-center">

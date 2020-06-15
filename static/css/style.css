@@ -71,4 +71,20 @@
   .fas:hover {
     cursor: pointer;
   }
+
+  a.youtube:hover i {
+    color: white !important;
+  }
+
+  #baseMain {
+    height: 100vh;
+  }
+
+  div.footer {
+    clear: both;
+    position: relative;
+    margin-bottom: 0px;
+    margin-top: 30px;
+    height: 80px;
+  }
 }
