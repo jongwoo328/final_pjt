@@ -40,8 +40,8 @@
 </div>
 
 <!-- 영화 목록 - poster_path, adult, title, vote_average, released_date -->
-<div class="container" id="movie_list">
-  <div class="row">
+<div class="container" id="Total_movie">
+  <div class="row" id="movie_list">
     {% for movie in page_obj %}
       <div class="col-12 col-md-6 col-lg-3 mb-3 movie_card">
         <div class="card h-100">
@@ -122,7 +122,7 @@ $(document).ready(function(){
       var inputValue = $("#mySearch").val()
       axios.get(`/movies/index/search/${inputValue}/`)
       .then((res) => {
-        $("#movie_list").html(res.data)
+        $("#Total_movie").html(res.data)
 
       })
     })
@@ -131,7 +131,7 @@ $(document).ready(function(){
         var inputValue = $("#mySearch").val()
         axios.get(`/movies/index/search/${inputValue}/`)
         .then((res) => {
-          $("#movie_list").html(res.data)
+          $("#Total_movie").html(res.data)
         })
       }
     })
