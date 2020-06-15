@@ -25,7 +25,7 @@
 
 {% block context %}
     {% if request.user.is_authenticated %} 
-    {% if request.user.liked_movies.exist %}
+    {% if recommends %}
         <div class="container-fluid border border-dark">
             <div class="d-flex my-2">
             <h3 class="mb-0"><i class="fas">추천 영화</i></h3>
@@ -159,14 +159,6 @@
     </div>
 
     {% endif %}
-
-    <footer class="container-fluid text-center">
-        <a href="#myPage" title="To Top">
-            <i class="w3-button w3-circle w3-teal fas fa-chevron-up" id="ToTopButton"></i>
-        </a>
-        <p>Bootstrap Theme Made By <a href="https://www.w3schools.com" title="Visit w3schools">www.w3schools.com</a></p>
-      </footer>
-      
 
 {% endblock %}
 

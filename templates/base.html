@@ -36,8 +36,8 @@
     {% endif %}
     {% if request.resolver_match.url_name != 'main' or request.user.is_authenticated %}
     <!-- SIDEBAR -->
-    <div class="w3-sidebar w3-collapse w3-white w3-large" style="z-index:3;width:300px;" id="mySidebar">        
-        <div class="w3-black d-flex justify-content-between align-items-center">
+    <div class="w3-sidebar w3-collapse w3-white w3-large" style="z-index:3;width:300px;" id="mySidebar">     
+            <div class="w3-black d-flex justify-content-between align-items-center">
             <div>
                 <i class="fas fa-user-circle align-self-center mx-3 py-3">  
                     {% if request.user.is_authenticated %}
@@ -51,8 +51,8 @@
         </div>
         <!-- Menu -->
         <div
-         id="nav01" class="w3-bar-block">
-         <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'movies:main' %}">홈</a>
+        id="nav01" class="w3-bar-block">
+        <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'movies:main' %}">홈</a>
             <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'movies:index' %}">전체 영화</a>
             <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'community:community' %}">커뮤니티</a>
             {% if request.user.is_authenticated %}
@@ -64,6 +64,9 @@
                 <a href="{% url 'accounts:signup' %}" class="w3-bar-item w3-button text-decoration-none">회원가입</a>
             {% endif %}
         </div>
+        <footer class="container-fluid text-center d-flex justify-content-center align-items-center footer">
+            
+        </footer>
     </div>
     {% endif %}
     <!-- HEADER -->
@@ -96,7 +99,10 @@
             </div>
         </div>
     </div>
-
+    <div class="container-fluid text-center d-flex justify-content-center align-items-center footer">
+        <!-- <p>test</p> -->
+        <!-- <p>Bootstrap Theme Made By <a href="https://www.w3schools.com" title="Visit w3schools">www.w3schools.com</a></p> -->
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
         function w3_open() {

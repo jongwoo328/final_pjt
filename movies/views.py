@@ -78,7 +78,7 @@ def recommend(recents):
 
 def main(request):
     # 랜덤 영화
-    random_movies = Movie.objects.filter(
+    random_movies = Movie.objects.exclude(poster_path="").filter(
         pk__in=list(random.sample(
             range(1, ALL_MOVIE_COUNT+1), RANDOM_MOVIE_COUNT
             ))
@@ -132,20 +132,10 @@ def search(request, input_value=None):
         movies = Movie.objects.order_by('-pk').filter(release_date__lte=datetime.datetime.now(), title__icontains=input_value)
     else : 
         movies = Movie.objects.order_by('-pk').filter(release_date__lte=datetime.datetime.now())
-    paginator = Paginator(movies, 12)
-    nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    context = {
-        'page_obj': page_obj,
-        'nowDate': nowDate,
-    }
     context = {
         'movies' : movies,
     }
     return render(request, 'movies/index_search.html', context)
-
-
 
 
 @login_required
