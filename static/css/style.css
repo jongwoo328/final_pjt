@@ -66,4 +66,9 @@
     display: block;
     visibility: visible;
   }
+
+  /* like button */
+  .fas:hover {
+    cursor: pointer;
+  }
 }
