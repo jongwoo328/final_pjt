@@ -12,6 +12,7 @@ class Genre(models.Model):
         return f'{self.name}'
 
 class Movie(models.Model):
+    api_id = models.IntegerField()
     title = models.CharField(max_length=100)
     original_title = models.CharField(max_length=100)
     release_date = models.DateField()
@@ -24,6 +25,7 @@ class Movie(models.Model):
     poster_path = models.CharField(max_length=100, default='')
     backdrop_path = models.CharField(max_length=100, default='')
     genres = models.ManyToManyField(Genre, related_name='movies')
+    trailer = models.CharField(max_length=50)
 
     def __str__(self):
         return f'{self.title}'

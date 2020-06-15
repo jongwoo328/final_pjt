@@ -75,7 +75,13 @@ Movie
               <span>{{ movie.release_date }} 개봉 </span>
             </div>
             <!-- 예고편 -->
-            <a href="" class="btn btn-primary">예고편</a>
+            <div class="mb-2"><span class="h5">트레일러</span></div>
+            {% if movie.trailer %}
+            <a href="https://www.youtube.com/watch?v={{ movie.trailer }}" target="_blank"><i class="fab fa-youtube h3 text-danger"></i></a>
+            {% else %}
+            <a href="https://www.youtube.com/results?search_query={{ movie.original_title }} trailer" target="_blank"><i class="fab fa-youtube h3 text-danger"></i></a>
+            {% endif %}
+            <!-- <a href="" class="btn btn-primary">예고편</a> -->
         </div>  
   </div>
 
