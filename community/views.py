@@ -3,6 +3,7 @@ import datetime # 날짜 가져오기
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 
@@ -24,6 +25,7 @@ def community(request):
         'board': None,
         'boards': boards,
     }
+
     return render(request, 'community/index.html', context)
 
 
@@ -61,11 +63,36 @@ def create_article(request, board_name=None):
             article.save()
             return redirect('community:detail', article.pk)
     else:
-        if board_name:
-            board = Board.objects.get(url_name=board_name)
-            form = ArticleForm(initial={'board': board})
+        board = get_object_or_404(Board, url_name=board_name)
+        if board.auth_required and not request.user.is_superuser:
+            messages.error(request, '관리자만 접근 가능합니다.')
+            #
+            if board_name is None:
+                board = None
+                articles = Article.objects.order_by('-pk')
+            else:
+                board = get_object_or_404(Board, url_name=board_name)
+                articles = board.article_set.all()
+
+            paginator = Paginator(articles, 10)
+            nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
+            page_number = request.GET.get('page')
+            page_obj = paginator.get_page(page_number)
+            boards = Board.objects.all()
+            context = {
+                'page_obj': page_obj,
+                'nowDate': nowDate,
+                'now_board': board,
+                'boards' : boards,
+            }
+            return render(request, 'community/index.html', context)
+            #
         else:
-            form = ArticleForm()
+            if board_name:
+                board = Board.objects.get(url_name=board_name)
+                form = ArticleForm(initial={'board': board})
+            else:
+                form = ArticleForm()
     context = {
         'form': form,
     }
@@ -129,9 +156,10 @@ def article_like(request, article_pk):
 @require_POST
 def delete_article(request, article_pk):
     article = get_object_or_404(Article, pk=article_pk)
+    url_name = article.board.url_name
     if request.user == article.author:
         article.delete()
-        return redirect('community:community')
+        return redirect('community:board', board_name=url_name)
     return redirect('community:detail', article_pk)
 
 
