@@ -104,13 +104,13 @@ def main(request):
     return render(request, 'movies/main.html', context)
 
 def index(request, sort=None):
+
     if sort == 'rank':
         movies = Movie.objects.order_by('-vote_average').filter(release_date__lte=datetime.datetime.now())
     elif sort == 'release':
         movies = Movie.objects.order_by('-release_date').filter(release_date__lte=datetime.datetime.now())
     else:
         movies = Movie.objects.order_by('-pk').filter(release_date__lte=datetime.datetime.now())
-
     paginator = Paginator(movies, 12)
     nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
     page_number = request.GET.get('page')
@@ -121,7 +121,29 @@ def index(request, sort=None):
     }
     print(page_number, type(page_number))
     if not page_number or int(page_number) == 1 : return render(request, 'movies/index.html', context)
-    else : return render(request, 'movies/index_ajax.html', context)
+    else : return render(request, 'movies/index_scroll.html', context)
+    
+
+def search(request, input_value=None):
+    if input_value : 
+        movies = Movie.objects.order_by('-pk').filter(release_date__lte=datetime.datetime.now(), title__icontains=input_value)
+    else : 
+        movies = Movie.objects.order_by('-pk').filter(release_date__lte=datetime.datetime.now())
+    paginator = Paginator(movies, 12)
+    nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    context = {
+        'page_obj': page_obj,
+        'nowDate': nowDate,
+    }
+    context = {
+        'movies' : movies,
+    }
+    return render(request, 'movies/index_search.html', context)
+
+
+
 
 @login_required
 def detail(request, movie_pk):

@@ -26,10 +26,12 @@
 <!-- CONTEXT -->
 <div class="container mt-5 mb-3 pb-3 d-flex justify-content-between w3-border-bottom"> 
   <div class="row d-flex flex-fill">
-    <h3 class="mr-5"><i class="fas">전체 영화</i></h3>
-    <div>
-    <input id="mySearch" class="w3-input w3-border w3-animate-input" placeholder="Search" type="text">
-  </div>
+    <h3 class="mr-5"><a href="{% url 'movies:index' %}" class="text-dark"><i class="fas">전체 영화</i></a></h3>
+    <!-- Search -->
+    <div class="d-flex">
+      <input id="mySearch" class="w3-input w3-border w3-animate-input" placeholder="Search" type="text" required>
+      <button type="button" id="SearchButton" class="btn btn-outline-success">Success</button>
+    </div>
   </div>
   <div class="align-self-end">
     <a href="{% url 'movies:index_sort' 'rank' %}" class="mr-2 text-dark"><i class="fas fa-check">평점순</i></a> 
@@ -38,10 +40,10 @@
 </div>
 
 <!-- 영화 목록 - poster_path, adult, title, vote_average, released_date -->
-<div class="container">
-  <div class="row" id="movie_list">
+<div class="container" id="movie_list">
+  <div class="row">
     {% for movie in page_obj %}
-      <div class="col-12 col-md-6 col-lg-3 mb-3">
+      <div class="col-12 col-md-6 col-lg-3 mb-3 movie_card">
         <div class="card h-100">
         <!-- 영화 이미지 -->
           <a href="{% url 'movies:detail' movie.pk %}">
@@ -56,7 +58,7 @@
             <div class="d-flex justify-content-between">
                 <div>
                   <!-- 영화 제목, 평점 -->
-                  <a href="{% url 'movies:detail' movie.pk %}" class="font-weight-bold MovieTitle">{{ movie.title }}</a>
+                  <a href="{% url 'movies:detail' movie.pk %}" class="font-weight-bold movie_title">{{ movie.title }}</a>
                   <span><i class="fas fa-star fa-sm" style="color:crimson"> {{ movie.vote_average }}</i></span>
                 </div>
                 <div>
@@ -116,16 +118,23 @@ $(document).ready(function(){
     })
 
     // searchbar
-    $("#mySearch").on("keyup", function() {
-      var inputValue = $(this).val()
-      console.log(inputValue)
-      $('.MovieTitle').filter(function(){
-        console.log($(this).text())
-        console.log($(this).toggle($(this).text().toLowerCase().indexOf(inputValue) > -1))
-        $(this).toggle($(this).text().toLowerCase().indexOf(inputValue) > -1)
+    $("#SearchButton").click(function() {
+      var inputValue = $("#mySearch").val()
+      axios.get(`/movies/index/search/${inputValue}/`)
+      .then((res) => {
+        $("#movie_list").html(res.data)
+
       })
     })
-
+    $("#mySearch").keydown(function(key) {
+      if (key.keyCode == 13){
+        var inputValue = $("#mySearch").val()
+        axios.get(`/movies/index/search/${inputValue}/`)
+        .then((res) => {
+          $("#movie_list").html(res.data)
+        })
+      }
+    })
 
     // 이미지 사이즈 조절
     $('.ReSizeImage').each(function(){
