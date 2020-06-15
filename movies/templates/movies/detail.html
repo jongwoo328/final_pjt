@@ -38,7 +38,7 @@ Movie
         <div class=" ml-4 mt-3 flex-fill">
             <!-- 제목 -->
             <div class="d-flex justify-content-between mb-2">
-                <h4>{{ movie.title }}</h4>
+                <h3>{{ movie.title }}</h3>
                 <!-- 좋아요 -->
                 <div>
                 {% if request.user in movie.liked_users.all %}
@@ -53,15 +53,19 @@ Movie
 
             <!-- origin제목 & 평점 -->
             <div class="mb-1">
-              <span><small>{{ movie.original_title }}</small></span> |
-              <span><i class="fas fa-star fa-sm" style="color:crimson"> {{ movie.vote_average }}</i></span>
+              <span>{{ movie.original_title }}</span> |
+              <span><i class="fas fa-star" style="color:crimson"> {{ movie.vote_average }}</i></span>
             </div>
 
             <!-- 장르, 국가 -->
             <div class="mb-1">
                 <span id="genre">
                   {% for genre in movie.genres.all %}
-                    {{ genre.name }}
+                    {% if forloop.last %}
+                      {{ genre.name }}
+                    {% else %}
+                      {{ genre.name }}, 
+                    {% endif %}
                   {% endfor %}
                 </span> |
 
@@ -75,12 +79,23 @@ Movie
               <span>{{ movie.release_date }} 개봉 </span>
             </div>
             <!-- 예고편 -->
-            <div class="mb-2"><span class="h5">트레일러</span></div>
-            {% if movie.trailer %}
-            <a href="https://www.youtube.com/watch?v={{ movie.trailer }}" target="_blank"><i class="fab fa-youtube h3 text-danger"></i></a>
-            {% else %}
-            <a href="https://www.youtube.com/results?search_query={{ movie.original_title }} trailer" target="_blank"><i class="fab fa-youtube h3 text-danger"></i></a>
-            {% endif %}
+            <div class="mb-2">
+              {% if movie.trailer %}
+                <a href="https://www.youtube.com/watch?v={{ movie.trailer }}" 
+                   target="_blank" class="btn btn-outline-danger">
+                  <span class="h5">예고편</span>
+                  <i class="fab fa-youtube h5 text-danger my-0"></i>
+                </a>
+              {% else %}
+                <a href="https://www.youtube.com/results?search_query={{ movie.original_title }} trailer" 
+                   target="_blank" class="btn btn-outline-danger">
+                  <span class="h5">예고편</span>
+                  <i class="fab fa-youtube h5 text-danger my-0"></i>
+                </a>
+              {% endif %}
+            
+            </div>
+            
             <!-- <a href="" class="btn btn-primary">예고편</a> -->
         </div>  
   </div>
@@ -191,8 +206,8 @@ Movie
 
 <script>
   // 장르
-  var genres = document.getElementById('genre').innerText
-  document.getElementById('genre').innerText = genres.split(" ")[0] 
+  // var genres = document.getElementById('genre').innerText
+  // document.getElementById('genre').innerText = genres.split(" ")[0] 
   
   // 국가
   const contries = {
