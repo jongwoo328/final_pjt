@@ -29,6 +29,10 @@
     }
 </style>
 <body id="myPage">
+    {% if messages %}
+        {% bootstrap_javascript jquery=True %}
+        {% bootstrap_messages %}
+    {% endif %}
     {% if request.resolver_match.url_name != 'main' or request.user.is_authenticated %}
     <!-- SIDEBAR -->
     <div class="w3-sidebar w3-collapse w3-white w3-large" style="z-index:3;width:300px;" id="mySidebar">        
@@ -61,7 +65,6 @@
         </div>
     </div>
     {% endif %}
-
     <!-- HEADER -->
     <div class="container-fluid  w3-overlay w3-hide-large" onclick="w3_close()" style=" cursor:pointer" id="myOverlay"></div>
         <div id="baseMain" class="w3-main" > 

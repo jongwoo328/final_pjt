@@ -32,6 +32,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=100)),
                 ('url_name', models.CharField(max_length=100)),
+                ('auth_required', models.BooleanField(default=False)),
             ],
         ),
         migrations.CreateModel(
