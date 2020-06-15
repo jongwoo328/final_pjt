@@ -131,3 +131,7 @@ STATICFILES_DIRS = [
 STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
+
+# message framework setting
+from django.contrib.messages import constants as messages_constants
+MESSAGE_TAGS = {messages_constants.ERROR: 'danger'}
