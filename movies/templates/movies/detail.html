@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load bootstrap4 %}
+{% load static %}
 
 {% block title %}
 Movie
@@ -29,9 +30,16 @@ Movie
         <!-- 영화 포스터 -->
         <span>
           <!-- w185xh278 -->
+          {% if movie.poster_path %}
           <img src="https://image.tmdb.org/t/p/w185/{{ movie.poster_path }}" 
               style="width: 185px; height: 278px; overflow:hidden;"
               alt="Alps">
+          {% else %}
+          <img src="{% static 'image/noimage_index.png' %}" 
+              style="width: 185px; height: 278px; overflow:hidden;"
+              class="border border-gray"
+              alt="Alps">
+          {% endif %}
         </span>
         
         <!-- 영화 정보 -->

@@ -4,6 +4,7 @@ import random
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 
@@ -120,8 +121,10 @@ def index(request, sort=None):
         'nowDate': nowDate,
     }
     
-    if not page_number or int(page_number) == 1 : return render(request, 'movies/index.html', context)
-    else : return render(request, 'movies/index_scroll.html', context)
+    if not page_number or int(page_number) == 1:
+        return render(request, 'movies/index.html', context)
+    else:
+        return render(request, 'movies/index_scroll.html', context)
     
 
 def search(request, input_value=None):

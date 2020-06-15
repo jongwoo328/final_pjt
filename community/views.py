@@ -10,6 +10,7 @@ from django.http import JsonResponse
 from .models import Article, Comment, Board
 from .forms import ArticleForm, CommentForm
 
+
 def community(request):
     boards = Board.objects.all()
     articles = Article.objects.order_by('-pk')
