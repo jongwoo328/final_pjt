@@ -67,7 +67,7 @@
     </div>
     {% endif %}
     <!-- HEADER -->
-    <div class="container-fluid w3-overlay w3-hide-large" onclick="w3_close()" style=" cursor:pointer" id="myOverlay"></div>
+    <div class="container-fluid  w3-overlay w3-hide-large" onclick="w3_close()" style=" cursor:pointer" id="myOverlay"></div>
         <div id="baseMain" class="w3-main" > 
             <div id="myHeader">
                 
@@ -82,12 +82,10 @@
                         <div>
                         <a href="{% url 'movies:main' %}" class="text-decoration-none w3-text-light-gray">
                             <!-- LOGO IMAGE -->
-                            <img src="{% static 'image/logo3.png' %}" alt="LOGO" style="height: 200px">
+                            <img src="{% static 'image/logo4.png' %}" alt="LOGO" size="width:100px">
                         </a>
                         </div>
-                        {% if request.resolver_match.url_name == 'main'%}
-                        <button class="w3-btn w3-xlarge w3-dark-grey w3-hover-light-grey" onclick="document.getElementById('id01').style.display='block'" style="font-weight:900;">LEARN W3.CSS</button>
-                        {% endif %}
+                        
                     </h1>
                 </header>
             </div>

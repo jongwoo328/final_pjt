@@ -26,10 +26,12 @@
         <div class="align-self-center">
             <h5>
                 <!-- <i class="fas fa-search"> | </i> -->
-            {% if now_board %}
+            {% if not now_board or now_board.name != '공지사항' %}
+            <!-- {% if now_board %} -->
             <a href="{% url 'community:create_article' now_board.url_name %}" class="text-dark"><i class="fas fa-edit"></i></a></h5>
-            {% else %}
-            <a href="{% url 'community:create_article_noboard' %}" class="text-dark"><i class="fas fa-edit"></i></a></h5>
+            <!-- {% else %} -->
+            <!-- <a href="{% url 'community:create_article_noboard' %}" class="text-dark"><i class="fas fa-edit"></i></a></h5> -->
+            <!-- {% endif %} -->
             {% endif %}
         </div>
         
@@ -81,10 +83,13 @@
 {% block script %}
 <script>
     $(document).ready(function() {
-        const LengthLimit = 80
+        const LengthLimit = 30
         $(".article_title").each(function(){
-            var titleLength = $(this).text().length
-            
+            var title = $.trim($(this).text())
+            if (title.length > 30){
+                title = title.substring(1, LengthLimit) + '...'
+                $(this).text(title)
+            }
         })
         
     })
