@@ -10,6 +10,7 @@ class Board(models.Model):
     name = models.CharField(max_length=100)
     url_name = models.CharField(max_length=100)
     auth_required = models.BooleanField(default=False)
+    name_short = models.CharField(max_length=10)
 
     def __str__(self):
         return f'{self.name}'
@@ -20,15 +21,18 @@ class Board(models.Model):
             {
                 'name': '공지사항',
                 'url_name': 'notice',
+                'name_short': '공지',
                 'auth_required': True,
             },
             {
                 'name': '자유게시판',
                 'url_name': 'free',
+                'name_short': '자유',
             },
             {
                 'name': '추천게시판',
                 'url_name': 'recommend',
+                'name_short': '추천',
             },
         ]
         for board in board_data:
