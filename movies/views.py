@@ -125,7 +125,9 @@ def index(request, sort=None):
         return render(request, 'movies/index.html', context)
     else:
         return render(request, 'movies/index_scroll.html', context)
-    
+
+def about(request) : 
+    return render(request, 'movies/about.html')
 
 def search(request, input_value=None):
     if input_value : 

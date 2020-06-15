@@ -24,14 +24,13 @@
 {% endblock %}
 
 {% block context %}
-    {% if request.user.is_authenticated %} 
     {% if recommends %}
-        <div class="container-fluid border border-dark">
+        <div class="container border border-dark">
             <div class="d-flex my-2">
             <h3 class="mb-0"><i class="fas">추천 영화</i></h3>
                 
             </div>
-            <div class="container-fluid RecommendMovie d-flex mx-0 px-0"  style=" overflow-x: scroll;">
+            <div class="container RecommendMovie d-flex mx-0 px-0"  style=" overflow-x: scroll;">
                 {% for recommend in recommends %}
                 <a href="{% url 'movies:detail' recommend.pk %}">
                     <img src="https://image.tmdb.org/t/p/w154{{ recommend.poster_path }}" 
@@ -42,19 +41,20 @@
             </div>
         </div>
     {% else %}
-    <div class="container-fluid border border-dark">
+    <div class="container border border-dark">
         <div class="d-flex my-2">
         <h3 class="mb-0"><i class="fas">추천 영화</i></h3>
             
         </div>
-        <div class="container-fluid RecommendMovie d-flex mx-0 px-0" >
+        <div class="container RecommendMovie d-flex mx-0 px-0" >
             아직 좋아하는 영화가 없어요 ㅠㅠ
         </div>
     </div>
     {% endif %}
-    <div class="container-fluid border border-dark">
+
+    <div class="container border border-dark">
         <h3>이런 영화는 어떠세요?</h3>
-        <div class="container-fluid RandomMovie d-flex mx-0 px-0" style=" overflow-x: scroll;">
+        <div class="container RandomMovie d-flex mx-0 px-0" style=" overflow-x: scroll;">
             {% for movie in movies %}
             <a href="{% url 'movies:detail' movie.pk %}" class="cd">
                 <img src="https://image.tmdb.org/t/p/w154{{ movie.poster_path }}" 
@@ -64,92 +64,6 @@
             {% endfor %}
         </div>
     </div>
-
-
-    {% else %}
-
-    <!-- Container (Services Section) -->
-<div id="services" class="container-fluid text-center w3-white w3-padding-64">
-    <h2>SERVICES</h2>
-    <h4>What we offer</h4>
-    <br>
-    <div class="row slideanim">
-      <div class="col-sm-4">
-        <div class="card">
-        <i class="fas fa-thumbs-up fa-5x my-3"></i>
-        <h4>영화추천</h4>
-        <p>당신에게 맞는 영화를 추천해드려요</p>
-        </div>
-      </div>
-
-      <div class="col-sm-4">
-        <div class="card">
-        <i class="fas fa-clone fa-5x my-3"></i>
-        <h4>영화리뷰</h4>
-        <p>다른사람들의 리뷰를 볼수있어요</p>
-        </div>
-      </div>
-
-      <div class="col-sm-4">
-        <div class="card">
-        <i class="fas fa-globe fa-5x my-3"></i>
-        <h4>커뮤니티</h4>
-        <p>당신의 생각을 공유하세요</p>
-        </div>
-      </div>
-
-    </div>
-  </div>
-        <!-- 로그인 & 회원가입 & 영화리스트? -->
-    <div class="container-fluid text-center  mb-5 w3-padding-64" style="background-color: lightslategray;">
-        <h2>JOIN US NOW</h2>
-        <br>
-        <div class="w3-row-padding w3-center w3-margin-top">
-            <div class="w3-third">
-            <div class="w3-card w3-container w3-light-grey" style="min-height:300px">
-                <h3 class="mt-3">로그인</h3><br>
-                <p></p>
-                <p></p>
-                <p></p>
-                <p></p>
-                <a href="{% url 'accounts:login' %}">
-                    <button class="w3-btn w3-xlarge w3-dark-grey w3-hover-light-grey" style="font-weight:900;">LOGIN</button>
-                </a>
-                
-            </div>
-            </div>
-            
-            <div class="w3-third">
-            <div class="w3-card w3-container w3-light-grey" style="min-height:300px">
-                <h3 class="mt-3">회원가입</h3><br>
-                <p>Standard CSS only</p>
-                <p>Easy to learn</p>
-                <p>No need for jQuery</p>
-                <p>No JavaScript library</p>
-                <a href="{% url 'accounts:signup' %}">
-                    <button class="w3-btn w3-xlarge w3-dark-grey w3-hover-light-grey" style="font-weight:900;">SIGNUP</button>
-                </a>
-                
-            </div>
-            </div>
-            
-            <div class="w3-third">
-            <div class="w3-card w3-container w3-light-grey" style="min-height:300px">
-                <h3 class="mt-3">SCAFY</h3><br>
-                <p>Paper like design</p>
-                <p>Bold colors and shadows</p>
-                <p>Equal across platforms</p>
-                <p>Equal across devices</p>
-                <a href="{% url 'community:community' %}">
-                    <button class="w3-btn w3-xlarge w3-dark-grey w3-hover-light-grey" style="font-weight:900;">COMMUNITY</button>
-                </a>
-                
-            </div>
-            </div>
-        </div>
-    </div>
-
-    {% endif %}
 
 {% endblock %}
 
