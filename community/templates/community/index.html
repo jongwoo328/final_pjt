@@ -81,10 +81,13 @@
 {% block script %}
 <script>
     $(document).ready(function() {
-        const LengthLimit = 80
+        const LengthLimit = 30
         $(".article_title").each(function(){
-            var titleLength = $(this).text().length
-            
+            var title = $.trim($(this).text())
+            if (title.length > 30){
+                title = title.substring(1, LengthLimit) + '...'
+                $(this).text(title)
+            }
         })
         
     })
