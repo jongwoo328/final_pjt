@@ -90,14 +90,14 @@ Movie
             <div class="mb-2">
               {% if movie.trailer %}
                 <a href="https://www.youtube.com/watch?v={{ movie.trailer }}" 
-                   target="_blank" class="btn btn-outline-danger">
-                  <span class="h5">예고편</span>
+                   target="_blank" class="btn btn-outline-danger youtube">
+                  <span class="h5 youtube">예고편</span>
                   <i class="fab fa-youtube h5 text-danger my-0"></i>
                 </a>
               {% else %}
                 <a href="https://www.youtube.com/results?search_query={{ movie.original_title }} trailer" 
-                   target="_blank" class="btn btn-outline-danger">
-                  <span class="h5">예고편</span>
+                   target="_blank" class="btn btn-outline-danger youtube">
+                  <span class="h5 youtube">예고편</span>
                   <i class="fab fa-youtube h5 text-danger my-0"></i>
                 </a>
               {% endif %}

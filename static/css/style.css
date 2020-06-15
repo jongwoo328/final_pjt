@@ -71,4 +71,8 @@
   .fas:hover {
     cursor: pointer;
   }
+
+  a.youtube:hover i {
+    color: white !important;
+  }
 }
