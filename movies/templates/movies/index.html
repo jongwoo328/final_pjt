@@ -50,7 +50,7 @@
             {% if movie.poster_path %}
             <img src="https://image.tmdb.org/t/p/w342/{{ movie.poster_path }}" alt="{{ movie.title }}" class=" card-img-top ReSizeImage">
             {% else %}
-            <img src="{% static 'image/noimage_index.png' %}" alt="{{ movie.title }}" class=" card-img-top ReSizeImage">
+            <img src="{% static 'image/noimage_index.png' %}" alt="{{ movie.title }}" class=" card-img-top ReSizeImage border border-gray">
             {% endif %}
           </a>
           <!-- 영화 제목, 좋아요, 평점, 개봉일 -->

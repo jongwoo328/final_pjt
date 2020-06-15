@@ -40,14 +40,14 @@
                             <img 
                                 src="{% static 'image/noimage_index.png' %}" 
                                 alt="{{ first_movie.title }}" 
-                                class="card-img-top ReSizeImage">
+                                class="card-img-top ReSizeImage border border-dark">
                             {% endif %}
                         </a>
                 </div>
                 {% for movie in rest_movies %}
                 <div class="carousel-item col-md-3 mx-0">
                         <a href="{% url 'movies:detail' movie.pk %}">
-                        {% if first_movie.poster_path %}
+                        {% if movie.poster_path %}
                             <img src="https://image.tmdb.org/t/p/w154{{ movie.poster_path }}" 
                             alt="{{ movie.title }}" 
                             class="card-img-top ReSizeImage">
@@ -55,7 +55,7 @@
                             <img 
                                 src="{% static 'image/noimage_index.png' %}" 
                                 alt="{{ first_movie.title }}" 
-                                class="card-img-top ReSizeImage">
+                                class="card-img-top ReSizeImage border border-dark">
                         {% endif %}
                     </a>
                     <!-- </div> -->
