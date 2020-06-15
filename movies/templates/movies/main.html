@@ -26,13 +26,16 @@
 {% block context %}
     {% if request.user.is_authenticated %} 
     <div class="container-fluid border border-dark">
-        <h3>추천 영화</h3>
-        <div class="d-flex">
+        <div class="d-flex my-2">
+        <h3 class="mb-0"><i class="fas">추천 영화</i></h3>
+            
+        </div>
+        <div class="container-fluid RecommendMovie d-flex mx-0 px-0"  style=" overflow-x: scroll;">
             {% for recommend in recommends %}
             <a href="{% url 'movies:detail' recommend.pk %}">
                 <img src="https://image.tmdb.org/t/p/w154{{ recommend.poster_path }}" 
                     alt="{{ recommend.title }}" 
-                    class="card-img-top ReSizeImage">
+                   >
             </a>
             {% endfor %}
         </div>
@@ -40,12 +43,12 @@
 
     <div class="container-fluid border border-dark">
         <h3>이런 영화는 어떠세요?</h3>
-        <div class="d-flex">
+        <div class="container-fluid RandomMovie d-flex mx-0 px-0" style=" overflow-x: scroll;">
             {% for movie in movies %}
-            <a href="{% url 'movies:detail' movie.pk %}">
+            <a href="{% url 'movies:detail' movie.pk %}" class="cd">
                 <img src="https://image.tmdb.org/t/p/w154{{ movie.poster_path }}" 
                     alt="{{ movie.title }}" 
-                    class="card-img-top ReSizeImage">
+                    >
             </a>
             {% endfor %}
         </div>
@@ -159,6 +162,19 @@
 {% block script %}
 <script>
 $(document).ready(function(){
+
+    // 추천영화 스크롤
+	RecommendmoveScrollLeft = function() {
+    var _scrollX = $('.RecommendMovie').scrollLeft();
+    $('.RecommendMovie').scrollLeft(_scrollX);
+    };
+    RandommoveScrollLeft = function() {
+    var _scrollX = $('.RandomMovie').scrollLeft();
+    $('.RandomMovie').scrollLeft(_scrollX);
+    };
+
+
+    // Top Button
     $(window).scroll(function() {
             if ($(this).scrollTop() > 500) {
                 $('#ToTopButton').fadeIn();
@@ -166,7 +182,6 @@ $(document).ready(function(){
                 $('#ToTopButton').fadeOut();
             }
         });
-
 
     $("#ToTopButton").click(function(event) {
         $('html, body').animate({
