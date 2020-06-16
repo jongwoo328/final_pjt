@@ -167,6 +167,7 @@ def about(request) :
 def search(request, input_value=None):
     if input_value : 
         movies = Movie.objects.order_by('-pk').filter(release_date__lte=datetime.datetime.now(), title__icontains=input_value)
+        
     else : 
         movies = Movie.objects.order_by('-pk').filter(release_date__lte=datetime.datetime.now())
     context = {

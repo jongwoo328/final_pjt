@@ -33,7 +33,7 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
   <div class="w3-container w3-display-container w3-padding-16">
     <i onclick="w3_close()" class="fa fa-remove w3-hide-large w3-button w3-display-topright"></i>
     <a href="{% url 'movies:main' %}" class="flex-fill ml-2">
-        <img src="{% static 'image/logo.png' %}" alt="LOGO" style="width:200px; height:60px">
+        <img id="LOGO" src="{% static 'image/logo.png' %}" alt="LOGO" style="width:200px; height:60px">
     </a>
   </div>
   <div class="w3-padding-64 w3-large w3-text-grey" style="font-weight:bold">
@@ -71,7 +71,7 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
   <div class="w3-hide-large" style="margin-top:85px"></div>
   
   <!-- Top header -->
-  <header class="w3-container w3-xlarge">
+  <header class="w3-container w3-xlarge" id="HEADER">
     <!-- <p class="w3-left">{{ request.resolver_match.url_name }}</p> -->
     <div class="w3-right">
         {% if request.user.is_authenticated %}
@@ -91,7 +91,7 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
   </header>
 
   <!--context -->
-  <div class="w3-display-container w3-container">
+  <div class="w3-display-container w3-container" id="CONTEXT">
       {% block context %}
       {% endblock %}
   </div>
@@ -125,10 +125,6 @@ function myAccFunc() {
   }
 }
 
-// Click on the "Jeans" link on page load to open the accordion for demo purposes
-document.getElementById("myBtn").click();
-
-
 // Open and close sidebar
 function w3_open() {
   document.getElementById("mySidebar").style.display = "block";
@@ -139,6 +135,15 @@ function w3_close() {
   document.getElementById("mySidebar").style.display = "none";
   document.getElementById("myOverlay").style.display = "none";
 }
+
+// context margin 설정
+$(document).ready(function() {
+    const LogoHeight = $("#LOGO").height()
+    const HeaderHeight = $("#HEADER").height()
+
+    $("#CONTEXT").css("margin-top", LogoHeight-HeaderHeight)
+})
+
 </script>
 {% block script %}
 {% endblock %}

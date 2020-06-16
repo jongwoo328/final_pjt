@@ -39,13 +39,33 @@
   </div>
 </div>
 {% endfor %}
-<script>
+{% block script %}
+  <script>
       $(document).ready(function(){
-        $('.ReSizeImage').each(function(){
-            var width = $(this).innerWidth()
-            var ratio = 1.5
-            $(this).innerHeight(width*ratio)
+          $('.ReSizeImage').each(function(){
+              var width = $(this).innerWidth()
+              var ratio = 1.5
+              $(this).innerHeight(width*ratio)
 
+          })
+      })
+      $(".like-button").unbind('click').bind('click',function(event){
+        movieId = event.target.dataset.id
+        axios.get(`/movies/${movieId}/like/`)
+
+        .then((response) => {
+          // response.data.count -> json으로 응답(해당 게시글에 좋아요를 누른 사람의 수)
+          document.querySelector(`#like-count-${movieId}`).innerText = response.data.count
+
+          if (response.data.movie_liked) {
+            event.target.style.color = 'crimson'
+          } else {
+            event.target.style.color = 'black'
+          }
         })
-    })
-</script>
+        .catch((error) => {
+          console.log(error)
+        })
+      });
+  </script>
+{% endblock %}
