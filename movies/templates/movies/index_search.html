@@ -44,3 +44,30 @@
       <p>찾는 영화가 없습니다.</p>
     {% endif %}
   </div>
+
+{% block script %}
+  <script>
+      var likeButtonList = document.querySelectorAll('.like-button')
+
+      likeButtonList.forEach((likeButton) => {
+          likeButton.addEventListener('click', function(event){
+              const movieId = event.target.dataset.id
+
+              axios.get(`/movies/${movieId}/like/`)
+              .then((response) => {
+                  // response.data.count -> json으로 응답(해당 게시글에 좋아요를 누른 사람의 수)
+                  document.querySelector(`#like-count-${movieId}`).innerText = response.data.count
+
+                  if (response.data.movie_liked) {
+                      event.target.style.color = 'crimson'
+                  } else {
+                      event.target.style.color = 'black'
+                  }
+              })
+            .catch((error) => {
+                  console.log(error)
+              })
+          })
+      })
+  </script>
+{% endblock %}
