@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 {% load bootstrap4 %}
 {% load static %}
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- w3 school - style css -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-teal.css">
-    <!-- icon -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <title>{% block title %}{% endblock %}</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     {% bootstrap_css %}
@@ -18,119 +18,123 @@
     {% block head %}
     {% endblock %}
 </head>
+
 {% block style %}
 {% endblock %}
+
 <style>
-    .baseMainMargin{
-        margin-left:300px;
-    }
+.w3-sidebar a {font-family: "Roboto", sans-serif}
+body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
 </style>
-<body id="myPage" style="background-color: rgb(255, 255, 255);">
-    {% if messages %}
-        {% bootstrap_javascript jquery=True %}
-        {% bootstrap_messages %}
-    {% endif %}
-    
-    
-    <div class="container-fluid px-0" style="background-color: white">
-        <!-- SIDEBAR -->
-        <div class="w3-sidebar w3-collapse w3-large" style="z-index:3;width:300px; background-color: rgb(255, 255, 255)" id="mySidebar">     
-            <div  style="background-color: white" id="LogoImage">
-                <a href="{% url 'movies:main' %}" class="flex-fill ml-2">
-                    <img src="{% static 'image/logo.png' %}" alt="LOGO" style="width:230px; height:70px">
-                </a>
-            </div>
-            <!-- Menu -->
-            <div id="nav01" class="w3-bar-block">
-                <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'movies:main' %}">HOME</a>
-                <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'movies:about' %}">ABOUT</a>
-                <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'movies:index' %}">MOVIES</a>
-                <div class=" w3-dropdown-hover w3-hide-small">
-                    <a href="{% url 'community:community' %}" class="w3-button" title="More">COMMUNITY<i class="fa fa-caret-down"></i></a>     
-                        <div class="w3-dropdown-content w3-bar-block w3-card-4">
-                        <a href="{% url 'community:board' 'notice' %}" class="w3-bar-item w3-button">공지사항</a>
-                        <a href="{% url 'community:board' 'free' %}" class="w3-bar-item w3-button">자유게시판</a>
-                        <a href="{% url 'community:board' 'recommend' %}" class="w3-bar-item w3-button">추천게시판</a>
-                    </div>
-                </div>
-            </div>
-            <!-- FOOTER -->
-            <footer class="w3-display-bottommiddle w3-hide-small container-fluid text-center">
-                <img src="{% static 'image/logo.png' %}" alt="SCAFY" id=fotterImage width="100px">
-                <p><small class="text-muted">Made by JongWoo Lee, Jiyoung Kim</small></p> 
-            </footer>
-        </div>
-        <!-- HEADER -->
-        <nav id="HEADER" class="container-fluid navbar navbar-expand-sm d-flex justify-content-end py-0">
-            <!-- SIDEBAR button -->
-            <div class="w3-large w3-hide-large w3-display-top">
-                <i class="fa fa-bars w3-button w3-xlarge" onclick="w3_open()"></i>
-            </div>
-            <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarSupportedContent">
-                <ul class="navbar-nav">
-                    {% if request.user.is_authenticated %}
-                        <li class="nav-item">
-                            <a href="{% url 'accounts:profile' %}" class="w3-bar-item w3-button text-dark w3-hide-small"><i class="fas fa-user-circle"></i> {{ request.user.username }}</a>
-                        </li>
-                        
-                        <li class="nav-item w3-hide-small">
-                            <form action="{% url 'accounts:logout' %}" method="POST" style="display:inline">
-                                {% csrf_token %}
-                                <button class="w3-bar-item w3-button text-decoration-none"><small class="text-muted">(LOGOUT)</small></button>
-                            </form>
-                        </li>
-                    
-                    {% else %}
-                        <a href="{% url 'accounts:login' %}" class="w3-bar-item w3-button text-dark w3-hide-small">LOGIN</a>
-                    {% endif %} 
-                </ul>
-            </div>
-        </nav>
-            
-        
-                
-        
-        <!-- CONTEXT -->
-        <div id="baseMain" style="margin-left:300px;">
-            {% block context %}
-            {% endblock %}
-        </div>
+<body class="w3-content" style="max-width:1200px">
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-bar-block w3-white w3-collapse w3-top" style="z-index:3;width:250px" id="mySidebar">
+  <div class="w3-container w3-display-container w3-padding-16">
+    <i onclick="w3_close()" class="fa fa-remove w3-hide-large w3-button w3-display-topright"></i>
+    <a href="{% url 'movies:main' %}" class="flex-fill ml-2">
+        <img src="{% static 'image/logo.png' %}" alt="LOGO" style="width:200px; height:60px">
+    </a>
+  </div>
+  <div class="w3-padding-64 w3-large w3-text-grey" style="font-weight:bold">
+    <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'movies:main' %}">HOME</a>
+    <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'movies:about' %}">ABOUT</a>
+    <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'movies:index' %}">MOVIES</a>
+    <a onclick="myAccFunc()" href="javascript:void(0)" class="w3-button w3-block w3-white w3-left-align" id="myBtn">
+        COMMUNITY <i class="fa fa-caret-down"></i>
+    </a>
+    <div id="demoAcc" class="w3-bar-block w3-hide w3-padding-large w3-medium">
+        <a href="{% url 'community:board' 'notice' %}" class="w3-bar-item w3-button">공지사항</a>
+        <a href="{% url 'community:board' 'free' %}" class="w3-bar-item w3-button">자유게시판</a>
+        <a href="{% url 'community:board' 'recommend' %}" class="w3-bar-item w3-button">추천게시판</a>
     </div>
+  </div>
+</nav>
 
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script>
-        function w3_open() {
-            document.getElementById("mySidebar").style.display = "block";
-            document.getElementById("myOverlay").style.display = "block";
-        }
+<!-- Top menu on small screens -->
+<header class="w3-bar w3-top w3-hide-large w3-light-grey w3-xlarge">
+  <div class="w3-bar-item w3-padding-24 w3-wide">
+    <a href="{% url 'movies:main' %}" class="flex-fill ml-2">
+        <img src="{% static 'image/logo.png' %}" alt="LOGO" style="width:130px; height:35px">
+    </a>
+    </div>
+  <a href="javascript:void(0)" class="w3-bar-item w3-button w3-padding-24 w3-right" onclick="w3_open()"><i class="fa fa-bars"></i></a>
+</header>
 
-        function w3_close() {
-            document.getElementById("mySidebar").style.display = "none";
-            document.getElementById("myOverlay").style.display = "none";
-        }
-        $(document).ready(function(){
-            // footer image size 조절
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:250px">
+
+  <!-- Push down content on small screens -->
+  <div class="w3-hide-large" style="margin-top:85px"></div>
+  
+  <!-- Top header -->
+  <header class="w3-container w3-xlarge">
+    <!-- <p class="w3-left">{{ request.resolver_match.url_name }}</p> -->
+    <div class="w3-right">
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'accounts:profile' %}" class="w3-bar-item w3-button text-dark" style="padding:0;">
+                <small><i class="fas fa-user-circle"></i> {{ request.user.username }}</small>
+            </a>
+            <form action="{% url 'accounts:logout' %}" method="POST" style="display:inline">
+                {% csrf_token %}
+                <button class="w3-bar-item w3-button text-decoration-none">
+                    <small class="text-muted">(LOGOUT)</small>
+                </button>
+            </form>
+        {% else %}
+            <a href="{% url 'accounts:login' %}" class="w3-bar-item w3-button text-dark"><small>LOGIN</small></a>
+        {% endif %} 
+    </div>
+  </header>
+
+  <!--context -->
+  <div class="w3-display-container w3-container">
+      {% block context %}
+      {% endblock %}
+  </div>
+
+  <!-- Footer -->
+  <footer class="w3-display-bottom w3-padding-64 w3-light-grey w3-small w3-center" id="footer">
+    <a href="{% url 'movies:main' %}" class="ml-2">
+        <img src="{% static 'image/logo.png' %}" alt="LOGO" style="width:200px; height:60px" class="mb-4"> 
+    </a>
+    <p>MADE BY JONGWOO LEE, JIYOUNG KIM</p>
+    <p>POWERED BY w3schools.coom</p>
+  </footer>
+
+<!-- End page content -->
+</div>
 
 
+<script>
+// Accordion 
+function myAccFunc() {
+  var x = document.getElementById("demoAcc");
+  if (x.className.indexOf("w3-show") == -1) {
+    x.className += " w3-show";
+  } else {
+    x.className = x.className.replace(" w3-show", "");
+  }
+}
 
-            // 로그인 여부에 따른 레이아웃 변경
-            if ("{{ request.resolver_match.url_name }}" != "main" || "{{ request.user }}" != "AnonymousUser") {
-                $("#baseMain").addClass("baseMainMargin")
-            }
-            const navheight = $("#HEADER").height()
-            console.log(navheight, $("#LogoImage").height())
-            $("#baseMain").css("margin-top", 70-navheight)
-        })     
+// Click on the "Jeans" link on page load to open the accordion for demo purposes
+document.getElementById("myBtn").click();
 
-    </script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-    {% bootstrap_javascript jquery='full' %}
-    {% block script %}
-    {% endblock %}
+
+// Open and close sidebar
+function w3_open() {
+  document.getElementById("mySidebar").style.display = "block";
+  document.getElementById("myOverlay").style.display = "block";
+}
+ 
+function w3_close() {
+  document.getElementById("mySidebar").style.display = "none";
+  document.getElementById("myOverlay").style.display = "none";
+}
+</script>
 
 </body>
-
 </html>
