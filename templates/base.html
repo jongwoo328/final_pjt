@@ -121,7 +121,7 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
         <img src="{% static 'image/logo.png' %}" alt="LOGO" style="width:200px; height:60px" class="mb-4"> 
     </a>
     <p>MADE BY JONGWOO LEE, JIYOUNG KIM</p>
-    <p>POWERED BY w3schools.coom</p>
+    <p>POWERED BY w3schools.com</p>
   </footer>
 <!-- End page content -->
 </div>
@@ -162,9 +162,8 @@ $(document).ready(function() {
     const LogoHeight = $("#LOGO").outerHeight()
     const HeaderHeight = $("#HEADER").height()
     const FooterHeight = $("footer").outerHeight()
-    console.log("footer", FooterHeight)
     $("#CONTEXT").css("margin-top", LogoHeight-HeaderHeight)
-    $("#CONTEXT").css("margin-bottom", FooterHeight+300)
+    // $("#CONTEXT").css("margin-bottom", FooterHeight+300)
 })
 
 </script>
