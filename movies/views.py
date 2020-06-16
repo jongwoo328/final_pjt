@@ -1,4 +1,5 @@
 import datetime
+from dateutil.relativedelta import relativedelta
 import random
 
 from django.shortcuts import render, redirect, get_object_or_404
@@ -77,6 +78,11 @@ def recommend(recents):
     return result
 
 def main(request):
+    # 최신 영화 중 평점 높은 영화 - 인기영화
+    
+    # 2달전 날짜 - 최신 영화 뽑기 위해
+    month_ago = datetime.datetime.now() - relativedelta(months=2)
+    popular_movies = Movie.objects.order_by('-popularity').exclude(poster_path="").filter(release_date__lte=datetime.datetime.now(), release_date__gte=month_ago)[:10]
     # 랜덤 영화
     random_movies = Movie.objects.exclude(poster_path="").filter(
         pk__in=list(random.sample(
@@ -98,6 +104,7 @@ def main(request):
         is_logged_in = False
 
     context = {
+        'popular_movies' : popular_movies,
         'movies' : random_movies,
         'recommends': sorted(recommends, key=lambda x: random.random()),
         'is_logged_in': is_logged_in,
@@ -125,7 +132,9 @@ def index(request, sort=None):
         return render(request, 'movies/index.html', context)
     else:
         return render(request, 'movies/index_scroll.html', context)
-    
+
+def about(request) : 
+    return render(request, 'movies/about.html')
 
 def search(request, input_value=None):
     if input_value : 

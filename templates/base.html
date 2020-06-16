@@ -14,92 +14,89 @@
     <title>{% block title %}{% endblock %}</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     {% bootstrap_css %}
+
     {% block head %}
     {% endblock %}
 </head>
 {% block style %}
 {% endblock %}
 <style>
-    #myHeader {
-        /* background-image: url('{% static "image/back1.jpg" %}'); */
-        background-color: rgb(199, 227, 247);
-        background-size: cover;
-    }
     .baseMainMargin{
         margin-left:300px;
     }
 </style>
-<body id="myPage">
+<body id="myPage" style="background-color: rgb(255, 255, 255);">
     {% if messages %}
         {% bootstrap_javascript jquery=True %}
         {% bootstrap_messages %}
     {% endif %}
-    {% if request.resolver_match.url_name != 'main' or request.user.is_authenticated %}
-    <!-- SIDEBAR -->
-    <div class="w3-sidebar w3-collapse w3-white w3-large" style="z-index:3;width:300px;" id="mySidebar">     
-            <div class="w3-black d-flex justify-content-between align-items-center">
-            <div>
-                <i class="fas fa-user-circle align-self-center mx-3 py-3">  
-                    {% if request.user.is_authenticated %}
-                        <a href="{% url 'accounts:profile' %}" class="w3-text-light-grey">{{ request.user.username }}</a>
-                    {% else %}
-                        <a href="{% url 'accounts:login' %}" class="w3-text-light-grey">로그인</a>
-                    {% endif %}
-                </i>
-                <a class="w3-button w3-hover-black w3-hide-large w3-large w3-right mx-3 px-0" href="javascript:void(0)" onclick="w3_close()">×</a>
+    
+    
+    <div class="container-fluid px-0" style="background-color: white">
+        <!-- SIDEBAR -->
+        <div class="w3-sidebar w3-collapse w3-large" style="z-index:3;width:300px; background-color: rgb(255, 255, 255)" id="mySidebar">     
+            <div  style="background-color: white" id="LogoImage">
+                <a href="{% url 'movies:main' %}" class="flex-fill ml-2">
+                    <img src="{% static 'image/logo.png' %}" alt="LOGO" style="width:230px; height:70px">
+                </a>
             </div>
-        </div>
-        <!-- Menu -->
-        <div
-        id="nav01" class="w3-bar-block">
-        <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'movies:main' %}">홈</a>
-            <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'movies:index' %}">전체 영화</a>
-            <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'community:community' %}">커뮤니티</a>
-            {% if request.user.is_authenticated %}
-                <form action="{% url 'accounts:logout' %}" method="POST">
-                    {% csrf_token %}
-                    <button class="w3-bar-item w3-button text-decoration-none">로그아웃</button>
-                </form>
-            {% else %}
-                <a href="{% url 'accounts:signup' %}" class="w3-bar-item w3-button text-decoration-none">회원가입</a>
-            {% endif %}
-        </div>
-    </div>
-    {% endif %}
-    <!-- HEADER -->
-    <div class="container-fluid  w3-overlay w3-hide-large" onclick="w3_close()" style=" cursor:pointer" id="myOverlay"></div>
-        <div id="baseMain" class="w3-main" > 
-            <div id="myHeader">
-                
-                {% if request.resolver_match.url_name != 'main' or request.user.is_authenticated%}
-                    <!-- SIDEBAR button -->
-                    <div class="w3-top w3-large w3-hide-large">
-                        <i class="fa fa-bars w3-button w3-xlarge" onclick="w3_open()"></i>
+            <!-- Menu -->
+            <div id="nav01" class="w3-bar-block">
+                <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'movies:main' %}">HOME</a>
+                <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'movies:about' %}">ABOUT</a>
+                <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'movies:index' %}">MOVIES</a>
+                <div class=" w3-dropdown-hover w3-hide-small">
+                    <a href="{% url 'community:community' %}" class="w3-button" title="More">COMMUNITY<i class="fa fa-caret-down"></i></a>     
+                        <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                        <a href="{% url 'community:board' 'notice' %}" class="w3-bar-item w3-button">공지사항</a>
+                        <a href="{% url 'community:board' 'free' %}" class="w3-bar-item w3-button">자유게시판</a>
+                        <a href="{% url 'community:board' 'recommend' %}" class="w3-bar-item w3-button">추천게시판</a>
                     </div>
-                {% endif %}
-                <header class="w3-container w3-padding-64 w3-center">
-                    <h1 class="w3-xxxlarge w3-padding-16">
-                        <div>
-                        <a href="{% url 'movies:main' %}">
-                            <!-- LOGO IMAGE -->
-                            <img src="{% static 'image/new_logo.png' %}" alt="LOGO" size="width:100px">
-                        </a>
-                        </div>
+                </div>
+            </div>
+            <!-- FOOTER -->
+            <footer class="w3-display-bottommiddle w3-hide-small container-fluid text-center">
+                <img src="{% static 'image/logo.png' %}" alt="SCAFY" id=fotterImage width="100px">
+                <p><small class="text-muted">Made by JongWoo Lee, Jiyoung Kim</small></p> 
+            </footer>
+        </div>
+        <!-- HEADER -->
+        <nav id="HEADER" class="container-fluid navbar navbar-expand-sm d-flex justify-content-end py-0">
+            <!-- SIDEBAR button -->
+            <div class="w3-large w3-hide-large w3-display-top">
+                <i class="fa fa-bars w3-button w3-xlarge" onclick="w3_open()"></i>
+            </div>
+            <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarSupportedContent">
+                <ul class="navbar-nav">
+                    {% if request.user.is_authenticated %}
+                        <li class="nav-item">
+                            <a href="{% url 'accounts:profile' %}" class="w3-bar-item w3-button text-dark w3-hide-small"><i class="fas fa-user-circle"></i> {{ request.user.username }}</a>
+                        </li>
                         
-                    </h1>
-                </header>
+                        <li class="nav-item w3-hide-small">
+                            <form action="{% url 'accounts:logout' %}" method="POST" style="display:inline">
+                                {% csrf_token %}
+                                <button class="w3-bar-item w3-button text-decoration-none"><small class="text-muted">(LOGOUT)</small></button>
+                            </form>
+                        </li>
+                    
+                    {% else %}
+                        <a href="{% url 'accounts:login' %}" class="w3-bar-item w3-button text-dark w3-hide-small">LOGIN</a>
+                    {% endif %} 
+                </ul>
             </div>
-            <!-- CONTEXT -->
-            <div>
-                {% block context %}
-                {% endblock %}
-            </div>
+        </nav>
+            
+        
+                
+        
+        <!-- CONTEXT -->
+        <div id="baseMain" style="margin-left:300px;">
+            {% block context %}
+            {% endblock %}
         </div>
     </div>
-    <div class="container-fluid text-center d-flex justify-content-center align-items-center footer">
-        <p>temporary footer</p>
-        <!-- <p>Bootstrap Theme Made By <a href="https://www.w3schools.com" title="Visit w3schools">www.w3schools.com</a></p> -->
-    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
         function w3_open() {
@@ -111,19 +108,19 @@
             document.getElementById("mySidebar").style.display = "none";
             document.getElementById("myOverlay").style.display = "none";
         }
+        $(document).ready(function(){
+            // footer image size 조절
 
-        // openNav("nav01");
-        // function openNav(id)/ {
-            // document.getElementById("nav01").style.display = "block";
-        // }
 
-    $(document).ready(function(){
-        if ("{{ request.resolver_match.url_name }}" != "main" || "{{ request.user }}" != "AnonymousUser") {
-            $("#baseMain").addClass("baseMainMargin")
-        }
-        
-        
-    })
+
+            // 로그인 여부에 따른 레이아웃 변경
+            if ("{{ request.resolver_match.url_name }}" != "main" || "{{ request.user }}" != "AnonymousUser") {
+                $("#baseMain").addClass("baseMainMargin")
+            }
+            const navheight = $("#HEADER").height()
+            console.log(navheight, $("#LogoImage").height())
+            $("#baseMain").css("margin-top", 70-navheight)
+        })     
 
     </script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

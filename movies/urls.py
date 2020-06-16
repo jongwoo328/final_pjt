@@ -7,6 +7,7 @@ app_name = 'movies'
 urlpatterns = [
     path('', views.main, name='main'),
     path('index/', views.index, name='index'),
+    path('about', views.about, name='about'),
     path('index/search/<str:input_value>/', views.search, name="search"),
     path('index/<str:sort>/', views.index, name='index_sort'),
     path('<int:movie_pk>/', views.detail, name='detail'),
