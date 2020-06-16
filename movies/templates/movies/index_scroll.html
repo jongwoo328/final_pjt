@@ -32,13 +32,13 @@
                       {% if request.user.is_authenticated %}
                           <i class="fas fa-heart new-like-button fa-lg align-self-center" style="color:crimson" data-id="{{ movie.pk }}"></i>
                       {% else %}
-                          <i class="fas fa-heart fa-lg align-self-center" style="color:crimson" data-id="{{ movie.pk }}"></i>
+                          <i class="fas fa-heart fa-lg align-self-center" style="color:crimson" onclick="alert('로그인이 필요합니다.')"></i>
                       {% endif %}
                     {% else %}
                       {% if request.user.is_authenticated %}
                           <i class="fas fa-heart new-like-button fa-lg align-self-center" style="color:black" data-id="{{ movie.pk }}"></i>
                       {% else %}
-                          <i class="fas fa-heart fa-lg align-self-center" style="color:black" data-id="{{ movie.pk }}"></i>
+                          <i class="fas fa-heart fa-lg align-self-center" style="color:black" onclick="alert('로그인이 필요합니다.')"></i>
                       {% endif %}
                     {% endif %}
                     <span id="like-count-{{ movie.pk }}">{{ movie.liked_users.all|length }}</span>
