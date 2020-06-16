@@ -68,7 +68,7 @@
   }
 
   /* like button */
-  .fas:hover {
+  .fa-heart:hover, .fa-star:hover{
     cursor: pointer;
   }
 

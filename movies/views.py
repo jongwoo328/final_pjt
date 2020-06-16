@@ -136,16 +136,17 @@ def main(request):
             yearly_favor_movies |= movies.order_by('?')[:RANDOM_MOVIE_COUNT//3]
 
         recommends |= yearly_favor_movies
-        
+
     else:
         liked = False
 
-    new_movies = Movie.objects.order_by('-release_date')[:20]
+    # new_movies = Movie.objects.order_by('-release_date')[:20]
+    new_movies = Movie.objects.filter(release_date__gte=month_ago).order_by('?')[:20]
 
     context = {
         'popular_movies' : popular_movies,
         'movies' : random_movies,
-        'new_movies': sorted(new_movies, key=lambda x: random.random()),
+        'new_movies': new_movies,
         'recommends': sorted(recommends, key=lambda x: random.random()),
         'is_logged_in': is_logged_in,
         'liked': liked,

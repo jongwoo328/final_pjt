@@ -140,27 +140,16 @@
                     
                 {% endfor %}
             {% else %}
-                <div class="col-12 text-center" style="color:white">d</div>
-                <hr style="border-top-color: white">
-                <div class="col-12 text-center" style="color:white">d</div>
-                <hr style="border-top-color: white">
-                <div class="col-12 text-center" style="color:white">d</div>
-                <hr style="border-top-color: white">
-                <div class="col-12 text-center" style="color:white">d</div>
-                <hr style="border-top-color: white">
+                <div class="col-12 text-center whitespace"></div>
+                <div class="col-12 text-center whitespace"></div>
+                <div class="col-12 text-center whitespace"></div>
+                <div class="col-12 text-center whitespace"></div>
                 <div class="col-12 text-center">아직 새로운 글이 올라오지 않았어요</div>
-                <hr style="border-top-color: white">
-                <div class="col-12 text-center" style="color:white">d</div>
-                <hr style="border-top-color: white">
-                <div class="col-12 text-center" style="color:white">d</div>
-                <hr style="border-top-color: white">
-                <div class="col-12 text-center" style="color:white">d</div>
-                <hr style="border-top-color: white">
-                <div class="col-12 text-center" style="color:white">d</div>
-                <hr style="border-top-color: white">
-                <div class="col-12 text-center" style="color:white">d</div>
-                <hr>
-
+                <div class="col-12 text-center whitespace"></div>
+                <div class="col-12 text-center whitespace"></div>
+                <div class="col-12 text-center whitespace"></div>
+                <div class="col-12 text-center whitespace"></div>
+                <div class="col-12 text-center whitespace"></div>
                 
             {% endif %}
         </tbody>
@@ -175,6 +164,7 @@
 
 {% block script %}
 <script>
+    const whitespace = '\u00A0'
     $(document).ready(function() {
         const LengthLimit = 30
         $(".article_title").each(function(){
@@ -186,5 +176,6 @@
         })
         
     })
+    $('.whitespace').text(whitespace)
 </script>
 {% endblock %}

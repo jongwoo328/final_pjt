@@ -57,16 +57,16 @@
     {% bootstrap_form form %}
 
     {% if request.resolver_match.url_name == 'signup' %}
-        <button class="btn btn-info">회원가입</button>
+        <button class="w3-button w3-teal">회원가입</button>
     {% elif request.resolver_match.url_name == 'login' %}
-        <button class="btn btn-info">로그인</button>
-        <a href="{% url 'accounts:signup' %}" class='btn btn-secondary'>가입하기</a>
+        <button class="w3-button w3-teal">로그인</button>
+        <a href="{% url 'accounts:signup' %}" class='w3-button btn-secondary'>가입하기</a>
     {% elif request.resolver_match.url_name == 'update' %}
-        <button class="btn btn-info">수정</button>
-        <a href="{% url 'accounts:delete' %}" class='btn btn-danger' data-toggle="modal" data-target="#UserDelete">회원탈퇴</a>
+        <button class="w3-button w3-teal">수정</button>
+        <a href="{% url 'accounts:delete' %}" class='w3-button w3-red w3-hover-red' data-toggle="modal" data-target="#UserDelete">회원탈퇴</a>
     {% else %}
-        <button class="btn btn-info">수정</button>
+        <button class="w3-button w3-teal">수정</button>
     {% endif %}
 </form>
-</>
+
 {% endblock %}
