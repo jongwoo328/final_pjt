@@ -25,37 +25,51 @@
 
 <style>
 html, body {
-
 margin: 0;
-
 height: 100%;
-
-
 }
-
 .w3-sidebar a {font-family: "Roboto", sans-serif}
 body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
+
+
+body{
+  background-color: white;
+}
+#mySidebar{
+  background-color: #1B2631;
+}
+#HEADER{
+  background-color: white;
+}
+#Main_Context{
+  background-color: white;
+}
+footer{
+  background-color: white;
+}
+
+
 </style>
 <body class="w3-content" style="max-width:1200px">
 <!-- Sidebar/menu -->
-<nav class="w3-sidebar w3-bar-block w3-white w3-collapse w3-top" style="z-index:3;width:250px" id="mySidebar">
-  <div class="w3-container w3-display-container w3-padding-16">
+<nav class="w3-sidebar w3-bar-block  w3-collapse w3-top" style="z-index:3;width:250px;" id="mySidebar">
+  <div id="LOGO" class="w3-container w3-display-container w3-padding-16">
     <i onclick="w3_close()" class="fa fa-remove w3-hide-large w3-button w3-display-topright"></i>
     <a href="{% url 'movies:main' %}" class="flex-fill ml-2">
-        <img id="LOGO" src="{% static 'image/logo.png' %}" alt="LOGO" style="width:200px; height:60px">
+        <img src="{% static 'image/logo_white.png' %}" alt="LOGO" style="width:200px; height:60px">
     </a>
   </div>
-  <div class="w3-padding-64 w3-large w3-text-grey" style="font-weight:bold">
-    <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'movies:main' %}">HOME</a>
-    <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'movies:about' %}">ABOUT</a>
-    <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'movies:index' %}">MOVIES</a>
-    <a onclick="myAccFunc()" href="javascript:void(0)" class="w3-button w3-block w3-white w3-left-align" id="myBtn">
+  <div class="w3-padding-32 w3-large w3-text-grey" style="font-weight:bold">
+    <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'movies:main' %}" style="color: white;">HOME</a>
+    <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'movies:about' %}" style="color: white;">ABOUT</a>
+    <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'movies:index' %}" style="color: white;">MOVIES</a>
+    <a onclick="myAccFunc()" href="javascript:void(0)" class="w3-button w3-block w3-left-align" id="myBtn" style="color: white;">
         COMMUNITY <i class="fa fa-caret-down"></i>
     </a>
     <div id="demoAcc" class="w3-bar-block w3-hide w3-padding-large w3-medium">
-        <a href="{% url 'community:board' 'notice' %}" class="w3-bar-item w3-button">공지사항</a>
-        <a href="{% url 'community:board' 'free' %}" class="w3-bar-item w3-button">자유게시판</a>
-        <a href="{% url 'community:board' 'recommend' %}" class="w3-bar-item w3-button">추천게시판</a>
+        <a href="{% url 'community:board' 'notice' %}" class="w3-bar-item w3-button" style="color: white;">공지사항</a>
+        <a href="{% url 'community:board' 'free' %}" class="w3-bar-item w3-button" style="color: white;">자유게시판</a>
+        <a href="{% url 'community:board' 'recommend' %}" class="w3-bar-item w3-button" style="color: white;">추천게시판</a>
     </div>
   </div>
 </nav>
@@ -80,7 +94,7 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
   
   <!-- Top header -->
   <header class="w3-container w3-xlarge" id="HEADER">
-    <div class="w3-right">
+    <div id="UserInfo" class="w3-right">
         {% if request.user.is_authenticated %}
             <a href="{% url 'accounts:profile' %}" class="w3-bar-item w3-button text-dark" style="padding:0;">
                 <small><i class="fas fa-user-circle"></i> {{ request.user.username }}</small>
@@ -111,7 +125,7 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
         </div>
     {% endfor %}
     {% endif %}
-  <div class="w3-display-container w3-container" id="CONTEXT">
+  <div class="w3-display-container w3-container" id="Main_Context">
       {% block context %}
       {% endblock %}
   </div>
@@ -159,11 +173,16 @@ function w3_close() {
 
 // context margin 설정
 $(document).ready(function() {
+    const WindowHeight = $(window).height()
     const LogoHeight = $("#LOGO").outerHeight()
-    const HeaderHeight = $("#HEADER").height()
-    const FooterHeight = $("footer").outerHeight()
-    $("#CONTEXT").css("margin-top", LogoHeight-HeaderHeight)
-    // $("#CONTEXT").css("margin-bottom", FooterHeight+300)
+    const UserInfoHeight = $("#UserInfo").outerHeight()
+    const FooterHeight = $('footer').outerHeight()
+    const ContextHeight = $('#Main_Context').outerHeight()
+
+    $("#HEADER").css("height", LogoHeight)
+    $("#UserInfo").css("margin-top", (LogoHeight/2)-(UserInfoHeight/2))
+    $('#Main_Context').css("padding-bottom", WindowHeight-LogoHeight-ContextHeight-FooterHeight+300)
+    console.log($('#Main_Context').outerHeight())
 })
 
 </script>

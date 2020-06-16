@@ -113,8 +113,10 @@ $(document).ready(function(){
   // 무한스크롤
     const BASEURL = $(location).attr('pathname')  
     var page = 1
+    console.log($(window).scrollTop())
+    console.log($('#Main_Context').outerHeight())
     $(window).scroll(function() {
-        if ($(window).scrollTop() >= $(document).height() - $(window).height() - 2) {
+        if ($(window).outerHeight() >= $('#Main_Context').outerHeight() || $(window).scrollTop() >= $(document).height() - $(window).height() - 2) {
           page++
           axios.get(BASEURL + `?page=${page}`)
           .then((res) => {
