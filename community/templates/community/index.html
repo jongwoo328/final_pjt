@@ -21,10 +21,14 @@
 
 {% block context %}
 <div class="container mt-5">
-    <div class="w3-bar w3-dark-gray mb-3">
-        <a href="{% url 'community:community' %}" class="w3-bar-item w3-button w3-mobile text-decoration-none">전체게시판</a>
+    <div class="w3-bar mb-3" style="background-color: #D5D8DC;">
+        {% if request.path == '/community/' %}
+            <a href="{% url 'community:community' %}" class="w3-bar-item w3-button w3-white w3-mobile text-decoration-none">전체게시판</a>
+        {% else %}
+            <a href="{% url 'community:community' %}" class="w3-bar-item w3-button w3-mobile text-decoration-none">전체게시판</a>
+        {% endif %}
         {% for board in boards %}
-            <a href="{% url 'community:board' board.url_name %}" class="w3-bar-item w3-button w3-mobile text-decoration-none">{{ board.name }}</a>
+            <a href="{% url 'community:board' board.url_name %}" class="w3-bar-item w3-button w3-mobile text-decoration-none url_banner">{{ board.name }}</a>
             
         {% endfor%}
     </div>
@@ -33,9 +37,9 @@
             <!-- <a href="{%url 'community:community' %}" class="text-dark"><i class="fas fa-angle-double-left"></i></a> -->
             <!-- <a href="{%url 'community:community' %}" class="text-dark">커뮤니티</a> -->
             {% if now_board %}
-            <i class="fas"> {{ now_board.name }} </i>
+                <i class="fas"> {{ now_board.name }} </i>
             {% else %}
-            <i class="fas"> 전체 게시판 </i>
+                <i class="fas"> 전체 게시판 </i>
             {% endif %}
         </h5>
         <div class="align-self-center">
@@ -166,6 +170,17 @@
 <script>
     const whitespace = '\u00A0'
     $(document).ready(function() {
+        const URL = $(location).attr('pathname')
+        $(".url_banner").each(function(){
+            if ($(this).attr('href') ==  URL) {
+                $(this).css("background-color", "white")
+            }
+            
+        })
+
+
+
+        // 제목 줄이기
         const ContextHeight = $('#Main_Context').outerHeight()
         const LengthLimit = 30
         $(".article_title").each(function(){
