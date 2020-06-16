@@ -32,8 +32,8 @@
             <h3 class="mb-0"><i class="fas">추천 영화</i></h3>
             {% if not liked %}
             <div class="ml-auto">
-                <span>영화를 좋아요 하면 더 관련있는 영화를 추천받을 수 있습니다.</span>
-                <a class="w3-button w3-teal" href="{% url 'movies:index' %}">찾아보러 가기</a>
+                <p class="d-inline-block mr-2">영화를 <span style="color: crimson;">좋아요</span> 하면 관련있는 영화를 추천받을 수 있습니다.</p>
+                <a class="w3-button w3-teal text-decoration-none" href="{% url 'movies:index' %}">찾아보러 가기</a>
             </div>
             {% endif %}
             </div>

@@ -32,8 +32,8 @@
         정말로 탈퇴하시겠습니까?
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-        <a class="btn btn-danger btn-md" href="{% url 'accounts:delete' %}" role="button">삭제</a>
+        <button type="button" class="w3-button btn-secondary" data-dismiss="modal">취소</button>
+        <a class="w3-button btn-danger w3-hover-red btn-md text-decoration-none" href="{% url 'accounts:delete' %}" role="button">삭제</a>
     </div>
     </div>
 </div>
@@ -60,10 +60,10 @@
         <button class="w3-button w3-teal">회원가입</button>
     {% elif request.resolver_match.url_name == 'login' %}
         <button class="w3-button w3-teal">로그인</button>
-        <a href="{% url 'accounts:signup' %}" class='w3-button btn-secondary'>가입하기</a>
+        <a href="{% url 'accounts:signup' %}" class='w3-button btn-secondary text-decoration-none'>가입하기</a>
     {% elif request.resolver_match.url_name == 'update' %}
         <button class="w3-button w3-teal">수정</button>
-        <a href="{% url 'accounts:delete' %}" class='w3-button w3-red w3-hover-red' data-toggle="modal" data-target="#UserDelete">회원탈퇴</a>
+        <a href="{% url 'accounts:delete' %}" class='w3-button btn-danger w3-hover-red text-decoration-none' data-toggle="modal" data-target="#UserDelete">회원탈퇴</a>
     {% else %}
         <button class="w3-button w3-teal">수정</button>
     {% endif %}
