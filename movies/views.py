@@ -15,7 +15,7 @@ from .forms import ReviewForm
 
 ALL_MOVIE_COUNT = 2000
 RANDOM_MOVIE_COUNT = 10
-
+YEARLY_FAVOR_COUNT = 3
 
 def start(request) : 
     return redirect('movies:main')
@@ -73,8 +73,9 @@ def recommend(recents):
         Movie.objects.filter(pk__in=keyword_recommends_with_pk)\
         .exclude(pk__in=recents_with_pk)
 
+
     result = keyword_recommends | genre_recommends
-    
+
     return result
 
 def main(request):
@@ -95,13 +96,39 @@ def main(request):
     if request.user.is_authenticated:
         recents = request.user.recents()
         if recents:
-            recommends = recommend(recents)
+            recommends = recommend(recents).order_by('?')[:RANDOM_MOVIE_COUNT]
         else:
             recommends = Movie.objects.none()
         is_logged_in = True
     else:
         recommends = Movie.objects.none()
         is_logged_in = False
+
+    # 좋아하는 연도 추천영화
+    yearly_favor = [
+        ('under60', request.user.liked_under60),
+        ('1960', request.user.liked_1960),
+        ('1970', request.user.liked_1970),
+        ('1980', request.user.liked_1980),
+        ('1990', request.user.liked_1990),
+        ('2000', request.user.liked_2000),
+        ('2010', request.user.liked_2010),
+        ('2020', request.user.liked_2020),
+    ]
+    LIKED_COUNT = 1
+
+    yearly_favor = sorted(yearly_favor, key=lambda x: x[LIKED_COUNT], reverse=True)[:YEARLY_FAVOR_COUNT]
+
+    yearly_favor_movies = Movie.objects.none()
+    for year, count in yearly_favor:
+        if year == 'under60':
+            movies = Movie.objects.filter(release_date__lt=datetime.date(1960, 1, 1))
+        else:
+            year = int(year)
+            movies = Movie.objects.filter(release_date__lt=datetime.date(year + 10, 1, 1)).filter(release_date__gte=datetime.date(year, 1, 1))
+        yearly_favor_movies |= movies.order_by('?')[:RANDOM_MOVIE_COUNT//3]
+
+    recommends |= yearly_favor_movies
 
     context = {
         'popular_movies' : popular_movies,
