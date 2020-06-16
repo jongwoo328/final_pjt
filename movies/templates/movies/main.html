@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load bootstrap4 %}
+{% load static %}
 
 {% block title %}
 {% endblock %}
@@ -24,21 +25,7 @@
 {% endblock %}
 
 {% block context %}
-    <div class="container border border-dark">
-        <div class="d-flex my-2">
-        <h3 class="mb-0"><i class="fas">인기 영화</i></h3>
-            
-        </div>
-        <div class="container RecommendMovie d-flex mx-0 px-0"  style=" overflow-x: scroll;">
-            {% for movie in popular_movies %}
-            <a href="{% url 'movies:detail' movie.pk %}">
-                <img src="https://image.tmdb.org/t/p/w154{{ movie.poster_path }}" 
-                    alt="{{ movie.title }}" 
-                >
-            </a>
-            {% endfor %}
-        </div>
-    </div>
+
     {% if recommends %}
         <div class="container border border-dark">
             <div class="d-flex my-2">
@@ -66,6 +53,45 @@
         </div>
     </div>
     {% endif %}
+
+    <div class="container border border-dark">
+        <div class="d-flex my-2">
+        <h3 class="mb-0"><i class="fas">인기 영화</i></h3>
+            
+        </div>
+        <div class="container RecommendMovie d-flex mx-0 px-0"  style=" overflow-x: scroll;">
+            {% for movie in popular_movies %}
+            <a href="{% url 'movies:detail' movie.pk %}">
+                <img src="https://image.tmdb.org/t/p/w154{{ movie.poster_path }}" 
+                    alt="{{ movie.title }}" 
+                >
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="container border border-dark">
+        <div class="d-flex my-2">
+        <h3 class="mb-0"><i class="fas">새로운 영화</i></h3>
+            
+        </div>
+        <div class="container RecommendMovie d-flex mx-0 px-0"  style=" overflow-x: scroll;">
+            {% for movie in new_movies %}
+            <a href="{% url 'movies:detail' movie.pk %}">
+                {% if movie.poster_path %}
+                <img src="https://image.tmdb.org/t/p/w154{{ movie.poster_path }}" 
+                    alt="{{ movie.title }}" 
+                >
+                {% else %}
+                <img src="{% static 'image/noimage_index.png' %}" 
+                    alt="{{ movie.title }}" 
+                    style="height: 231px;"
+                >
+                {% endif %}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
 
     <div class="container border border-dark">
         <h3>이런 영화는 어떠세요?</h3>

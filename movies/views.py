@@ -131,9 +131,12 @@ def main(request):
 
         recommends |= yearly_favor_movies
 
+    new_movies = Movie.objects.order_by('-release_date')[:20]
+
     context = {
         'popular_movies' : popular_movies,
         'movies' : random_movies,
+        'new_movies': sorted(new_movies, key=lambda x: random.random()),
         'recommends': sorted(recommends, key=lambda x: random.random()),
         'is_logged_in': is_logged_in,
     }
