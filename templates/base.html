@@ -105,7 +105,29 @@ footer{
         <img src="{% static 'image/logo.png' %}" alt="LOGO" style="width:130px; height:35px">
     </a>
     </div>
-  <a href="javascript:void(0)" class="w3-bar-item w3-button w3-padding-24 w3-right" onclick="w3_open()"><i class="fa fa-bars"></i></a>
+    <a href="javascript:void(0)" class="w3-bar-item w3-button w3-padding-24 w3-right" onclick="w3_open()"><i class="fa fa-bars"></i></a>
+    <div class="w3-bar-item w3-right w3-padding-16">
+      <div id="UserInfoTop" class="d-flex justify-content-center align-items-center my-auto">
+        {% if request.user.is_authenticated %}
+            <div>
+              <a href="{% url 'accounts:profile' %}" class="w3-bar-item w3-button text-muted" style="padding:0;">
+                  <i class="fas fa-user-circle"></i> {{ request.user.username }}
+              </a>
+            </div>
+            <div>
+              <form action="{% url 'accounts:logout' %}" method="POST" style="display:inline">
+                  {% csrf_token %}
+                  <button class="w3-bar-item w3-button text-decoration-none">
+                      <small class="text-muted">LOGOUT</small>
+                  </button>
+              </form>
+            </div>
+        {% else %}
+            <a href="{% url 'accounts:login' %}" class="w3-bar-item w3-button text-dark text-decoration-none"><small>LOGIN</small></a>
+            <a href="{% url 'accounts:signup' %}" class="w3-bar-item w3-button text-dark text-decoration-none"><small>SIGNUP</small></a>
+        {% endif %} 
+    </div>
+    </div>
 </header>
 
 <!-- Overlay effect when opening sidebar on small screens -->
@@ -115,10 +137,10 @@ footer{
 <div class="w3-main" style="margin-left:250px">
 
   <!-- Push down content on small screens -->
-  <div class="w3-hide-large" style="margin-top:85px"></div>
+  <div class="w3-hide-large" style="margin-top:130px"></div>
   
   <!-- Top header -->
-  <header class="w3-container w3-xlarge" id="HEADER">
+  <header class="w3-container w3-xlarge d-none d-lg-block" id="HEADER" style="margin-top: 0;">
     <div id="UserInfo" class="w3-right">
         {% if request.user.is_authenticated %}
             <a href="{% url 'accounts:profile' %}" class="w3-bar-item w3-button text-muted" style="padding:0;">
