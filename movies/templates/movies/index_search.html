@@ -60,34 +60,34 @@
 {% block script %}
   <script>
     $(document).ready(function(){
-          $('.ReSizeImage').each(function(){
+        $('.ReSizeImage').each(function(){
               var width = $(this).innerWidth()
               var ratio = 1.5
               $(this).innerHeight(width*ratio)
-
           })
+          
       })
-      var likeButtonList = document.querySelectorAll('.like-button')
 
-      likeButtonList.forEach((likeButton) => {
-          likeButton.addEventListener('click', function(event){
-              const movieId = event.target.dataset.id
+      $(".like-button").bind('click',function(event){
+        console.log(event)
+        movieId = event.target.dataset.id
+        axios.get(`/movies/${movieId}/like/`)
 
-              axios.get(`/movies/${movieId}/like/`)
-              .then((response) => {
-                  // response.data.count -> json으로 응답(해당 게시글에 좋아요를 누른 사람의 수)
-                  document.querySelector(`#like-count-${movieId}`).innerText = response.data.count
+        .then((response) => {
+          // response.data.count -> json으로 응답(해당 게시글에 좋아요를 누른 사람의 수)
+          console.log(response.data)
+          document.querySelector(`#like-count-${movieId}`).innerText = response.data.count
 
-                  if (response.data.movie_liked) {
-                      event.target.style.color = 'crimson'
-                  } else {
-                      event.target.style.color = 'black'
-                  }
-              })
-            .catch((error) => {
-                  console.log(error)
-              })
-          })
+          if (response.data.movie_liked) {
+            event.target.style.color = 'crimson'
+          } else {
+            event.target.style.color = 'black'
+          }
+        })
+        .catch((error) => {
+          console.log(error)
       })
+    }).unbind('click')
+      
   </script>
 {% endblock %}

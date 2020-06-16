@@ -60,12 +60,37 @@ footer{
     </a>
   </div>
   <div class="w3-padding-32 w3-large w3-text-grey" style="font-weight:bold">
-    <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'movies:main' %}" style="color: white;">HOME</a>
-    <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'movies:about' %}" style="color: white;">ABOUT</a>
+    
+    
+    {% if request.path == '/movies/' %}
+      <a class="w3-bar-item w3-button" href="{% url 'movies:main' %}" style="color: white;">HOME</a>
+    {% else %}
+      <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'movies:main' %}" style="color: rgb(145, 141, 141);">HOME</a>
+    {% endif %}
+    
+
+    {% if request.path == '/movies/about/' %}
+      <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'movies:about' %}" style="color: white;">ABOUT</a>
+    {% else %}
+    <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'movies:about' %}" style="color: rgb(145, 141, 141);">ABOUT</a>
+    {% endif %}
+    
+    {% if request.path == '/movies/index/' %}
     <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'movies:index' %}" style="color: white;">MOVIES</a>
+    {% else %}
+    <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'movies:index' %}" style="color: rgb(145, 141, 141);">MOVIES</a>
+    {% endif %}
+
+    {% if request.path == '/community/' or request.path == '/community/notice/' or request.path == '/community/free/' or request.path == '/community/recommend/'%}
     <a onclick="myAccFunc()" href="javascript:void(0)" class="w3-button w3-block w3-left-align" id="myBtn" style="color: white;">
-        COMMUNITY <i class="fa fa-caret-down"></i>
+      COMMUNITY <i class="fa fa-caret-down"></i>
     </a>
+    {% else %}
+    <a onclick="myAccFunc()" href="javascript:void(0)" class="w3-button w3-block w3-left-align text-decoration-none" id="myBtn" style="color: rgb(145, 141, 141);">
+      COMMUNITY <i class="fa fa-caret-down"></i>
+    </a>
+    {% endif %}
+    
     <div id="demoAcc" class="w3-bar-block w3-hide w3-padding-large w3-medium">
         <a href="{% url 'community:board' 'notice' %}" class="w3-bar-item w3-button" style="color: white;">공지사항</a>
         <a href="{% url 'community:board' 'free' %}" class="w3-bar-item w3-button" style="color: white;">자유게시판</a>
@@ -96,13 +121,13 @@ footer{
   <header class="w3-container w3-xlarge" id="HEADER">
     <div id="UserInfo" class="w3-right">
         {% if request.user.is_authenticated %}
-            <a href="{% url 'accounts:profile' %}" class="w3-bar-item w3-button text-dark" style="padding:0;">
-                <small><i class="fas fa-user-circle"></i> {{ request.user.username }}</small>
+            <a href="{% url 'accounts:profile' %}" class="w3-bar-item w3-button text-muted" style="padding:0;">
+                <i class="fas fa-user-circle"></i> {{ request.user.username }}
             </a>
             <form action="{% url 'accounts:logout' %}" method="POST" style="display:inline">
                 {% csrf_token %}
                 <button class="w3-bar-item w3-button text-decoration-none">
-                    <small class="text-muted">(LOGOUT)</small>
+                    <small class="text-muted">LOGOUT</small>
                 </button>
             </form>
         {% else %}
