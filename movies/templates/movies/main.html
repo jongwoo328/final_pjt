@@ -24,6 +24,20 @@
 
 {% block style %}
 <style>
+.scrollmenu {
+    overflow: auto;
+    white-space: nowrap;
+}
+.card-body {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 158px;
+  height: 100px;
+}
+.movie_card{
+    display:inline-block;
+}
 #ToTopButton{
     position: fixed;
     right: 2%;
@@ -38,251 +52,210 @@
 {% block context %}
 
     {% if request.user.is_authenticated %}
-        <div class="mb-4">
+        <div class="mb-5">
             <div class="d-flex">
-            <h3 class="mb-0"><i class="fas">추천 영화</i></h3>
-            {% if not liked %}
-            <div class="ml-auto">
-                <p class="d-inline-block mr-2">영화를 <span style="color: crimson;">좋아요</span> 하면 관련있는 영화를 추천받을 수 있습니다.</p>
-                <a class="w3-button text-decoration-none" href="{% url 'movies:index' %}" style="background-color: #4c6b8d; color:white;">찾아보러 가기</a>
+                <h3 class="mb-0"><i class="fas">추천 영화</i></h3>
+                {% if not liked %}
+                    <div class="ml-auto">
+                        <p class="d-inline-block mr-2">영화를 <span style="color: crimson;">좋아요</span> 하면 관련있는 영화를 추천받을 수 있습니다.</p>
+                        <a class="w3-button text-decoration-none" href="{% url 'movies:index' %}" style="background-color: #4c6b8d; color:white;">찾아보러 가기</a>
+                    </div>
+                {% endif %}
             </div>
-            {% endif %}
-            </div>
-            <div class="container-fulid RecommendMovie d-flex mx-0 px-0"  style=" overflow-x: scroll;">
+            <div class="container-fulid mx-0 px-0 scrollmenu" >
                 {% for movie in recommends %}
-                <div class="main-card border border-dark" style="margin-right: 20px; border-radius: 5px;">
-                    <a href="{% url 'movies:detail' movie.pk %}">
-                        <!-- <figure> -->
-                            {% if movie.poster_path %}
-                            <img src="https://image.tmdb.org/t/p/w154{{ movie.poster_path }}" 
-                                alt="{{ movie.title }}" 
-                                style="width: 154px; height: 231px; border-radius: 5px;" 
-                                
-                            >
-                            {% else %}
-                            <img src="{% static 'image/noimage_index.png' %}" 
-                                alt="{{ movie.title }}" 
-                                style="width: 154px; height: 231px;" 
-                                class="border border-secondary"
-                            >
-                            {% endif %}
-                        <!-- </figure> -->
-                    </a>
-                    <div class="p-2 d-flex flex-column justify-content-between" style="height: 114px;">
-                        <div class="my-auto">
-                            <a class="d-block text-center text-decoration-none movie-title" href="{% url 'movies:detail' movie.pk %}">
-                                <span class="my-auto">{{ movie.title }}</span>
-                            </a>
-                        </div>
-                        <div>
+                    {% if movie.poster_path %}
+                    <div class="card movie_card">
+                        <!-- 영화 이미지 -->
+                        <!-- <a href="{% url 'movies:detail' movie.pk %}"> -->
+                        <img src="https://image.tmdb.org/t/p/w185{{ movie.poster_path }}" alt="{{ movie.title }}" class="card-img-top">
+                            
+                        <!-- </a> -->
+                        <div class="card-body">
+                            <!-- 영화 제목 -->
+                            <a href="{% url 'movies:detail' movie.pk %}" class="text-dark text-decoration-none">{{ movie.title }}</a>
                             <hr>
-                            <div class="d-flex justify-content-between">
-                                <!-- 영화 평점 -->
-                                <div>
-                                <span><i class="fas fa-star fa-sm" style="color:crimson"> {{ movie.vote_average }}</i></span>
+                            <div class="container-fluid px-0">
+                                <div class="d-flex justify-content-between">
+                                    <div class="flex-fill">
+                                        <span><i class="fas fa-star" style="color:crimson">{{ movie.vote_average }}</i></span>
+                                    </div>
+                                    <div>
+                                        {% if request.user in movie.liked_users.all %}
+                                            {% if request.user.is_authenticated %}
+                                                <i class="fas fa-heart like-button align-self-center" style="color:crimson" data-id="{{ movie.pk }}"></i>
+                                            {% else %}
+                                                <i class="fas fa-heart align-self-center" style="color:crimson" onclick="alert('로그인이 필요합니다.')"></i>
+                                            {% endif %}
+                                        {% else %}
+                                            {% if request.user.is_authenticated %}
+                                                <i class="fas fa-heart like-button align-self-center" style="color:black" data-id="{{ movie.pk }}"></i>
+                                            {% else %}
+                                                <i class="fas fa-heartalign-self-center" style="color:black" onclick="alert('로그인이 필요합니다.')"></i>
+                                            {% endif %}
+                                        {% endif %}
+                                        <span id="like-count-{{ movie.pk }}">{{ movie.liked_users.all|length }}</span>
+                                    </div>
                                 </div>
-                                <!-- 영화 좋아요 -->
-                                <div>
-                                {% if request.user in movie.liked_users.all %}
-                                    {% if request.user.is_authenticated %}
-                                        <i class="fas fa-heart like-button fa-sm align-self-center" style="color:crimson" data-id="{{ movie.pk }}"></i>
-                                    {% else %}
-                                        <i class="fas fa-heart fa-sm align-self-center" style="color:crimson" onclick="alert('로그인이 필요합니다.')"></i>
-                                    {% endif %}
-                                {% else %}
-                                    {% if request.user.is_authenticated %}
-                                        <i class="fas fa-heart like-button fa-sm align-self-center" style="color:white" data-id="{{ movie.pk }}"></i>
-                                    {% else %}
-                                        <i class="fas fa-heart fa-sm align-self-center" style="color:white" onclick="alert('로그인이 필요합니다.')"></i>
-                                    {% endif %}
-                                {% endif %}
-                                <span class="text-white" id="like-count-{{ movie.pk }}">{{ movie.liked_users.all|length }}</span>
-                                </div>
+
                             </div>
                         </div>
+                        
                     </div>
-                </div>
+                    {% endif %}
+                
                 {% endfor %}
             </div>
         </div>
     {% endif %}
 
-    <div class="mb-4">
+    <div class="mb-5">
         <div class="d-flex my-2">
         <h3 class="mb-0"><i class="fas">인기 영화</i></h3>
-            
         </div>
-        <div class="container-fluid RecommendMovie d-flex mx-0 px-0"  style=" overflow-x: scroll;">
+        <div class="container-fulid mx-0 px-0 scrollmenu" >
             {% for movie in popular_movies %}
-            <div class="main-card" style="margin-right: 10px;">
-                <a href="{% url 'movies:detail' movie.pk %}">
-                    <!-- <figure> -->
-                        {% if movie.poster_path %}
-                        <img src="https://image.tmdb.org/t/p/w154{{ movie.poster_path }}" 
-                            alt="{{ movie.title }}" 
-                            style="width: 154px; height: 231px;" 
-                            class="border border-secondary"
-                        >
-                        {% else %}
-                        <img src="{% static 'image/noimage_index.png' %}" 
-                            alt="{{ movie.title }}" 
-                            style="width: 154px; height: 231px;" 
-                            class="border border-secondary"
-                        >
-                        {% endif %}
-                    <!-- </figure> -->
-                </a>
-                <div class="bg-dark p-2 d-flex flex-column justify-content-between" style="height: 114px;">
-                    <div class="my-auto">
-                        <a class="d-block text-center text-decoration-none text-white movie-title" href="{% url 'movies:detail' movie.pk %}">{{ movie.title }}</a>
-                    </div>
-                    <div>
+                {% if movie.poster_path %}
+                <div class="card movie_card">
+                    <!-- 영화 이미지 -->
+                    <!-- <a href="{% url 'movies:detail' movie.pk %}"> -->
+                    <img src="https://image.tmdb.org/t/p/w185{{ movie.poster_path }}" alt="{{ movie.title }}" class="card-img-top">
+                        
+                    <!-- </a> -->
+                    <div class="card-body">
+                        <!-- 영화 제목 -->
+                        <a href="{% url 'movies:detail' movie.pk %}" class="text-dark text-decoration-none">{{ movie.title }}</a>
                         <hr>
-                        <div class="d-flex justify-content-between">
-                            <!-- 영화 평점 -->
-                            <div>
-                            <span><i class="fas fa-star fa-sm" style="color:crimson"> {{ movie.vote_average }}</i></span>
+                        <div class="container-fluid px-0">
+                            <div class="d-flex justify-content-between">
+                                <div class="flex-fill">
+                                    <span><i class="fas fa-star" style="color:crimson">{{ movie.vote_average }}</i></span>
+                                </div>
+                                <div>
+                                    {% if request.user in movie.liked_users.all %}
+                                        {% if request.user.is_authenticated %}
+                                            <i class="fas fa-heart like-button align-self-center" style="color:crimson" data-id="{{ movie.pk }}"></i>
+                                        {% else %}
+                                            <i class="fas fa-heart align-self-center" style="color:crimson" onclick="alert('로그인이 필요합니다.')"></i>
+                                        {% endif %}
+                                    {% else %}
+                                        {% if request.user.is_authenticated %}
+                                            <i class="fas fa-heart like-button align-self-center" style="color:black" data-id="{{ movie.pk }}"></i>
+                                        {% else %}
+                                            <i class="fas fa-heartalign-self-center" style="color:black" onclick="alert('로그인이 필요합니다.')"></i>
+                                        {% endif %}
+                                    {% endif %}
+                                    <span id="like-count-{{ movie.pk }}">{{ movie.liked_users.all|length }}</span>
+                                </div>
                             </div>
-                            <!-- 영화 좋아요 -->
-                            <div>
-                            {% if request.user in movie.liked_users.all %}
-                                {% if request.user.is_authenticated %}
-                                    <i class="fas fa-heart like-button fa-sm align-self-center" style="color:crimson" data-id="{{ movie.pk }}"></i>
-                                {% else %}
-                                    <i class="fas fa-heart fa-sm align-self-center" style="color:crimson" onclick="alert('로그인이 필요합니다.')"></i>
-                                {% endif %}
-                            {% else %}
-                                {% if request.user.is_authenticated %}
-                                    <i class="fas fa-heart like-button fa-sm align-self-center" style="color:white" data-id="{{ movie.pk }}"></i>
-                                {% else %}
-                                    <i class="fas fa-heart fa-sm align-self-center" style="color:white" onclick="alert('로그인이 필요합니다.')"></i>
-                                {% endif %}
-                            {% endif %}
-                            <span class="text-white" id="like-count-{{ movie.pk }}">{{ movie.liked_users.all|length }}</span>
-                            </div>
+
                         </div>
                     </div>
+                    
                 </div>
-            </div>
+                {% endif %}
+            
             {% endfor %}
         </div>
     </div>
 
-    <div class="mb-4">
+
+    <div class="mb-5">
         <div class="d-flex my-2">
         <h3 class="mb-0"><i class="fas">새로운 영화</i></h3>
-            
         </div>
-        <div class="container-fluid RecommendMovie d-flex mx-0 px-0"  style=" overflow-x: scroll;">
+        <div class="container-fulid mx-0 px-0 scrollmenu" >
             {% for movie in new_movies %}
-            <div class="main-card" style="margin-right: 1px;">
-                <a href="{% url 'movies:detail' movie.pk %}">
-                    <!-- <figure> -->
-                        {% if movie.poster_path %}
-                        <img src="https://image.tmdb.org/t/p/w154{{ movie.poster_path }}" 
-                            alt="{{ movie.title }}" 
-                            style="width: 154px; height: 231px;" 
-                            class="border border-secondary"
-                        >
-                        {% else %}
-                        <img src="{% static 'image/noimage_index.png' %}" 
-                            alt="{{ movie.title }}" 
-                            style="width: 154px; height: 231px;" 
-                            class="border border-secondary"
-                        >
-                        {% endif %}
-                    <!-- </figure> -->
-                </a>
-                <div class="bg-dark p-2 d-flex flex-column justify-content-between" style="height: 114px;">
-                    <div class="my-auto">
-                        <a class="d-block text-center text-decoration-none text-white movie-title" href="{% url 'movies:detail' movie.pk %}">{{ movie.title }}</a>
-                    </div>
-                    <div>
+                {% if movie.poster_path %}
+                <div class="card movie_card">
+                    <!-- 영화 이미지 -->
+                    <!-- <a href="{% url 'movies:detail' movie.pk %}"> -->
+                    <img src="https://image.tmdb.org/t/p/w185{{ movie.poster_path }}" alt="{{ movie.title }}" class="card-img-top">
+                        
+                    <!-- </a> -->
+                    <div class="card-body">
+                        <!-- 영화 제목 -->
+                        <a href="{% url 'movies:detail' movie.pk %}" class="text-dark text-decoration-none">{{ movie.title }}</a>
                         <hr>
-                        <div class="d-flex justify-content-between">
-                            <!-- 영화 평점 -->
-                            <div>
-                            <span><i class="fas fa-star fa-sm" style="color:crimson"> {{ movie.vote_average }}</i></span>
+                        <div class="container-fluid px-0">
+                            <div class="d-flex justify-content-between">
+                                <div class="flex-fill">
+                                    <span><i class="fas fa-star" style="color:crimson"> </i>
+                                         <strong>{{ movie.vote_average }}</strong>
+                                        </span>
+                                </div>
+                                <div>
+                                    {% if request.user in movie.liked_users.all %}
+                                        {% if request.user.is_authenticated %}
+                                            <i class="fas fa-heart like-button align-self-center" style="color:crimson" data-id="{{ movie.pk }}"></i>
+                                        {% else %}
+                                            <i class="fas fa-heart align-self-center" style="color:crimson" onclick="alert('로그인이 필요합니다.')"></i>
+                                        {% endif %}
+                                    {% else %}
+                                        {% if request.user.is_authenticated %}
+                                            <i class="fas fa-heart like-button align-self-center" style="color:black" data-id="{{ movie.pk }}"></i>
+                                        {% else %}
+                                            <i class="fas fa-heartalign-self-center" style="color:black" onclick="alert('로그인이 필요합니다.')"></i>
+                                        {% endif %}
+                                    {% endif %}
+                                    <span id="like-count-{{ movie.pk }}">{{ movie.liked_users.all|length }}</span>
+                                </div>
                             </div>
-                            <!-- 영화 좋아요 -->
-                            <div>
-                            {% if request.user in movie.liked_users.all %}
-                                {% if request.user.is_authenticated %}
-                                    <i class="fas fa-heart like-button fa-sm align-self-center" style="color:crimson" data-id="{{ movie.pk }}"></i>
-                                {% else %}
-                                    <i class="fas fa-heart fa-sm align-self-center" style="color:crimson" onclick="alert('로그인이 필요합니다.')"></i>
-                                {% endif %}
-                            {% else %}
-                                {% if request.user.is_authenticated %}
-                                    <i class="fas fa-heart like-button fa-sm align-self-center" style="color:white" data-id="{{ movie.pk }}"></i>
-                                {% else %}
-                                    <i class="fas fa-heart fa-sm align-self-center" style="color:white" onclick="alert('로그인이 필요합니다.')"></i>
-                                {% endif %}
-                            {% endif %}
-                            <span class="text-white" id="like-count-{{ movie.pk }}">{{ movie.liked_users.all|length }}</span>
-                            </div>
+
                         </div>
                     </div>
+                    
                 </div>
-            </div>
+                {% endif %}
             {% endfor %}
         </div>
+
     </div>
 
-    <div class="mb-4">
+    <div class="mb-5">
         <h3 class="mb-0"><i class="fas">이런 영화는 어떠세요?</i></h3>
-        <div class="container-fluid RandomMovie d-flex mx-0 px-0" style=" overflow-x: scroll;">
+        <div class="container-fulid mx-0 px-0 scrollmenu" >
             {% for movie in movies %}
-            <div class="main-card" style="margin-right: 1px;">
-                <a href="{% url 'movies:detail' movie.pk %}">
-                    <!-- <figure> -->
-                        {% if movie.poster_path %}
-                        <img src="https://image.tmdb.org/t/p/w154{{ movie.poster_path }}" 
-                            alt="{{ movie.title }}" 
-                            style="width: 154px; height: 231px;" 
-                            class="border border-secondary"
-                        >
-                        {% else %}
-                        <img src="{% static 'image/noimage_index.png' %}" 
-                            alt="{{ movie.title }}" 
-                            style="width: 154px; height: 231px;" 
-                            class="border border-secondary"
-                        >
-                        {% endif %}
-                    <!-- </figure> -->
-                </a>
-                <div class="bg-dark p-2 d-flex flex-column justify-content-between" style="height: 114px;">
-                    <div class="my-auto">
-                        <a class="d-block text-center text-decoration-none text-white movie-title" href="{% url 'movies:detail' movie.pk %}">{{ movie.title }}</a>
-                    </div>
-                    <div>
+                {% if movie.poster_path %}
+                <div class="card movie_card">
+                    <!-- 영화 이미지 -->
+                    <!-- <a href="{% url 'movies:detail' movie.pk %}"> -->
+                    <img src="https://image.tmdb.org/t/p/w185{{ movie.poster_path }}" alt="{{ movie.title }}" class="card-img-top">
+                        
+                    <!-- </a> -->
+                    <div class="card-body">
+                        <!-- 영화 제목 -->
+                        <a href="{% url 'movies:detail' movie.pk %}" class="text-dark text-decoration-none">{{ movie.title }}</a>
                         <hr>
-                        <div class="d-flex justify-content-between">
-                            <!-- 영화 평점 -->
-                            <div>
-                            <span><i class="fas fa-star fa-sm" style="color:crimson"> {{ movie.vote_average }}</i></span>
+                        <div class="container-fluid px-0">
+                            <div class="d-flex justify-content-between">
+                                <div class="flex-fill">
+                                    <span><i class="fas fa-star" style="color:crimson">{{ movie.vote_average }}</i></span>
+                                </div>
+                                <div>
+                                    {% if request.user in movie.liked_users.all %}
+                                        {% if request.user.is_authenticated %}
+                                            <i class="fas fa-heart like-button align-self-center" style="color:crimson" data-id="{{ movie.pk }}"></i>
+                                        {% else %}
+                                            <i class="fas fa-heart align-self-center" style="color:crimson" onclick="alert('로그인이 필요합니다.')"></i>
+                                        {% endif %}
+                                    {% else %}
+                                        {% if request.user.is_authenticated %}
+                                            <i class="fas fa-heart like-button align-self-center" style="color:black" data-id="{{ movie.pk }}"></i>
+                                        {% else %}
+                                            <i class="fas fa-heartalign-self-center" style="color:black" onclick="alert('로그인이 필요합니다.')"></i>
+                                        {% endif %}
+                                    {% endif %}
+                                    <span id="like-count-{{ movie.pk }}">{{ movie.liked_users.all|length }}</span>
+                                </div>
                             </div>
-                            <!-- 영화 좋아요 -->
-                            <div>
-                            {% if request.user in movie.liked_users.all %}
-                                {% if request.user.is_authenticated %}
-                                    <i class="fas fa-heart like-button fa-sm align-self-center" style="color:crimson" data-id="{{ movie.pk }}"></i>
-                                {% else %}
-                                    <i class="fas fa-heart fa-sm align-self-center" style="color:crimson" onclick="alert('로그인이 필요합니다.')"></i>
-                                {% endif %}
-                            {% else %}
-                                {% if request.user.is_authenticated %}
-                                    <i class="fas fa-heart like-button fa-sm align-self-center" style="color:white" data-id="{{ movie.pk }}"></i>
-                                {% else %}
-                                    <i class="fas fa-heart fa-sm align-self-center" style="color:white" onclick="alert('로그인이 필요합니다.')"></i>
-                                {% endif %}
-                            {% endif %}
-                            <span class="text-white" id="like-count-{{ movie.pk }}">{{ movie.liked_users.all|length }}</span>
-                            </div>
+
                         </div>
                     </div>
+                    
                 </div>
-            </div>
+                {% endif %}
+            
             {% endfor %}
         </div>
     </div>
@@ -292,17 +265,11 @@
 {% block script %}
 <script>
 $(document).ready(function(){
-
-    // 추천영화 스크롤
-	RecommendmoveScrollLeft = function() {
-    var _scrollX = $('.RecommendMovie').scrollLeft();
-    $('.RecommendMovie').scrollLeft(_scrollX);
-    };
-    RandommoveScrollLeft = function() {
-    var _scrollX = $('.RandomMovie').scrollLeft();
-    $('.RandomMovie').scrollLeft(_scrollX);
-    };
-
+    // 이미지 사이즈
+    const width = 158
+    const height = 158* 1.5
+    $(".card-img-top").css("width", width)
+    $(".card-img-top").css("height", height)
 
     // Top Button
     $(window).scroll(function() {
@@ -332,7 +299,7 @@ $('.like-button').on('click',function(event){
           if (response.data.movie_liked) {
             event.target.style.color = 'crimson'
           } else {
-            event.target.style.color = 'white'
+            event.target.style.color = 'black'
           }
         })
         .catch((error) => {

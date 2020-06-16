@@ -7,7 +7,7 @@
 <style>
 #content{
     resize: none;
-    height: 100px;
+    height: 80px;
   }
   
 
@@ -76,10 +76,10 @@
     <form action="{% url 'community:create_comment' article.pk %}" method="POST">
         {% csrf_token %}
         {% bootstrap_form form %}
-
-        <button class="w3-button w3-teal">댓글 작성</button>
+        <button id="submit" class="col-12 col-md-2 btn w3-teal">댓글 작성</button>
     </form>
-    
+
+
     <!-- 댓글 목록 -->
     <p class="mt-4"><strong>{{ comments|length }}</strong>개의 댓글</p>
     <hr>
@@ -123,6 +123,7 @@
 
 </div>
 <script>
+
     const likeArticleButton = document.querySelector('.like-article-button')
     const likeCommentButtonList = document.querySelectorAll('.like-comment-button')
     

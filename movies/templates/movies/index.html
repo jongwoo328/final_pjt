@@ -14,6 +14,11 @@
       display: none;
       z-index: 999;
   }
+  .card-body {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
   .movie_title{
     font-family: "Roboto", sans-serif
     }
@@ -161,18 +166,6 @@ $(document).ready(function(){
       }
     })
 
-    // 카드 제목 높이 조절
-    // 1. 최대 길이를 찾는다
-    var title_height = 0
-    $(".movie_title").each(function(){
-      if ($(this).height() > title_height){
-        title_height = $(this).height()
-      }
-    })
-    // 모든 카드에 제목의 최대길이로 설정
-    $(".movie_title").each(function(){
-      $(this).css("height", title_height)
-    })
 
     // 이미지 사이즈 조절
     $('.ReSizeImage').each(function(){
@@ -189,22 +182,8 @@ $(document).ready(function(){
           })
       var title_height = 0
       
-      $(".movie_title").each(function(){
-        $(this).removeAttr("style")
-      })
-      $(".movie_title").each(function(){
-        console.log($(this).height())
-        if ($(this).height() > title_height){
-          title_height = $(this).height()
-        }
-      })
-      console.log(title_height)
-      // 모든 카드에 제목의 최대길이로 설정
-      $(".movie_title").each(function(){
-        $(this).css("height", title_height)
       })
     })
-  })
   // 좋아요
     $(document).on('click',function(event){
       const movieId = event.target.dataset.id
