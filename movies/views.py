@@ -119,28 +119,35 @@ def main(request):
         ]
         LIKED_COUNT = 1
 
-        yearly_favor = sorted(yearly_favor, key=lambda x: x[LIKED_COUNT], reverse=True)[:YEARLY_FAVOR_COUNT]
+        yearly_favor = sorted(yearly_favor, key=lambda x: x[LIKED_COUNT], reverse=True)
 
         yearly_favor_movies = Movie.objects.none()
         if yearly_favor[0][1] == 0:
             liked = False
+
+            for year, count in yearly_favor:
+                if year == 'under60':
+                    movies = Movie.objects.filter(release_date__lt=datetime.date(1960, 1, 1))
+                else:
+                    year = int(year)
+                    movies = Movie.objects.filter(release_date__lt=datetime.date(year + 10, 1, 1)).filter(release_date__gte=datetime.date(year, 1, 1))
+                yearly_favor_movies |= movies.order_by('?')[:RANDOM_MOVIE_COUNT//4]
         else:
             liked = True
 
-        for year, count in yearly_favor:
-            if year == 'under60':
-                movies = Movie.objects.filter(release_date__lt=datetime.date(1960, 1, 1))
-            else:
-                year = int(year)
-                movies = Movie.objects.filter(release_date__lt=datetime.date(year + 10, 1, 1)).filter(release_date__gte=datetime.date(year, 1, 1))
-            yearly_favor_movies |= movies.order_by('?')[:RANDOM_MOVIE_COUNT//3]
+            for year, count in yearly_favor:
+                if year == 'under60':
+                    movies = Movie.objects.filter(release_date__lt=datetime.date(1960, 1, 1))
+                else:
+                    year = int(year)
+                    movies = Movie.objects.filter(release_date__lt=datetime.date(year + 10, 1, 1)).filter(release_date__gte=datetime.date(year, 1, 1))
+                yearly_favor_movies |= movies.order_by('?')[:RANDOM_MOVIE_COUNT//3]
 
         recommends |= yearly_favor_movies
 
     else:
         liked = False
 
-    # new_movies = Movie.objects.order_by('-release_date')[:20]
     new_movies = Movie.objects.filter(release_date__gte=month_ago).order_by('?')[:20]
 
     context = {

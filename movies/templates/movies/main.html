@@ -9,6 +9,17 @@
 <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
 <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<style>
+    .movie-title {
+        height: 44px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    hr {
+        background-color: white;
+        margin-top: 0px;
+    }
+</style>
 {% endblock %}
 
 {% block style %}
@@ -28,7 +39,7 @@
 
     {% if request.user.is_authenticated %}
         <div class="mb-4">
-            <div class="d-flex my-2">
+            <div class="d-flex">
             <h3 class="mb-0"><i class="fas">추천 영화</i></h3>
             {% if not liked %}
             <div class="ml-auto">
@@ -59,7 +70,9 @@
                     </a>
                     <div class="bg-dark p-2 d-flex flex-column justify-content-between" style="height: 114px;">
                         <div class="my-auto">
-                            <a class="d-block text-center text-decoration-none text-white" href="{% url 'movies:detail' movie.pk %}">{{ movie.title }}</a>
+                            <a class="d-block text-center text-decoration-none text-white movie-title" href="{% url 'movies:detail' movie.pk %}">
+                                <span class="my-auto">{{ movie.title }}</span>
+                            </a>
                         </div>
                         <div>
                             <hr>
@@ -121,7 +134,7 @@
                 </a>
                 <div class="bg-dark p-2 d-flex flex-column justify-content-between" style="height: 114px;">
                     <div class="my-auto">
-                        <a class="d-block text-center text-decoration-none text-white" href="{% url 'movies:detail' movie.pk %}">{{ movie.title }}</a>
+                        <a class="d-block text-center text-decoration-none text-white movie-title" href="{% url 'movies:detail' movie.pk %}">{{ movie.title }}</a>
                     </div>
                     <div>
                         <hr>
@@ -182,7 +195,7 @@
                 </a>
                 <div class="bg-dark p-2 d-flex flex-column justify-content-between" style="height: 114px;">
                     <div class="my-auto">
-                        <a class="d-block text-center text-decoration-none text-white" href="{% url 'movies:detail' movie.pk %}">{{ movie.title }}</a>
+                        <a class="d-block text-center text-decoration-none text-white movie-title" href="{% url 'movies:detail' movie.pk %}">{{ movie.title }}</a>
                     </div>
                     <div>
                         <hr>
@@ -240,7 +253,7 @@
                 </a>
                 <div class="bg-dark p-2 d-flex flex-column justify-content-between" style="height: 114px;">
                     <div class="my-auto">
-                        <a class="d-block text-center text-decoration-none text-white" href="{% url 'movies:detail' movie.pk %}">{{ movie.title }}</a>
+                        <a class="d-block text-center text-decoration-none text-white movie-title" href="{% url 'movies:detail' movie.pk %}">{{ movie.title }}</a>
                     </div>
                     <div>
                         <hr>
