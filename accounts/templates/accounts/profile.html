@@ -88,7 +88,8 @@
     <h4 class="mb-3"> 작성하신 게시글 </h4>
     <hr class="my-2">
     <div class="row" >
-        <div class="col-6 text-center">제목</div>
+        <div class="col-1 text-center">분류</div>
+        <div class="col-5 text-center">제목</div>
         <div class="col-2 text-center">스크랩</div>
         <div class="col-2 text-center">조회 수</div>
         <div class="col-2 text-center">작성일</div>
@@ -97,10 +98,11 @@
     <tbody>
         {% for article in user.article_set.all %}
             <div class="row">
-                <div class="col-6">
+                <div class="col-1 text-center">{{ article.board.name_short }}</div>
+                <div class="col-5">
                     <a href="{% url 'community:detail' article.pk %}" class="text-dark">{{article.title}}</a>
                 </div>
-                <div class="col-2 text-center">{{ article.liked_users|length }}</div>
+                <div class="col-2 text-center">{{ article.liked_users.all|length }}</div>
                 <div class="col-2 text-center">{{ article.hits }}</div>
                 <div class="col-2 text-center">
                     <!-- 오늘 날짜면 시간만 / 아니면 날짜 출력 -->
@@ -122,8 +124,9 @@
     <h4 class="my-2"> 스크랩한 게시글 </h4>
     <hr class="my-2">
     <div class="row" >
-        <div class="col-6 text-center">제목</div>
-        <div class="col-2 text-center">스크랩</div>
+        <div class="col-1 text-center">분류</div>
+        <div class="col-5 text-center">제목</div>
+        <div class="col-2 text-center">작성자</div>
         <div class="col-2 text-center">조회 수</div>
         <div class="col-2 text-center">작성일</div>
     </div>
@@ -131,10 +134,11 @@
     <tbody>
         {% for article in user.liked_articles.all %}
             <div class="row">
-                <div class="col-6">
+                <div class="col-1 text-center">{{ article.board.name_short }}</div>
+                <div class="col-5">
                     <a href="{% url 'community:detail' article.pk %}" class="text-dark">{{article.title}}</a>
                 </div>
-                <div class="col-2 text-center">{{ article.liked_users|length }}</div>
+                <div class="col-2 text-center">{{ article.author }}</div>
                 <div class="col-2 text-center">{{ article.hits }}</div>
                 <div class="col-2 text-center">
                     <!-- 오늘 날짜면 시간만 / 아니면 날짜 출력 -->
