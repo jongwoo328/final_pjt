@@ -121,6 +121,11 @@ def main(request):
         yearly_favor = sorted(yearly_favor, key=lambda x: x[LIKED_COUNT], reverse=True)[:YEARLY_FAVOR_COUNT]
 
         yearly_favor_movies = Movie.objects.none()
+        if yearly_favor[0][1] == 0:
+            liked = False
+        else:
+            liked = True
+
         for year, count in yearly_favor:
             if year == 'under60':
                 movies = Movie.objects.filter(release_date__lt=datetime.date(1960, 1, 1))
@@ -139,6 +144,7 @@ def main(request):
         'new_movies': sorted(new_movies, key=lambda x: random.random()),
         'recommends': sorted(recommends, key=lambda x: random.random()),
         'is_logged_in': is_logged_in,
+        'liked': liked,
     }
     return render(request, 'movies/main.html', context)
 

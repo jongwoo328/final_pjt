@@ -26,11 +26,16 @@
 
 {% block context %}
 
-    {% if recommends %}
+    {% if request.user.is_authenticated %}
         <div class="container border border-dark">
             <div class="d-flex my-2">
             <h3 class="mb-0"><i class="fas">추천 영화</i></h3>
-                
+            {% if not liked %}
+            <div class="ml-auto">
+                <span>영화를 좋아요 하면 더 관련있는 영화를 추천받을 수 있습니다.</span>
+                <a class="w3-button w3-teal" href="{% url 'movies:index' %}">찾아보러 가기</a>
+            </div>
+            {% endif %}
             </div>
             <div class="container RecommendMovie d-flex mx-0 px-0"  style=" overflow-x: scroll;">
                 {% for recommend in recommends %}
@@ -42,16 +47,6 @@
                 {% endfor %}
             </div>
         </div>
-    {% else %}
-    <div class="container border border-dark">
-        <div class="d-flex my-2">
-        <h3 class="mb-0"><i class="fas">추천 영화</i></h3>
-            
-        </div>
-        <div class="container RecommendMovie d-flex mx-0 px-0" >
-            아직 좋아하는 영화가 없어요 ㅠㅠ
-        </div>
-    </div>
     {% endif %}
 
     <div class="container border border-dark">
