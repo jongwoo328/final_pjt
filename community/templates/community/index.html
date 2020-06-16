@@ -166,6 +166,7 @@
 <script>
     const whitespace = '\u00A0'
     $(document).ready(function() {
+        const ContextHeight = $('#Main_Context').outerHeight()
         const LengthLimit = 30
         $(".article_title").each(function(){
             var title = $.trim($(this).text())
