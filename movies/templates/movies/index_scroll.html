@@ -51,32 +51,68 @@
       </div>
     {% endfor %}
 {% block script %}
-  <script>
-      $(document).ready(function(){
-          $('.ReSizeImage').each(function(){
+<script>
+  $(document).ready(function(){
+      $('.ReSizeImage').each(function(){
+          var width = $(this).innerWidth()
+          var ratio = 1.5
+          $(this).innerHeight(width*ratio)
+
+      })
+      // 카드 제목 높이 조절
+      // 1. 최대 길이를 찾는다
+      var title_height = 0
+      $(".movie_title").each(function(){
+        if ($(this).height() > title_height){
+          title_height = $(this).height()
+        }
+      })
+      // 모든 카드에 제목의 최대길이로 설정
+      $(".movie_title").each(function(){
+        $(this).css("height", title_height)
+      })
+      // 화면 크기가 변할때마다 사이즈 재설정
+      $(window).resize(function(){
+        $('.ReSizeImage').each(function(){
               var width = $(this).innerWidth()
               var ratio = 1.5
               $(this).innerHeight(width*ratio)
+            })
 
-          })
-      })
-      $(".like-button").unbind('click').bind('click',function(event){
-        movieId = event.target.dataset.id
-        axios.get(`/movies/${movieId}/like/`)
-
-        .then((response) => {
-          // response.data.count -> json으로 응답(해당 게시글에 좋아요를 누른 사람의 수)
-          document.querySelector(`#like-count-${movieId}`).innerText = response.data.count
-
-          if (response.data.movie_liked) {
-            event.target.style.color = 'crimson'
-          } else {
-            event.target.style.color = 'black'
+        var title_height = 0
+        $(".movie_title").each(function(){
+          $(this).removeAttr("style")
+        })
+        $(".movie_title").each(function(){
+          console.log($(this).height())
+          if ($(this).height() > title_height){
+            title_height = $(this).height()
           }
         })
-        .catch((error) => {
-          console.log(error)
+        console.log(title_height)
+        // 모든 카드에 제목의 최대길이로 설정
+        $(".movie_title").each(function(){
+          $(this).css("height", title_height)
         })
-      });
+      })
+    })
+  $(".like-button").unbind('click').bind('click',function(event){
+      movieId = event.target.dataset.id
+      axios.get(`/movies/${movieId}/like/`)
+
+      .then((response) => {
+        // response.data.count -> json으로 응답(해당 게시글에 좋아요를 누른 사람의 수)
+        document.querySelector(`#like-count-${movieId}`).innerText = response.data.count
+
+        if (response.data.movie_liked) {
+          event.target.style.color = 'crimson'
+        } else {
+          event.target.style.color = 'black'
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    });
   </script>
 {% endblock %}
