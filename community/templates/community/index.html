@@ -4,6 +4,21 @@
 
 {% block title %}Community{% endblock %}
 
+{% block style %}
+<style>
+    .page-link{
+        border-style: none;
+        color: black;
+    }
+    .page-item.active .page-link {
+    z-index: 1;
+    color: #fff;
+    background-color: #314357;
+}
+</style>
+{% endblock %}
+
+
 {% block context %}
 <div class="container mt-5">
     <div class="w3-bar w3-dark-gray mb-3">
@@ -92,38 +107,52 @@
             <hr class="my-2">
             {% endfor %}
             {% endif %}
-
-            {% for article in page_obj %}
-                <div class="row">
-                    <div class="col-1 text-center">{{ article.pk }}</div>
-                    {% if not now_board %}
-                    <div class="col-1 text-center">{{ article.board.name_short }}</div>
-                    <div class="col-4">
-                        <a href="{% url 'community:detail' article.pk %}" class="text-dark article_title">
-                            {{article.title}}
-                        </a>
-                    </div>
-                    {% else %}
-                    <div class="col-5">
-                        <a href="{% url 'community:detail' article.pk %}" class="text-dark article_title">
-                            {{article.title}}
-                        </a>
-                    </div>
-                    {% endif %}
-                    <div class="col-2 text-center">{{ article.author }}</div>
-                    <div class="col-2 text-center">{{ article.hits }}</div>
-                    <div class="col-2 text-center">
-                        <!-- 오늘 날짜면 시간만 / 아니면 날짜 출력 -->
-                        {% if article.created_at|date:"Y-m-d" == nowDate %}
-                            {{ article.created_at | date:"H:i" }}
+            {% if page_obj %}
+                {% for article in page_obj %}
+                    <div class="row">
+                        <div class="col-1 text-center">{{ article.pk }}</div>
+                        {% if not now_board %}
+                        <div class="col-1 text-center">{{ article.board.name_short }}</div>
+                        <div class="col-4">
+                            <a href="{% url 'community:detail' article.pk %}" class="text-dark article_title">
+                                {{article.title}}
+                            </a>
+                        </div>
                         {% else %}
-                            {{ article.created_at | date:"Y-m-d" }}
+                        <div class="col-5">
+                            <a href="{% url 'community:detail' article.pk %}" class="text-dark article_title">
+                                {{article.title}}
+                            </a>
+                        </div>
                         {% endif %}
+                        <div class="col-2 text-center">{{ article.author }}</div>
+                        <div class="col-2 text-center">{{ article.hits }}</div>
+                        <div class="col-2 text-center">
+                            <!-- 오늘 날짜면 시간만 / 아니면 날짜 출력 -->
+                            {% if article.created_at|date:"Y-m-d" == nowDate %}
+                                {{ article.created_at | date:"H:i" }}
+                            {% else %}
+                                {{ article.created_at | date:"Y-m-d" }}
+                            {% endif %}
+                        </div>
                     </div>
-                </div>
-                <hr class="my-2">
+                    <hr class="my-2">
+                    
+                {% endfor %}
+            {% else %}
+                <div class="col-12 text-center">d</div>
+                <div class="col-12 text-center">d</div>
+                <div class="col-12 text-center">d</div>
+                <div class="col-12 text-center">d</div>
+                <div class="col-12 text-center">아직 새로운 글이 올라오지 않았어요</div>
+                <div class="col-12 text-center">d</div>
+                <div class="col-12 text-center">d</div>
+                <div class="col-12 text-center">d</div>
+                <div class="col-12 text-center">d</div>
+                <div class="col-12 text-center">d</div>
+
                 
-            {% endfor %}
+            {% endif %}
         </tbody>
     </div>
     

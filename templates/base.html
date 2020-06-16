@@ -24,6 +24,15 @@
 {% endblock %}
 
 <style>
+html, body {
+
+margin: 0;
+
+height: 100%;
+
+
+}
+
 .w3-sidebar a {font-family: "Roboto", sans-serif}
 body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
 </style>
@@ -73,7 +82,6 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
   
   <!-- Top header -->
   <header class="w3-container w3-xlarge" id="HEADER">
-    <!-- <p class="w3-left">{{ request.resolver_match.url_name }}</p> -->
     <div class="w3-right">
         {% if request.user.is_authenticated %}
             <a href="{% url 'accounts:profile' %}" class="w3-bar-item w3-button text-dark" style="padding:0;">
@@ -87,6 +95,7 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
             </form>
         {% else %}
             <a href="{% url 'accounts:login' %}" class="w3-bar-item w3-button text-dark"><small>LOGIN</small></a>
+            <a href="{% url 'accounts:signup' %}" class="w3-bar-item w3-button text-dark"><small>SIGNUP</small></a>
         {% endif %} 
     </div>
   </header>
@@ -96,17 +105,18 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
       {% block context %}
       {% endblock %}
   </div>
-
   <!-- Footer -->
-  <footer class="w3-display-bottom w3-padding-64 w3-light-grey w3-small w3-center" id="footer">
+  <footer class="container w3-padding-64 w3-small w3-center" id="footer" style="bottom:0">
     <a href="{% url 'movies:main' %}" class="ml-2">
         <img src="{% static 'image/logo.png' %}" alt="LOGO" style="width:200px; height:60px" class="mb-4"> 
     </a>
     <p>MADE BY JONGWOO LEE, JIYOUNG KIM</p>
     <p>POWERED BY w3schools.coom</p>
   </footer>
-
 <!-- End page content -->
+</div>
+
+
 </div>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
@@ -139,10 +149,12 @@ function w3_close() {
 
 // context margin 설정
 $(document).ready(function() {
-    const LogoHeight = $("#LOGO").height()
+    const LogoHeight = $("#LOGO").outerHeight()
     const HeaderHeight = $("#HEADER").height()
-
+    const FooterHeight = $("footer").outerHeight()
+    console.log("footer", FooterHeight)
     $("#CONTEXT").css("margin-top", LogoHeight-HeaderHeight)
+    $("#CONTEXT").css("margin-bottom", FooterHeight+300)
 })
 
 </script>

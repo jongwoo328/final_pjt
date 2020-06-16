@@ -204,10 +204,7 @@ $(document).ready(function(){
     })
   })
   // 좋아요
-  // var likeButtonList = document.querySelectorAll('.like-button')
-
-  // likeButtonList.forEach((likeButton) => {
-    $(".like-button").bind('click',function(event){
+    $(document).on('click',function(event){
       const movieId = event.target.dataset.id
 
       axios.get(`/movies/${movieId}/like/`)
@@ -225,6 +222,6 @@ $(document).ready(function(){
       .catch((error) => {
         console.log(error)
       })
-    }).unbind('click')
+    })
   </script>
 {% endblock %}
