@@ -34,8 +34,16 @@
     </div>
   </div>
   <div class="align-self-end">
-    <a href="{% url 'movies:index_sort' 'rank' %}" class="mr-2 text-dark"><i class="fas fa-check">평점순</i></a> 
+    {% if request.path == '/movies/index/rank/' %}
+    <a href="{% url 'movies:index_sort' 'rank' %}" class="mr-2 text-success"><i class="fas fa-check">평점순</i></a>
+    {% else %}
+    <a href="{% url 'movies:index_sort' 'rank' %}" class="mr-2 text-dark"><i class="fas fa-check">평점순</i></a>
+    {% endif %}
+    {% if request.path == '/movies/index/release/' %}
+    <a href="{% url 'movies:index_sort' 'release' %}" class="mr-2 text-success"><i class="fas fa-check">개봉순</i></a>
+    {% else %}
     <a href="{% url 'movies:index_sort' 'release' %}" class="mr-2 text-dark"><i class="fas fa-check">개봉순</i></a>
+    {% endif %}
   </div>    
 </div>
 
