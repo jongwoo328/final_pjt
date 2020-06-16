@@ -19,6 +19,9 @@
         background-color: white;
         margin-top: 0px;
     }
+    .fa-star {
+        color: #f03e3e;
+    }
 </style>
 {% endblock %}
 
@@ -97,10 +100,8 @@
                                         <span id="like-count-{{ movie.pk }}">{{ movie.liked_users.all|length }}</span>
                                     </div>
                                 </div>
-
                             </div>
-                        </div>
-                        
+                      </div>
                     </div>
                     {% endif %}
                 
