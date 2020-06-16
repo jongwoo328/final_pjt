@@ -30,13 +30,13 @@
                   <div>
                     {% if request.user in movie.liked_users.all %}
                       {% if request.user.is_authenticated %}
-                          <i class="fas fa-heart like-button fa-lg align-self-center" style="color:crimson" data-id="{{ movie.pk }}"></i>
+                          <i class="fas fa-heart new-like-button fa-lg align-self-center" style="color:crimson" data-id="{{ movie.pk }}"></i>
                       {% else %}
                           <i class="fas fa-heart fa-lg align-self-center" style="color:crimson" data-id="{{ movie.pk }}"></i>
                       {% endif %}
                     {% else %}
                       {% if request.user.is_authenticated %}
-                          <i class="fas fa-heart like-button fa-lg align-self-center" style="color:black" data-id="{{ movie.pk }}"></i>
+                          <i class="fas fa-heart new-like-button fa-lg align-self-center" style="color:black" data-id="{{ movie.pk }}"></i>
                       {% else %}
                           <i class="fas fa-heart fa-lg align-self-center" style="color:black" data-id="{{ movie.pk }}"></i>
                       {% endif %}
@@ -96,7 +96,7 @@
         })
       })
     })
-  $(".like-button").unbind('click').bind('click',function(event){
+  $(".new-like-button").bind('click',function(event){
       movieId = event.target.dataset.id
       axios.get(`/movies/${movieId}/like/`)
 
@@ -113,6 +113,6 @@
       .catch((error) => {
         console.log(error)
       })
-    });
+    }).unbind('click');
   </script>
 {% endblock %}
