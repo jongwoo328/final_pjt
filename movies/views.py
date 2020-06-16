@@ -104,6 +104,7 @@ def main(request):
         recommends = Movie.objects.none()
         is_logged_in = False
 
+
     # 좋아하는 연도 추천영화
     if request.user.is_authenticated:
         yearly_favor = [
@@ -135,6 +136,9 @@ def main(request):
             yearly_favor_movies |= movies.order_by('?')[:RANDOM_MOVIE_COUNT//3]
 
         recommends |= yearly_favor_movies
+        
+    else:
+        liked = False
 
     new_movies = Movie.objects.order_by('-release_date')[:20]
 
