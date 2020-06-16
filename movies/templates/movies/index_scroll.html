@@ -23,12 +23,19 @@
           <div>
             <!-- 영화 좋아요 -->
           {% if request.user in movie.liked_users.all %}
+            {% if request.user.is_authenticated %}
               <i class="fas fa-heart fa-lg like-button" style="color:crimson" data-id="{{ movie.pk }}"></i>
-              <span id="like-count-{{ movie.pk }}">{{ movie.liked_users.all|length }}</span>
+            {% else %}
+              <i class="fas fa-heart fa-lg" style="color:crimson" data-id="{{ movie.pk }}"></i>
+            {% endif %}
           {% else %}
+            {% if request.user.is_authenticated %}
               <i class="fas fa-heart fa-lg like-button" style="color:black" data-id="{{ movie.pk }}"></i>
-              <span id="like-count-{{ movie.pk }}">{{ movie.liked_users.all|length }}</span>
+            {% else %}
+              <i class="fas fa-heart fa-lg" style="color:black" data-id="{{ movie.pk }}"></i>
+            {% endif %}
           {% endif %}
+              <span id="like-count-{{ movie.pk }}">{{ movie.liked_users.all|length }}</span>
           </div>
       </div>
       <!-- 개봉일 -->
