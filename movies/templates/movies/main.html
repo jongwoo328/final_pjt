@@ -38,19 +38,57 @@
             {% endif %}
             </div>
             <div class="container RecommendMovie d-flex mx-0 px-0"  style=" overflow-x: scroll;">
-                {% for recommend in recommends %}
-                <a href="{% url 'movies:detail' recommend.pk %}">
-                    {% if recommend.poster_path %}
-                    <img src="https://image.tmdb.org/t/p/w154{{ recommend.poster_path }}" 
-                        alt="{{ recommend.title }}" 
-                    >
-                    {% else %}
-                    <img src="{% static 'image/noimage_index.png' %}" 
-                        alt="{{ recommend.title }}" 
-                        style="height: 231px;"
-                    >
-                    {% endif %}
-                </a>
+                {% for movie in recommends %}
+                <div>
+                    <a href="{% url 'movies:detail' movie.pk %}">
+                        <!-- <figure> -->
+                            {% if movie.poster_path %}
+                            <img src="https://image.tmdb.org/t/p/w154{{ movie.poster_path }}" 
+                                alt="{{ movie.title }}" 
+                                style="width: 154px; height: 231px;" 
+                                class="border border-secondary"
+                            >
+                            {% else %}
+                            <img src="{% static 'image/noimage_index.png' %}" 
+                                alt="{{ movie.title }}" 
+                                style="width: 154px; height: 231px;" 
+                                class="border border-secondary"
+                            >
+                            {% endif %}
+                        <!-- </figure> -->
+                    </a>
+                    <div class="bg-dark p-2 d-flex flex-column justify-content-between" style="height: 114px;">
+                        <div class="my-auto">
+                            <a class="d-block text-center text-decoration-none text-white" href="{% url 'movies:detail' movie.pk %}">{{ movie.title }}</a>
+                        </div>
+                        <div>
+                            <hr>
+                            <div class="d-flex justify-content-between">
+                                <!-- 영화 평점 -->
+                                <div>
+                                <span><i class="fas fa-star fa-sm" style="color:crimson">{{ movie.vote_average }}</i></span>
+                                </div>
+                                <!-- 영화 좋아요 -->
+                                <div>
+                                {% if request.user in movie.liked_users.all %}
+                                    {% if request.user.is_authenticated %}
+                                        <i class="fas fa-heart like-button fa-sm align-self-center" style="color:crimson" data-id="{{ movie.pk }}"></i>
+                                    {% else %}
+                                        <i class="fas fa-heart fa-sm align-self-center" style="color:crimson" onclick="alert('로그인이 필요합니다.')"></i>
+                                    {% endif %}
+                                {% else %}
+                                    {% if request.user.is_authenticated %}
+                                        <i class="fas fa-heart like-button fa-sm align-self-center" style="color:white" data-id="{{ movie.pk }}"></i>
+                                    {% else %}
+                                        <i class="fas fa-heart fa-sm align-self-center" style="color:white" onclick="alert('로그인이 필요합니다.')"></i>
+                                    {% endif %}
+                                {% endif %}
+                                <span id="like-count-{{ movie.pk }}" class="text-white">{{ movie.liked_users.all|length }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 {% endfor %}
             </div>
         </div>
@@ -148,5 +186,25 @@ $(document).ready(function(){
         return false
     })
 })
+$('.like-button').on('click',function(event){
+      const movieId = event.target.dataset.id
+      if (movieId !== undefined) {
+        axios.get(`/movies/${movieId}/like/`)
+
+        .then((response) => {
+          // response.data.count -> json으로 응답(해당 게시글에 좋아요를 누른 사람의 수)
+          document.querySelector(`#like-count-${movieId}`).innerText = response.data.count
+
+          if (response.data.movie_liked) {
+            event.target.style.color = 'crimson'
+          } else {
+            event.target.style.color = 'black'
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+      }
+    })
 </script>
 {% endblock %}
