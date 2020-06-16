@@ -48,7 +48,7 @@ def board(request, board_name=None):
         articles = Article.objects.order_by('-pk').exclude(board=notice_board)
     else:
         board = get_object_or_404(Board, url_name=board_name)
-        articles = board.article_set.all()
+        articles = board.article_set.order_by('-pk')
 
     paginator = Paginator(articles, 10)
     nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
