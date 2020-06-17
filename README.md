@@ -57,12 +57,12 @@ SCAFY는 SSAFY Cinema Analysis For You의 약자로 사용자 취향으로 영�
 - 오류 보완
 - 디자인 수정
 
-**이종우** [![github](https://img.shields.io/badge/- -343a40?logo=github)](https://github.com/jongwoo328)
+**이종우** [![github](https://img.shields.io/badge/-%20-343a40?logo=github)](https://github.com/jongwoo328)
 
 - Django View, Model
 - 데이터 수집
 
-**김지영** [![github](https://img.shields.io/badge/- -343a40?logo=github)](https://github.com/jiyoung1329)
+**김지영** [![github](https://img.shields.io/badge/-%20-343a40?logo=github)](https://github.com/jiyoung1329)
 
 - Django Template
 - Javascript
