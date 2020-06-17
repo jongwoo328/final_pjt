@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
+from django.db.models import Q
 
 from .models import Movie, Genre, Review, MAX_RANK
 from .forms import ReviewForm
@@ -16,6 +17,49 @@ from .forms import ReviewForm
 ALL_MOVIE_COUNT = 2000
 RANDOM_MOVIE_COUNT = 10
 YEARLY_FAVOR_COUNT = 3
+
+Genres = {
+	 "Adventure" : ["모험", "어드벤처"],
+	 "Fantasy" : ["판타지"],
+	 "Animation" : ["애니"],
+	 "Drama" : ["드라마"],
+	 "Horror" : ["공포"],
+	 "Action" : ["액션"],
+	 "Comedy" : ["코미디"],
+	 "History" : ["역사"],
+	 "Western" : ["서부"],
+	 "Thriller" : ["스릴러"],
+	 "Crime" : ["범죄"],
+	 "Documentary" : ["다큐"],
+	 "Science Fiction" : ["SF", "공상"],
+	 "Mystery" : ["미스테리", "추리"],
+	 "Music" : ["음악"],
+	 "Romance" : ["로맨스", "사랑"],
+	 "Family" : ["가족", "패밀리"],
+	 "War" : ["전쟁"],
+	 "TV Movie" : ["티비"], 
+}
+Genres_pk = {
+	 "Adventure" : 12,
+	 "Fantasy" : 14,
+	 "Animation" :16 ,
+	 "Drama" : 18,
+	 "Horror" : 27,
+	 "Action" : 28,
+	 "Comedy" : 35,
+	 "History" : 36,
+	 "Western" : 37,
+	 "Thriller" : 56,
+	 "Crime" : 80,
+	 "Documentary" : 99,
+	 "Science Fiction" : 878,
+	 "Mystery" : 9648,
+	 "Music" : 10402,
+	 "Romance" : 10749,
+	 "Family" : 10751,
+	 "War" : 10752,
+	 "TV Movie" : 10770, 
+}
 
 def start(request) : 
     return redirect('movies:main')
@@ -186,13 +230,32 @@ def about(request) :
     return render(request, 'movies/about.html')
 
 def search(request, input_value=None):
+    
     if input_value : 
-        movies = Movie.objects.order_by('-pk').filter(release_date__lte=datetime.datetime.now(), title__icontains=input_value)
+        # 제목으로 검색
+        title_movies = Movie.objects.order_by('-pk').filter(Q(title__icontains=input_value) | 
+                                                      Q(original_title__icontains=input_value))
+
+        # 장르로 검색
+        input_value = input_value.split(' ')
+        genres = []
+        for val in input_value : 
+            for genre in Genres : 
+                if val.lower() == genre.lower() or val in Genres[genre] : 
+                    genres.append(Genre.objects.get(name=genre))
         
+        if genres : 
+            genre_movies = set(Movie.objects.all())
+            for genre in genres : 
+                results = set(genre.movies.all())
+                genre_movies = genre_movies.intersection(results)
+        else : genre_movies = None
+
     else : 
         movies = Movie.objects.order_by('-pk').filter(release_date__lte=datetime.datetime.now())
     context = {
-        'movies' : movies,
+        'title_movies' : title_movies,
+        'genre_movies' : genre_movies,
     }
     return render(request, 'movies/index_search.html', context)
 
