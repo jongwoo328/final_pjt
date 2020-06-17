@@ -54,20 +54,38 @@
                           </a>
                           <!-- 영화 제목, 좋아요, 평점, 개봉일 -->
                           <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                  <!-- 영화 제목, 평점 -->
-                                  <a href="{% url 'movies:detail' first_movie.pk %}" class="font-weight-bold movie_title">{{ first_movie.title }}</a>
-                                  <span><i class="fas fa-star fa-sm" style="color:crimson"> {{ first_movie.vote_average }}</i></span>
-                                </div>
-                            </div>
-                            <!-- 개봉일 -->
-                            <p class="mt-2 mb-0"><small>{{ first_movie.release_date|date:"Y-m-d" }} 개봉</small></p>
-                              
+                                <!-- 영화 제목 -->
+                                <a href="{% url 'movies:detail' first_movie.pk %}" class="text-dark text-decoration-none">{{ first_movie.title }}</a>
+                                <hr>
+                                <!-- 평점 & 좋아요 -->
+                                <div class="container-fluid px-0">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="flex-fill">
+                                            <span><i class="fas fa-star" style="color:crimson">{{ first_movie.vote_average }}</i></span>
+                                        </div>  
+                                        <div>
+                                            {% if request.user in first_movie.liked_users.all %}
+                                                {% if request.user.is_authenticated %}
+                                                    <i class="fas fa-heart like-button align-self-center" style="color:crimson" data-id="{{ first_movie.pk }}"></i>
+                                                {% else %}
+                                                    <i class="fas fa-heart align-self-center" style="color:crimson" onclick="alert('로그인이 필요합니다.')"></i>
+                                                {% endif %}
+                                            {% else %}
+                                                {% if request.user.is_authenticated %}
+                                                    <i class="fas fa-heart like-button align-self-center" style="color:black" data-id="{{ first_movie.pk }}"></i>
+                                                {% else %}
+                                                    <i class="fas fa-heartalign-self-center" style="color:black" onclick="alert('로그인이 필요합니다.')"></i>
+                                                {% endif %}
+                                            {% endif %}
+                                            <span id="like-count-{{ first_movie.pk }}">{{ first_movie.liked_users.all|length }}</span>
+                                        </div>
+                                    </div>  
+                                </div>  
                           </div>
+
                 
                         </div>
-                      </div>
+                    </div>
                 </div>
                 {% for movie in rest_movies %}
                 <div class="carousel-item col-md-3 mx-0">
@@ -83,16 +101,33 @@
                             </a>
                             <!-- 영화 제목, 좋아요, 평점, 개봉일 -->
                             <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <!-- 영화 제목, 평점 -->
-                                    <a href="{% url 'movies:detail' movie.pk %}" class="font-weight-bold movie_title">{{ movie.title }}</a>
-                                    <span><i class="fas fa-star fa-sm" style="color:crimson"> {{ movie.vote_average }}</i></span>
+                                <!-- 영화 제목 -->
+                                <a href="{% url 'movies:detail' movie.pk %}" class="text-dark text-decoration-none">{{ movie.title }}</a>
+                                <hr>
+                                <!-- 평점 & 좋아요 -->
+                                <div class="container-fluid px-0">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="flex-fill">
+                                            <span><i class="fas fa-star" style="color:crimson">{{ movie.vote_average }}</i></span>
+                                        </div> 
+                                        <div>
+                                            {% if request.user in movie.liked_users.all %}
+                                                {% if request.user.is_authenticated %}
+                                                    <i class="fas fa-heart like-button align-self-center" style="color:crimson" data-id="{{ movie.pk }}"></i>
+                                                {% else %}
+                                                    <i class="fas fa-heart align-self-center" style="color:crimson" onclick="alert('로그인이 필요합니다.')"></i>
+                                                {% endif %}
+                                            {% else %}
+                                                {% if request.user.is_authenticated %}
+                                                    <i class="fas fa-heart like-button align-self-center" style="color:black" data-id="{{ movie.pk }}"></i>
+                                                {% else %}
+                                                    <i class="fas fa-heartalign-self-center" style="color:black" onclick="alert('로그인이 필요합니다.')"></i>
+                                                {% endif %}
+                                            {% endif %}
+                                            <span id="like-count-{{ movie.pk }}">{{ movie.liked_users.all|length }}</span>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <!-- 개봉일 -->
-                            <p class="mt-2 mb-0"><small>{{ movie.release_date|date:"Y-m-d" }} 개봉</small></p>
-                                
                             </div>
                 
                         </div>
@@ -249,5 +284,27 @@ $('.ReSizeImage').each(function(){
 
     })
 })
+
+// 좋아요
+$('.like-button').on('click',function(event){
+      const movieId = event.target.dataset.id
+      if (movieId !== undefined) {
+        axios.get(`/movies/${movieId}/like/`)
+
+        .then((response) => {
+
+          document.querySelector(`#like-count-${movieId}`).innerText = response.data.count
+
+          if (response.data.movie_liked) {
+            event.target.style.color = 'crimson'
+          } else {
+            event.target.style.color = 'black'
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+      }
+    })
 </script>
 {% endblock %}
