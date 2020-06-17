@@ -70,6 +70,14 @@ SCAFY는 SSAFY Cinema Analysis For You의 약자로 사용자 취향으로 영�
 
 
 
+## 내용
+
+### ERD
+
+![ERD](./images/erd.png)
+
+
+
 
 
 
