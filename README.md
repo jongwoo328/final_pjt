@@ -20,7 +20,7 @@ SCAFY는 SSAFY Cinema Analysis For You의 약자로 사용자 취향으로 영�
 
 ### 2. 사용한 프레임워크, 라이브러리
 
- ![](https://img.shields.io/badge/-2.2.13-green?logo=django&style=for-the-badge)  ![Bootstrap](https://img.shields.io/badge/-4.5-purple?logo=bootstrap&style=for-the-badge) ![w3.css](https://img.shields.io/badge/W3-CSS-lightgreen?style=for-the-badge) ![tmdbapi](https://img.shields.io/badge/-API-gray?logo=the movie database&style=for-the-badge) ![googlefonts](https://img.shields.io/badge/-Fonts-bac8ff?logo=google&style=for-the-badge) ![jquery](https://img.shields.io/badge/-3.5.1-blue?logo=jquery&style=for-the-badge) ![fontawesome](https://img.shields.io/badge/-5.13.0-ffc078?logo=font awesome&style=for-the-badge)
+ ![](https://img.shields.io/badge/-2.2.13-green?logo=django&style=for-the-badge)  ![Bootstrap](https://img.shields.io/badge/-4.5-purple?logo=bootstrap&style=for-the-badge) ![w3.css](https://img.shields.io/badge/W3-CSS-lightgreen?style=for-the-badge) ![tmdbapi](https://img.shields.io/badge/-API-gray?logo=the%20movie%20database&style=for-the-badge) ![googlefonts](https://img.shields.io/badge/-Fonts-bac8ff?logo=google&style=for-the-badge) ![jquery](https://img.shields.io/badge/-3.5.1-blue?logo=jquery&style=for-the-badge) ![fontawesome](https://img.shields.io/badge/-5.13.0-ffc078?logo=font%20awesome&style=for-the-badge)
 
 #### [Django](https://docs.djangoproject.com/en/3.0/)
 
