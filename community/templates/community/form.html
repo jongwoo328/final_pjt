@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load bootstrap4 %}
 
-{% block title %}Community{% endblock %}
+{% block title %}COMMUNITY{% endblock %}
 
 
 {% block style %}
@@ -32,11 +32,11 @@
         {% bootstrap_form form %}
         
         {% if request.resolver_match.url_name == 'create_article' %}
-            <button class="w3-button w3-teal">게시글 작성</button>
+            <button class="w3-button "  style="background-color: #4c6b8d; color:white;">게시글 작성</button>
         {% elif request.resolver_match.url_name == 'update_article' %}
-            <button class="w3-button w3-teal">게시글 수정</button>
+            <button class="w3-button" style="background-color: #4c6b8d; color:white;">게시글 수정</button>
         {% else %}
-        <button class="w3-button w3-teal">댓글 수정</button>
+        <button class="w3-button" style="background-color: #4c6b8d; color:white;">댓글 수정</button>
         {% endif %}
     
     </form>

@@ -3,13 +3,13 @@
 <!-- Page Title -->
 {% block title %}
 {% if request.resolver_match.url_name == 'signup' %}
-    회원가입   
+    SIGNUP 
 {% elif request.resolver_match.url_name == 'login' %}
-    로그인  
+    LOGIN  
 {% elif request.resolver_match.url_name == 'update' %}
-    회원 정보 수정 
+    PROFILE
 {% else %}
-    비밀번호 변경
+    PROFILE
 {% endif %}
 {% endblock %}
 

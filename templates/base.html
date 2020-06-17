@@ -68,12 +68,6 @@ footer{
       <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'movies:main' %}" style="color: rgb(145, 141, 141);">HOME</a>
     {% endif %}
     
-
-    {% if request.path == '/movies/about/' %}
-      <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'movies:about' %}" style="color: white;">ABOUT</a>
-    {% else %}
-    <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'movies:about' %}" style="color: rgb(145, 141, 141);">ABOUT</a>
-    {% endif %}
     
     {% if request.resolver_match.app_name == 'movies' and request.path != '/movies/about/' and request.path != '/movies/' %}
     <a class="w3-bar-item w3-button text-decoration-none" href="{% url 'movies:index' %}" style="color: white;">MOVIES</a>
