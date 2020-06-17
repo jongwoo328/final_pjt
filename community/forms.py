@@ -4,10 +4,13 @@ from .models import Article, Comment, Board
 
 
 class ArticleForm(forms.ModelForm):
-    board = forms.ModelChoiceField(queryset=Board.objects.all())
+    board = forms.ModelChoiceField(queryset=Board.objects.filter(auth_required=False))
     class Meta:
         model = Article
-        fields = ('title', 'content', )
+        fields = ('title', 'content', 'board')
+
+class AdminArticleForm(ArticleForm):
+    board = forms.ModelChoiceField(queryset=Board.objects.all())
         
 class CommentForm(forms.ModelForm):
     content = forms.CharField(
