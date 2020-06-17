@@ -123,7 +123,7 @@ Movie
   <form action="{% url 'movies:review_create' movie.pk %}" method="POST">
       {% csrf_token %}
       {% bootstrap_form form %}   
-      <input type="submit" value="등록" id="submit">
+      <button class="w3-button w3-teal">등록</button>
   </form>
   {% endif %}
   <!-- 댓글 조회 -->
