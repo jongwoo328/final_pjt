@@ -44,9 +44,15 @@
                 </div>
         </div>
         <div class="d-flex justify-content-between">
-            <p class="text-muted"><small>{{ article.created_at }}</small></p>
+            <p class="text-muted">
+                <small>작성 : {{ article.created_at }}</small>
+                {% if article.created_at|date:"Y-m-d H:i" != article.updated_at|date:"Y-m-d H:i" %}
+                <small> | 수정 : {{ article.updated_at }}</small>
+                {% endif %}
+            </p>
             <div>
-                <span class="text-muted"><small>조회 수 {{ article.hits }}</small></span>
+                <span class="text-muted mx-2"><small>조회 수 {{ article.hits }}</small></span>
+                <span class="text-muted"><small>댓글 수 {{ comments|length }}</small></span>
                 
             </div>
             
