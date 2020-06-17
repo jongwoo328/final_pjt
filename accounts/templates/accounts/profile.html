@@ -2,14 +2,23 @@
 {% load bootstrap4 %}
 {% load static %}
 
+{% block title %}
+PROFILE
+{% endblock %}
+
 {% block head %}
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 {% endblock %}
 
-
+{% block style %}
 <style>
-
+  .card-body, .movie_title{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 </style>
+{% endblock %}
 {% block context %}
 <!-- 프로필 -->
 <div class="container my-5 w3-border-bottom">

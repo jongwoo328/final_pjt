@@ -122,8 +122,10 @@ Movie
   <hr>
   <form action="{% url 'movies:review_create' movie.pk %}" method="POST">
       {% csrf_token %}
-      {% bootstrap_form form %}   
-      <button class="w3-button w3-teal">등록</button>
+      {% bootstrap_form form %} 
+      <div class="d-flex justify-content-end">
+      <button class="w3-button"  style="background-color: #4c6b8d; color:white;">등록</button>
+    </div>  
   </form>
   {% endif %}
   <!-- 댓글 조회 -->
@@ -194,6 +196,7 @@ Movie
       <p class="my-3">{{ review.content }}</p>
       <div class="d-flex justify-content-between">
         <p>{{ review.created_at }}</p>
+        {% if request.user == review.author or request.user.is_superuser %}
         <div>
           <a href="{% url 'movies:review_update' movie.pk review.pk %}"><small class="text-decoration-none text-dark">수정</small></a>
           <small>
@@ -203,6 +206,7 @@ Movie
             </form>
         </small>
         </div>
+        {% endif %}
       </div> 
       <hr>
     {% endfor %}

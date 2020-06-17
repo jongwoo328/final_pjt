@@ -226,8 +226,6 @@ def index(request, sort=None):
     else:
         return render(request, 'movies/index_scroll.html', context)
 
-def about(request) : 
-    return render(request, 'movies/about.html')
 
 def search(request, input_value=None):
     
