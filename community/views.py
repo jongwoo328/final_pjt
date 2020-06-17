@@ -8,7 +8,7 @@ from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 
 from .models import Article, Comment, Board
-from .forms import ArticleForm, CommentForm
+from .forms import ArticleForm, CommentForm, AdminArticleForm
 
 
 NOTICE_BOARD_NAME = '공지사항'
@@ -68,7 +68,10 @@ def board(request, board_name=None):
 @login_required
 def create_article(request, board_name=None):
     if request.method == 'POST':
-        form = ArticleForm(request.POST)
+        if request.user.is_superuser:
+            form = AdminArticleForm(request.POST)
+        else:
+            form = ArticleForm(request.POST)
         if form.is_valid():
             article = form.save(commit=False)
             article.author = request.user
@@ -103,9 +106,15 @@ def create_article(request, board_name=None):
         else:
             if board_name:
                 board = Board.objects.get(url_name=board_name)
-                form = ArticleForm(initial={'board': board})
+                if request.user.is_superuser:
+                    form = AdminArticleForm(initial={'board': board})
+                else:
+                    form = ArticleForm(initial={'board': board})
             else:
-                form = ArticleForm()
+                if request.user.is_superuser:
+                    form = AdminArticleForm()
+                else:
+                    form = ArticleForm()
     context = {
         'form': form,
     }
@@ -132,14 +141,20 @@ def detail(request, article_pk):
 def update_article(request, article_pk):
     article = get_object_or_404(Article, pk=article_pk)
     if request.method == 'POST':
-        form = ArticleForm(request.POST, instance=article)
+        if request.user.is_superuser:
+            form = AdminArticleForm(request.POST, instance=article)
+        else:
+            form = ArticleForm(request.POST, instance=article)
         if form.is_valid():
             article = form.save()
             return redirect('community:detail', article_pk)
     else:
         if request.user != article.author:
             return redirect('community:detail', article_pk)
-        form = ArticleForm(instance=article)
+        if request.user.is_superuser:
+            form = AdminArticleForm(instance=article)
+        else:
+            form = ArticleForm(instance=article)
     context = {
         'form': form,
     }
