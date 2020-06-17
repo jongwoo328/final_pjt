@@ -150,6 +150,7 @@ def update_article(request, article_pk):
             form = ArticleForm(request.POST, instance=article)
         if form.is_valid():
             article.updated_at = timezone.now()
+            article.updated = True
             article = form.save()
             return redirect('community:detail', article_pk)
     else:
@@ -215,7 +216,9 @@ def update_comment(request, article_pk, comment_pk):
     if request.method == 'POST':
         form = CommentForm(request.POST, instance=comment)
         if form.is_valid():
-            form.save()
+            comment = form.save(commit=False)
+            comment.updated = True
+            comment.save()
             return redirect('community:detail', article_pk)
     else:
         form = CommentForm(instance=comment)

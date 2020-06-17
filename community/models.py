@@ -1,9 +1,11 @@
+import pytz
 from faker import Faker
 
 from django.db import models
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 
 
 class Board(models.Model):
@@ -44,6 +46,7 @@ class Article(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField()
+    updated = models.BooleanField(default=False)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     board = models.ForeignKey(Board, on_delete=models.CASCADE)
     hits = models.IntegerField(default=0)
@@ -69,12 +72,14 @@ class Article(models.Model):
                 title=faker.sentence(),
                 content=str(faker.text()) * 10,
                 author=get_user_model().objects.get(pk=1),
-                board=Board.objects.get(pk=3)
+                board=Board.objects.get(pk=3),
+                updated_at=timezone.now()
             )
 
 class Comment(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    updated = models.BooleanField(default=False)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
