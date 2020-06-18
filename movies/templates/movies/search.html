@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% load bootstrap_pagination %}
+{% load static %}
+
+{% block title %}
+{% endblock %}
+
+{% block style %}
+<style>
+  #ToTopButton{
+      position: fixed;
+      right: 2%;
+      bottom: 50px;
+      display: none;
+      z-index: 999;
+  }
+  .card-body, .movie_title{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+  .movie_title{
+    font-family: "Roboto", sans-serif
+    }
+    .page-link{
+        border-style: none;
+        color: black;
+    }
+    .page-item.active .page-link {
+    z-index: 1;
+    color: #fff;
+    background-color: #314357;
+    }
+  </style>
+{% endblock %}
+
+
+{% block context %}
+<!-- TOP BUTTON -->
+  <a href="#myPage" title="To Top">
+    <i class="w3-button w3-circle fas fa-chevron-up p-3" id="ToTopButton" style="color: white;background-color: #1F618D;"></i>
+  </a>
+<!-- CONTEXT -->
+<div class="container mt-5 mb-5 pb-3 d-flex justify-content-between w3-border-bottom"> 
+  <div class="row d-flex flex-fill">
+    <h3 class="mr-5"><a href="{% url 'movies:index' %}" class="text-dark"><i class="fas">전체 영화</i></a></h3>
+    <!-- Search -->
+    <form class="d-flex" action="{% url 'movies:search' 'name' %}" method="GET">
+      <input  name="search" class="w3-input w3-border w3-animate-input" placeholder="Search" type="text" required>
+      <button class="btn" style="border-style: solid; border-color: #212F3C;">Search</button>
+    </form>
+  </div>
+  <div class="align-self-end">
+    {% if request.path == '/movies/search/name/' %}
+    <a href="/movies/search/name/?search={{ input_value }}" class="mr-2" style="color: #2E86C1 ;"><i class="fas fa-check">이름</i></a>
+    {% else %}
+    <a href="/movies/search/name/?search={{ input_value }}" class="mr-2 text-muted"><i class="fas fa-check">이름</i></a>
+    {% endif %}
+    {% if request.path == '/movies/search/genre/' %}
+    <a href="/movies/search/genre/?search={{ input_value }}" class="mr-2" style="color: #2E86C1;"><i class="fas fa-check">장르</i></a>
+    {% else %}
+    <a href="/movies/search/genre/?search={{ input_value }}" class="mr-2 text-muted"><i class="fas fa-check">장르</i></a>
+    {% endif %}
+  </div>    
+</div>
+
+<!-- 영화 목록 - poster_path, adult, title, vote_average, released_date -->
+
+<div class="container" id="Total_movie">
+  {% if page_obj %}
+  <div class="row" id="movie_list">
+    
+      {% for movie in page_obj %}
+        <div class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3 movie_card">
+          <div class="card h-100">
+            <!-- 영화 이미지 -->
+            <a href="{% url 'movies:detail' movie.pk %}">
+              {% if movie.poster_path %}
+              <img src="https://image.tmdb.org/t/p/w342/{{ movie.poster_path }}" alt="{{ movie.title }}" class=" card-img-top ReSizeImage">
+              {% else %}
+              <img src="{% static 'image/noimage_index.png' %}" alt="{{ movie.title }}" class=" card-img-top ReSizeImage border border-gray">
+              {% endif %}
+            </a>
+          
+            <!-- 영화 제목, 좋아요, 평점, 개봉일 -->
+            <div class="card-body">
+              <!-- 영화 제목 -->
+              <a href="{% url 'movies:detail' movie.pk %}" ><h5 class="font-weight-bold text-dark movie_title" >{{ movie.title }}</h5></a>
+              <!-- 개봉일 -->
+              <p class="mt-2 mb-0"><small>{{ movie.release_date|date:"Y-m-d" }} 개봉</small></p>
+              <hr>
+              <div class="container-fluid">
+                <div class="d-flex justify-content-between pt-3 ">
+                    <!-- 영화 평점 -->
+                    <div>
+                    <span><i class="fas fa-star fa-lg" style="color:crimson">{{ movie.vote_average }}</i></span>
+                    </div>
+                    <!-- 영화 좋아요 -->
+                    <div>
+                      {% if request.user in movie.liked_users.all %}
+                        {% if request.user.is_authenticated %}
+                            <i class="fas fa-heart like-button fa-lg align-self-center" style="color:crimson" data-id="{{ movie.pk }}"></i>
+                        {% else %}
+                            <i class="fas fa-heart fa-lg align-self-center" style="color:crimson" onclick="alert('로그인이 필요합니다.')"></i>
+                        {% endif %}
+                      {% else %}
+                        {% if request.user.is_authenticated %}
+                            <i class="fas fa-heart like-button fa-lg align-self-center" style="color:black" data-id="{{ movie.pk }}"></i>
+                        {% else %}
+                            <i class="fas fa-heart fa-lg align-self-center" style="color:black" onclick="alert('로그인이 필요합니다.')"></i>
+                        {% endif %}
+                      {% endif %}
+                      <span id="like-count-{{ movie.pk }}">{{ movie.liked_users.all|length }}</span>
+                    </div>
+                </div>
+              </div>
+            </div>
+        
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <!-- pagination -->
+    <div class="d-flex justify-content-center">
+    {% bootstrap_paginate page_obj range=10 show_prev_next="false" show_first_last="true" %}
+    
+    </div>
+    {% else %}
+    <p>찾는 영화가 없어요 ㅠㅠ</p>
+    {% endif %}
+</div>
+
+
+
+<script>
+  
+$(document).ready(function(){
+  
+    // TOP BUTTON
+    $(window).scroll(function() {
+        
+          if ($(this).scrollTop() > 500) {
+              $('#ToTopButton').fadeIn();
+          } else {
+              $('#ToTopButton').fadeOut();
+          }
+      });
+
+
+    $("#ToTopButton").click(function(event) {
+        $('html, body').animate({
+            scrollTop: 0
+        }, 400);
+        return false
+    })
+
+    $("#mySearch").keydown(function(key) {
+      if (key.keyCode == 13){
+        var inputValue = $("#mySearch").val()
+        axios.get(`/movies/index/search/${inputValue}/`)
+        .then((res) => {
+          $("#Total_movie").html(res.data)
+        })
+      }
+    })
+
+
+    // 이미지 사이즈 조절
+    $('.ReSizeImage').each(function(){
+        var width = $(this).innerWidth()
+        console.log($(this).html(), width)
+        var ratio = 1.5
+        $(this).innerHeight(width*ratio)
+    })
+    $(window).resize(function(){
+      $('.ReSizeImage').each(function(){
+            var width = $(this).innerWidth()
+            var ratio = 1.5
+            $(this).innerHeight(width*ratio)
+          })
+      var title_height = 0
+      
+      })
+    })
+  // 좋아요
+    $(document).on('click',function(event){
+      const movieId = event.target.dataset.id
+      if (movieId !== undefined) {
+        axios.get(`/movies/${movieId}/like/`)
+
+        .then((response) => {
+          // response.data.count -> json으로 응답(해당 게시글에 좋아요를 누른 사람의 수)
+          document.querySelector(`#like-count-${movieId}`).innerText = response.data.count
+
+          if (response.data.movie_liked) {
+            event.target.style.color = 'crimson'
+          } else {
+            event.target.style.color = 'black'
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+      }
+    })
+  </script>
+{% endblock %}
