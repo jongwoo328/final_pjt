@@ -66,7 +66,7 @@
             <div class="col-2 text-center">조회 수</div>
             <div class="col-2 text-center">작성일</div>
         </div>
-        <hr class="my-2 mb-3">
+        <hr class="my-2">
         <tbody>
             {% if not now_board or now_board.name != '공지사항' %}
             {% for notice in noticed %}
@@ -136,7 +136,7 @@
                             {% endif %}
                         </div>
                     </div>
-                    <hr>
+                    <hr class="my-2">
                     
                 {% endfor %}
             {% else %}
