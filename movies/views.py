@@ -109,7 +109,7 @@ def recommend(recents):
     # recents_with_pk -> 입력 영화의 pk map
     keyword_recommends_with_pk = []
     for keyword in keywords:
-        keyword_recommends_with_pk += map(lambda movie: movie.pk ,Movie.objects.filter(title__icontains=keyword).iterator())
+        keyword_recommends_with_pk += map(lambda movie: movie.pk ,Movie.objects.filter(title__startswith=keyword).iterator())
     recents_with_pk = map(lambda movie: movie.pk, recents.iterator())
 
     # 추출결과에서 이미 추천된 영화는 제외
