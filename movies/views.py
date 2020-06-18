@@ -227,35 +227,47 @@ def index(request, sort=None):
         return render(request, 'movies/index_scroll.html', context)
 
 
-def search(request, input_value=None):
-    
+def search(request, sort):
+    input_value = request.GET.get('search')
+    print(input_value)
     if input_value : 
-        # 제목으로 검색
-        title_movies = Movie.objects.order_by('-pk').filter(Q(title__icontains=input_value) | 
-                                                      Q(original_title__icontains=input_value))
-
-        # 장르로 검색
-        input_value = input_value.split(' ')
-        genres = []
-        for val in input_value : 
-            for genre in Genres : 
-                if val.lower() == genre.lower() or val in Genres[genre] : 
-                    genres.append(Genre.objects.get(name=genre))
-        
-        if genres : 
-            genre_movies = set(Movie.objects.all())
-            for genre in genres : 
-                results = set(genre.movies.all())
-                genre_movies = genre_movies.intersection(results)
-        else : genre_movies = None
-
+        if sort == 'name' : 
+            # 제목으로 검색
+            movies = Movie.objects.order_by('-pk').filter(Q(title__icontains=input_value) | 
+                                                        Q(original_title__icontains=input_value))
+        elif sort == 'genre' : 
+            # 장르로 검색
+            input_values = input_value.split(' ')
+            print(input_value)
+            genres = []
+            for val in input_values : 
+                for genre in Genres : 
+                    if val.lower() == genre.lower() or val in Genres[genre] : 
+                        genres.append(Genre.objects.get(name=genre))
+            
+            if genres : 
+                movies = set(Movie.objects.all())
+                for genre in genres : 
+                    results = set(genre.movies.all())
+                    movies = movies.intersection(results)
+                movies = list(movies)
+            else : movies = None
     else : 
         movies = Movie.objects.order_by('-pk').filter(release_date__lte=datetime.datetime.now())
+    
+    # paginator
+    # print(movies)
+    if movies : 
+        paginator = Paginator(movies, 8)
+        nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+    else : page_obj = None
     context = {
-        'title_movies' : title_movies,
-        'genre_movies' : genre_movies,
+        'input_value' : input_value,
+        'page_obj' : page_obj,
     }
-    return render(request, 'movies/index_search.html', context)
+    return render(request, 'movies/search.html', context)
 
 
 @login_required

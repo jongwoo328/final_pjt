@@ -196,7 +196,7 @@ Movie
       <p class="my-3">{{ review.content }}</p>
       <div class="d-flex justify-content-between">
         <p>{{ review.created_at }}</p>
-        {% if request.user == review.author or request.user.is_superuser %}
+        {% if request.user == review.author %}
         <div>
           <a href="{% url 'movies:review_update' movie.pk review.pk %}"><small class="text-decoration-none text-dark">수정</small></a>
           <small>
