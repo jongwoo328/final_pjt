@@ -131,11 +131,19 @@ def detail(request, article_pk):
     comments = article.comment_set.order_by('-pk')
     nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
     form = CommentForm()
+    previous = request.META.get('HTTP_REFERER', f'/community/{article.board.url_name}/')
+    if (request.META.get('HTTP_REFERER').split('/')[-2] == 'community'):
+        previous_name = '전체게시판'
+    else:
+        previous_name = article.board.name
+    # previous_name = 
     context = {
         'form': form,
         'article': article,
         'comments' : comments,
         'nowDate': nowDate,
+        'previous': previous,
+        'previous_name': previous_name,
     }
     return render(request, 'community/detail.html', context)
 

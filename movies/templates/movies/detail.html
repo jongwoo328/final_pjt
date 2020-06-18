@@ -23,7 +23,7 @@ Movie
 {% block context %}
 <div class="container mt-5">
   
-  <h4><a href="{%url 'movies:index' %}" class="text-dark"><i class="fas fa-angle-double-left"> </i></a>
+  <h4><a href="{{ previous }}" class="text-dark"><i class="fas fa-angle-double-left"> </i></a>
     <i class="fas"> 영화 상세 </i></h4>
   <hr>
   <div class="container d-flex">

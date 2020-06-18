@@ -229,7 +229,6 @@ def index(request, sort=None):
 
 def search(request, sort):
     input_value = request.GET.get('search')
-    print(input_value)
     if input_value : 
         if sort == 'name' : 
             # 제목으로 검색
@@ -238,7 +237,6 @@ def search(request, sort):
         elif sort == 'genre' : 
             # 장르로 검색
             input_values = input_value.split(' ')
-            print(input_value)
             genres = []
             for val in input_values : 
                 for genre in Genres : 
@@ -278,6 +276,7 @@ def detail(request, movie_pk):
     nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
     form = ReviewForm()
     is_voted = movie.review_set.filter(author=request.user).exists()
+    previous = request.META.get('HTTP_REFERER', '/movies/index/')
     context = {
         'movie': movie,
         'form': form,
@@ -285,6 +284,7 @@ def detail(request, movie_pk):
         'my_review': my_review,
         'is_voted': is_voted,
         'review_count': len(reviews) + len(my_review),
+        'previous': previous,
     }
     return render(request, 'movies/detail.html', context)
 
