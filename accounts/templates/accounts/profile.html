@@ -68,7 +68,7 @@ PROFILE
                 <div class="card movie_card">
                     <!-- 영화 이미지 -->
                     <a href="{% url 'movies:detail' movie.pk %}">
-                    <img src="https://image.tmdb.org/t/p/w185{{ movie.poster_path }}" alt="{{ movie.title }}" class="card-img-top">
+                    <img src="https://image.tmdb.org/t/p/w154{{ movie.poster_path }}" alt="{{ movie.title }}" class="card-img-top" style="height:225px">
                         
                     </a>
                     <div class="card-body">
@@ -107,18 +107,7 @@ PROFILE
         {% endif %}
             
 
-    <div class="container">
-        <div class="row">
-            <div class="col-12 text-center mt-4">
-                <a class="btn btn-outline-secondary mx-1 prev" href="javascript:void(0)" title="Previous">
-                    <i class="fa fa-lg fa-chevron-left"></i>
-                </a>
-                <a class="btn btn-outline-secondary mx-1 next" href="javascript:void(0)" title="Next">
-                    <i class="fa fa-lg fa-chevron-right"></i>
-                </a>
-            </div>
-        </div>
-    </div>
+
 </div>
 
 
