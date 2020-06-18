@@ -68,7 +68,7 @@
   }
 
   /* like button */
-  .fa-heart:hover, .fa-star:hover{
+  .fa-heart:hover, .like-article-button:hover{
     cursor: pointer;
   }
 

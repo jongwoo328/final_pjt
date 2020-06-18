@@ -185,7 +185,7 @@ $(document).ready(function(){
       })
     })
   // 좋아요
-    $(document).on('click',function(event){
+    $('.fa-heart').on('click',function(event){
       const movieId = event.target.dataset.id
       if (movieId !== undefined) {
         axios.get(`/movies/${movieId}/like/`)
