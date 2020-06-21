@@ -162,7 +162,7 @@ SCAFY는 SSAFY Cinema Analysis For You의 약자로 사용자 취향으로 영�
 
 http://3.23.206.76
 
-
+(30분 접속이 없으면 서버 중지됨)
 
 ## 기타
 
